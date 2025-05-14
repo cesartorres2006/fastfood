@@ -1,0 +1,56 @@
+<!-- src/main/resources/templates/order-history.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head('Historial de Pedidos')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container py-5">
+    <h1 class="mb-4">Mi Historial de Pedidos</h1>
+
+    <div th:if="${#lists.isEmpty(orders)}" class="alert alert-info">
+        No tienes pedidos realizados aún. <a th:href="@{/products}">¡Haz tu primer pedido!</a>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(orders)}" class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Número de Pedido</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}">123</td>
+                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</td>
+                <td>$<span th:text="${order.totalAmount}">0.00</span></td>
+                <td>
+                            <span th:class="${'badge ' + (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'bg-warning' :
+                                              (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'bg-info' :
+                                              (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'bg-primary' :
+                                              (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'bg-success' :
+                                              (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'bg-success' : 'bg-danger')))))}"
+                                  th:text="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'Pendiente' :
+                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'Confirmado' :
+                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'Preparando' :
+                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'Listo' :
+                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'Entregado' : 'Cancelado'))))}">
+                                Estado
+                            </span>
+                </td>
+                <td>
+                    <a th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-sm btn-outline-primary">Ver Detalles</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

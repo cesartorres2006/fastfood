@@ -1,0 +1,116 @@
+<!-- src/main/resources/templates/admin/product-form.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head(${product.id} ? 'Editar Producto' : 'Nuevo Producto')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 th:text="${product.id} ? 'Editar Producto' : 'Nuevo Producto'">Producto</h1>
+        <a th:href="@{/admin/products}" class="btn btn-outline-primary">Volver a Productos</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/admin/products/save}" th:object="${product}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Nombre del Producto *</label>
+                        <input type="text" id="name" th:field="*{name}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="category" class="form-label">Categoría *</label>
+                        <select id="category" th:field="*{category}" class="form-select" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="Hamburguesas">Hamburguesas</option>
+                            <option value="Pizzas">Pizzas</option>
+                            <option value="Bebidas">Bebidas</option>
+                            <option value="Complementos">Complementos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="price" class="form-label">Precio *</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" id="price" th:field="*{price}" class="form-control" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="available" class="form-label">Disponibilidad</label>
+                        <div class="form-check form-switch mt-2">
+                            <input type="checkbox" id="available" th:field="*{available}" class="form-check-input">
+                            <label for="available" class="form-check-label">Producto disponible</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción</label>
+                    <textarea id="description" th:field="*{description}" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imageUrl" class="form-label">URL de la Imagen</label>
+                    <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="imageFile" class="form-label">O subir imagen</label>
+                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*">
+                </div>
+
+                <div class="mb-3" th:if="${product.imageUrl}">
+                    <label class="form-label">Imagen Actual</label>
+                    <div>
+                        <img th:src="${product.imageUrl}" class="img-thumbnail" style="max-width: 200px;" alt="Imagen del producto">
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Validación del formulario
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            const name = document.getElementById('name').value.trim();
+            const category = document.getElementById('category').value;
+            const price = document.getElementById('price').value;
+
+            if (!name) {
+                alert('Por favor, ingrese el nombre del producto');
+                event.preventDefault();
+                return;
+            }
+
+            if (!category) {
+                alert('Por favor, seleccione una categoría');
+                event.preventDefault();
+                return;
+            }
+
+            if (!price || parseFloat(price) <= 0) {
+                alert('Por favor, ingrese un precio válido');
+                event.preventDefault();
+                return;
+            }
+        });
+    });
+</script>
+</body>
+</html>

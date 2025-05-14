@@ -1,0 +1,180 @@
+<!-- src/main/resources/templates/admin/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head('Panel de Administración')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<main class="container py-5">
+    <h1 class="mb-4">Panel de Administración</h1>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Pedidos</h5>
+                    <h2 class="card-text" th:text="${totalOrders}">0</h2>
+                    <a th:href="@{/admin/orders}" class="btn btn-light mt-2">Ver Pedidos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Pedidos Pendientes</h5>
+                    <h2 class="card-text" th:text="${pendingOrders}">0</h2>
+                    <a th:href="@{/admin/orders}" class="btn btn-dark mt-2">Gestionar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Productos</h5>
+                    <h2 class="card-text" th:text="${totalProducts}">0</h2>
+                    <a th:href="@{/admin/products}" class="btn btn-light mt-2">Gestion de Productos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Usuarios</h5>
+                    <h2 class="card-text" th:text="${totalUsers}">0</h2>
+                    <a th:href="@{/admin/users}" class="btn btn-light mt-2">Gestion de Usuarios</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Acciones Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a th:href="@{/admin/products/new}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-plus-circle"></i> Añadir Nuevo Producto
+                        </a>
+                        <a th:href="@{/admin/orders}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-list-check"></i> Gestionar Pedidos
+                        </a>
+                        <a th:href="@{/}" target="_blank" class="list-group-item list-group-item-action">
+                            <i class="bi bi-eye"></i> Ver Tienda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Últimos Pedidos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Esta parte se podría llenar con datos reales -->
+                            <tr>
+                                <td colspan="5" class="text-center">Cargando datos...</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cargar los últimos pedidos
+        fetch('/api/orders/all')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar los pedidos');
+                }
+                return response.json();
+            })
+            .then(orders => {
+                displayLatestOrders(orders.slice(0, 5)); // Mostrar solo los 5 últimos
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+    function displayLatestOrders(orders) {
+        const tableBody = document.querySelector('.table tbody');
+
+        if (orders.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay pedidos recientes</td></tr>';
+            return;
+        }
+
+        tableBody.innerHTML = '';
+
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+
+            const statusClass = getStatusClass(order.status);
+            const formattedDate = new Date(order.orderDate).toLocaleString();
+
+            row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>${formattedDate}</td>
+                    <td><span class="badge ${statusClass}">${translateStatus(order.status)}</span></td>
+                    <td>$${order.totalAmount.toFixed(2)}</td>
+                `;
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    function getStatusClass(status) {
+        const statusMap = {
+            'PENDING': 'bg-warning',
+            'CONFIRMED': 'bg-info',
+            'PREPARING': 'bg-primary',
+            'READY': 'bg-success',
+            'DELIVERED': 'bg-success',
+            'CANCELLED': 'bg-danger'
+        };
+
+        return statusMap[status] || 'bg-secondary';
+    }
+
+    function translateStatus(status) {
+        const statusMap = {
+            'PENDING': 'Pendiente',
+            'CONFIRMED': 'Confirmado',
+            'PREPARING': 'Preparando',
+            'READY': 'Listo',
+            'DELIVERED': 'Entregado',
+            'CANCELLED': 'Cancelado'
+        };
+
+        return statusMap[status] || status;
+    }
+</script>
+</body>
+</html>

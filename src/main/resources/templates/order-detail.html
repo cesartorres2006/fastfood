@@ -1,0 +1,85 @@
+<!-- src/main/resources/templates/order-detail.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head('Detalle de Pedido')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container py-5">
+    <h1 class="mb-4">Detalle del Pedido #<span th:text="${order.id}">123</span></h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Productos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item : ${order.items}">
+                                <td th:text="${item.product.name}">Producto</td>
+                                <td>$<span th:text="${item.price}">0.00</span></td>
+                                <td th:text="${item.quantity}">1</td>
+                                <td>$<span th:text="${item.price * item.quantity}">0.00</span></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="3" class="text-end">Total:</th>
+                                <th>$<span th:text="${order.totalAmount}">0.00</span></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Información del Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Estado:</strong>
+                        <span th:class="${'badge ' + (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'bg-warning' :
+                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'bg-info' :
+                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'bg-primary' :
+                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'bg-success' :
+                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'bg-success' : 'bg-danger')))))}"
+                              th:text="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'Pendiente' :
+                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'Confirmado' :
+                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'Preparando' :
+                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'Listo' :
+                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'Entregado' : 'Cancelado'))))}">
+                                Estado
+                            </span>
+                    </p>
+                    <p><strong>Fecha:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</span></p>
+                    <hr>
+                    <p><strong>Cliente:</strong> <span th:text="${order.customerName}">Nombre del Cliente</span></p>
+                    <p><strong>Dirección:</strong> <span th:text="${order.deliveryAddress}">Dirección de Entrega</span></p>
+                    <p><strong>Teléfono:</strong> <span th:text="${order.contactPhone}">Teléfono de Contacto</span></p>
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <a th:href="@{/orders}" class="btn btn-primary">Volver a Mis Pedidos</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

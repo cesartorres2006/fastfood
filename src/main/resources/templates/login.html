@@ -1,0 +1,50 @@
+<!-- src/main/resources/templates/login.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head('Iniciar Sesión')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="text-center">Iniciar Sesión</h2>
+        </div>
+        <div class="card-body">
+          <div th:if="${param.error}" class="alert alert-danger">
+            Usuario o contraseña incorrectos.
+          </div>
+          <div th:if="${param.logout}" class="alert alert-success">
+            Has cerrado sesión correctamente.
+          </div>
+          <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+              <label for="username" class="form-label">Nombre de usuario</label>
+              <input type="text" id="username" name="username" class="form-control" required autofocus>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" id="remember-me" name="remember-me" class="form-check-input">
+              <label for="remember-me" class="form-check-label">Recordarme</label>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-center">
+          <p class="mb-0">¿No tienes una cuenta? <a th:href="@{/register}">Regístrate aquí</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

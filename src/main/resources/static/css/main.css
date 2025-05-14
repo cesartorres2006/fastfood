@@ -1,0 +1,105 @@
+/* src/main/resources/static/css/main.css */
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Estilos para la barra de navegación */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Estilos para las tarjetas de productos */
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Estilos para el carrito */
+.badge {
+    font-size: 0.8rem;
+}
+
+/* Estilos para el formulario de checkout */
+.form-label {
+    font-weight: 500;
+}
+
+/* Estilos para el footer */
+footer {
+    margin-top: auto;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+/* src/main/resources/static/css/responsive.css */
+/* Estilos responsivos */
+
+/* Dispositivos pequeños (teléfonos móviles, menos de 576px) */
+@media (max-width: 575.98px) {
+    .jumbotron h1 {
+        font-size: 2rem;
+    }
+
+    .card-img-top {
+        height: 150px;
+    }
+
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+}
+
+/* Dispositivos medianos (tablets, 768px y superiores) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .card-img-top {
+        height: 180px;
+    }
+}
+
+/* Dispositivos grandes (desktops, 992px y superiores) */
+@media (min-width: 992px) {
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+}
+
+/* Para todos los dispositivos móviles */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        padding: 1rem 0;
+    }
+
+    .navbar-nav {
+        margin-bottom: 0.5rem;
+    }
+}

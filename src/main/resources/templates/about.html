@@ -1,0 +1,171 @@
+<!-- src/main/resources/templates/about.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/header :: head('Sobre Nosotros')">
+    <title>Sobre Nosotros</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container py-5">
+    <h1 class="mb-4">Sobre FastFood Restaurant</h1>
+
+    <!-- Historia -->
+    <section class="mb-5">
+        <h2>Nuestra Historia</h2>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <p>Fundado en 2010, FastFood Restaurant nació con una misión clara: ofrecer comida rápida de la más alta calidad, utilizando ingredientes frescos y preparaciones artesanales.</p>
+                <p>Lo que comenzó como un pequeño local en el centro de la ciudad, ha crecido hasta convertirse en uno de los restaurantes de comida rápida más queridos de la región, manteniendo siempre nuestros valores de calidad, frescura y servicio excepcional.</p>
+            </div>
+            <div class="col-lg-6">
+                <img class="img-fluid rounded" src="/img/restaurant-history.jpg" alt="Historia del restaurante">
+            </div>
+        </div>
+    </section>
+
+    <!-- Misión y Visión -->
+    <section class="mb-5">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title">Nuestra Misión</h3>
+                        <p class="card-text">Ofrecer la mejor experiencia gastronómica rápida, combinando sabores auténticos, ingredientes de calidad y un servicio excepcional, para satisfacer a nuestros clientes en cada visita.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title">Nuestra Visión</h3>
+                        <p class="card-text">Ser reconocidos como el restaurante de comida rápida líder en calidad e innovación, expandiendo nuestra presencia mientras mantenemos nuestro compromiso con la excelencia y la satisfacción del cliente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Valores -->
+    <section class="mb-5">
+        <h2>Nuestros Valores</h2>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="text-center">
+                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="bi bi-heart-fill text-danger" style="font-size: 2rem;"></i>
+                    </div>
+                    <h4>Pasión</h4>
+                    <p class="small">Amamos lo que hacemos y eso se refleja en cada plato.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="text-center">
+                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="bi bi-award-fill text-warning" style="font-size: 2rem;"></i>
+                    </div>
+                    <h4>Calidad</h4>
+                    <p class="small">Seleccionamos los mejores ingredientes para nuestras recetas.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="text-center">
+                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h4>Comunidad</h4>
+                    <p class="small">Apoyamos a nuestra comunidad local y sus productores.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="text-center">
+                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="bi bi-recycle text-success" style="font-size: 2rem;"></i>
+                    </div>
+                    <h4>Sostenibilidad</h4>
+                    <p class="small">Comprometidos con prácticas respetuosas con el medio ambiente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipo -->
+    <section class="mb-5">
+        <h2>Nuestro Equipo</h2>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <img src="/img/chef.jpg" class="card-img-top" alt="Chef Principal">
+                    <div class="card-body">
+                        <h5 class="card-title">Carlos Ramírez</h5>
+                        <p class="card-subtitle text-muted mb-2">Chef Principal</p>
+                        <p class="card-text small">Con más de 15 años de experiencia, Carlos lidera nuestro equipo de cocina con pasión y creatividad.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <img src="/img/manager.jpg" class="card-img-top" alt="Gerente">
+                    <div class="card-body">
+                        <h5 class="card-title">Laura Mendoza</h5>
+                        <p class="card-subtitle text-muted mb-2">Gerente General</p>
+                        <p class="card-text small">Laura asegura que cada detalle de la operación cumpla con nuestros altos estándares de calidad.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <img src="/img/service-manager.jpg" class="card-img-top" alt="Jefe de Servicio">
+                    <div class="card-body">
+                        <h5 class="card-title">Miguel Soto</h5>
+                        <p class="card-subtitle text-muted mb-2">Jefe de Servicio</p>
+                        <p class="card-text small">Miguel se asegura de que cada cliente reciba una atención personalizada y excepcional.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ubicación -->
+    <section class="mb-5">
+        <h2>Nuestra Ubicación</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="ratio ratio-16x9">
+                    <!-- Aquí puedes insertar un mapa de Google Maps -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000.0!3d40.0!4d-3.0!5e0!3m2!1ses!2ses!4v1620000000000!5m2!1ses!2ses"
+                            allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4>Horario de Atención</h4>
+                <table class="table table-sm">
+                    <tbody>
+                    <tr>
+                        <td>Lunes - Viernes</td>
+                        <td>11:00 - 22:00</td>
+                    </tr>
+                    <tr>
+                        <td>Sábados</td>
+                        <td>11:00 - 23:00</td>
+                    </tr>
+                    <tr>
+                        <td>Domingos</td>
+                        <td>12:00 - 21:00</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h4>Contacto</h4>
+                <address>
+                    <p>Calle Principal #123<br>Ciudad, País</p>
+                    <p>Teléfono: (123) 456-7890<br>
+                        Email: <a href="mailto:info@fastfood.com">info@fastfood.com</a></p>
+                </address>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!-- src/main/resources/templates/products.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/header :: head('Productos')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container py-5">
+    <h1 class="mb-4">Nuestro Menú</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" id="search-input" class="form-control" placeholder="Buscar productos...">
+                <button class="btn btn-primary" id="search-button">Buscar</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <select id="category-filter" class="form-select">
+                <option value="">Todas las categorías</option>
+                <option value="Hamburguesas">Hamburguesas</option>
+                <option value="Pizzas">Pizzas</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Complementos">Complementos</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="products-container">
+        <div class="col" th:each="product : ${products}">
+            <div class="card h-100">
+                <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" class="card-img-top" alt="Imagen del producto">
+                <img th:unless="${product.imageUrl}" src="https://via.placeholder.com/300x200" class="card-img-top" alt="Imagen de placeholder">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}">Nombre del producto</h5>
+                    <p class="card-text" th:text="${product.description}">Descripción del producto</p>
+                    <p class="card-text"><strong>$<span th:text="${product.price}">0.00</span></strong></p>
+
+                    <!-- Botón si el usuario está autenticado -->
+                    <button class="btn btn-primary add-to-cart"
+                            sec:authorize="isAuthenticated()"
+                            th:attr="data-id=${product.id}, data-name=${product.name}, data-price=${product.price}">
+                        Añadir al Carrito
+                    </button>
+
+                    <!-- Botón si el usuario NO está autenticado -->
+                    <a class="btn btn-primary"
+                       sec:authorize="!isAuthenticated()"
+                       th:href="@{/login}">
+                        Añadir al Carrito
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<script th:src="@{/js/products.js}"></script>
+<script th:src="@{/js/cart.js}"></script>
+</body>
+</html>

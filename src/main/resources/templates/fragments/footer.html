@@ -1,0 +1,38 @@
+<!-- src/main/resources/templates/fragments/footer.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="bg-dark text-white py-4 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h5>FastFood Restaurant</h5>
+        <p>La mejor comida rápida de la ciudad</p>
+      </div>
+      <div class="col-md-4">
+        <h5>Enlaces rápidos</h5>
+        <ul class="list-unstyled">
+          <li><a th:href="@{/}" class="text-white">Inicio</a></li>
+          <li><a th:href="@{/products}" class="text-white">Menú</a></li>
+          <li><a class="text-white" th:href="@{/about}">Sobre Nosotros</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contacto</h5>
+        <address>
+          <p>Calle Principal #123</p>
+          <p>Ciudad, País</p>
+          <p>Teléfono: (123) 456-7890</p>
+          <p>Email: info@fastfood.com</p>
+        </address>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 text-center">
+        <p class="mb-0">&copy; 2025 FastFood Restaurant. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

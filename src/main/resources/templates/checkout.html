@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head('Checkout')"></head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container py-5">
+  <h1 class="mb-4">Finalizar Pedido</h1>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Información de Entrega</h5>
+        </div>
+        <div class="card-body">
+          <form id="checkout-form" th:action="@{/checkout/place-order}" method="post">
+            <div class="mb-3">
+              <label for="customerName" class="form-label">Nombre completo</label>
+              <input type="text" id="customerName" name="customerName" class="form-control" th:value="${user.fullName}" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="deliveryAddress" class="form-label">Dirección de entrega</label>
+              <input type="text" id="deliveryAddress" name="deliveryAddress" class="form-control" th:value="${user.address}" required>
+            </div>
+            <div class="mb-3">
+              <label for="contactPhone" class="form-label">Teléfono de contacto</label>
+              <input type="text" id="contactPhone" name="contactPhone" class="form-control" th:value="${user.phone}" required>
+            </div>
+            <div class="mb-3">
+              <label for="notes" class="form-label">Notas adicionales (opcional)</label>
+              <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success">Confirmar Pedido</button>
+              <a th:href="@{/cart}" class="btn btn-outline-secondary mt-2">Volver al Carrito</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Resumen del Pedido</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cant.</th>
+                <th>Precio</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="item : ${cart.items}">
+                <td th:text="${item.product.name}">Producto</td>
+                <td th:text="${item.quantity}">1</td>
+                <td th:text="${'$' + #numbers.formatDecimal(item.product.price * item.quantity, 1, 2)}">$0.00</td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <th colspan="2">Total</th>
+                <th th:text="${'$' + #numbers.formatDecimal(cart.totalAmount, 1, 2)}">$0.00</th>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<script th:src="@{/js/validation.js}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('checkout-form');
+
+    if (form) {
+      form.addEventListener('submit', function(event) {
+        if (!validateCheckoutForm()) {
+          event.preventDefault();
+        }
+      });
+    }
+  });
+
+  function validateCheckoutForm() {
+    const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+    const contactPhone = document.getElementById('contactPhone').value.trim();
+
+    if (!deliveryAddress) {
+      alert('Por favor, ingrese una dirección de entrega');
+      return false;
+    }
+
+    if (!contactPhone) {
+      alert('Por favor, ingrese un teléfono de contacto');
+      return false;
+    }
+
+    return true;
+  }
+</script>
+</body>
+</html>
+
