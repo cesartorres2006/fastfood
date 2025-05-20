@@ -1,7 +1,7 @@
 package com.restaurante.fastfood.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+        import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

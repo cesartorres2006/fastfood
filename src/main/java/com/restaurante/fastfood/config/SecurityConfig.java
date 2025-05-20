@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +28,6 @@ import java.util.Set;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
     private final CustomUserDetailsService userDetailsService;
 
     @Autowired
@@ -72,13 +70,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/index", "/products",
-                                "/register", "/login", // Añadido "/cart" como ruta pública
-                                "/css/**", "/static/js/**", "/js/**", "/images/**" // Añadido "/js/**" para asegurar que los scripts se cargan
+                                "/register", "/login",
+                                "/css/**", "/static/js/**", "/js/**", "/images/**"
                         ).permitAll()
                         .requestMatchers("/api/products/**").permitAll()
-                        .requestMatchers("/api/cart/**").permitAll() // Añadido para permitir operaciones API del carrito
+                        .requestMatchers("/api/cart/count").permitAll() // Permitir verificar cantidad del carrito sin autenticación
                         .requestMatchers("/admin/**", "/api/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/orders/**","/cart", "/checkout/**").hasAuthority("ROLE_CLIENT") // Quitado "/cart/**" de aquí
+                        .requestMatchers("/cart", "/checkout/**").hasAuthority("ROLE_CLIENT")
+                        .requestMatchers("/api/cart/**").hasAuthority("ROLE_CLIENT") // Requiere autenticación y rol CLIENT
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

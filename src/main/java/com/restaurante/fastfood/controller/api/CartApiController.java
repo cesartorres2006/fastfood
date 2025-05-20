@@ -9,15 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/api/cart")
 public class CartApiController {
-
     private final CartService cartService;
     private final UserService userService;
 
@@ -40,52 +40,70 @@ public class CartApiController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Cart> addToCart(
+    public ResponseEntity<?> addToCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long productId,
             @RequestParam(defaultValue = "1") int quantity,
             @RequestParam(required = false) String notes) {
 
-        User user = userService.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
         try {
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
             Cart updatedCart = cartService.addProductToCart(user, productId, quantity, notes);
             return ResponseEntity.ok(updatedCart);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Error interno al procesar la solicitud");
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Cart> updateCartItem(
+    public ResponseEntity<?> updateCartItem(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long productId,
             @RequestParam int quantity) {
 
-        User user = userService.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
         try {
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
             Cart updatedCart = cartService.updateCartItemQuantity(user, productId, quantity);
             return ResponseEntity.ok(updatedCart);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Error interno al procesar la solicitud");
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Cart> removeFromCart(
+    public ResponseEntity<?> removeFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long productId) {
 
-        User user = userService.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        try {
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Cart updatedCart = cartService.removeProductFromCart(user, productId);
-        return ResponseEntity.ok(updatedCart);
+            Cart updatedCart = cartService.removeProductFromCart(user, productId);
+            return ResponseEntity.ok(updatedCart);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Error al eliminar producto del carrito");
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
 
     @DeleteMapping("/clear")
@@ -100,29 +118,32 @@ public class CartApiController {
 
     @GetMapping("/count")
     public ResponseEntity<Map<String, Integer>> getCartItemCount(@AuthenticationPrincipal UserDetails userDetails) {
+        Map<String, Integer> response = new HashMap<>();
+
         if (userDetails == null) {
-            Map<String, Integer> response = new HashMap<>();
             response.put("count", 0);
             return ResponseEntity.ok(response);
         }
 
         // Verificar si el usuario es un cliente
         if (!userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CLIENT"))) {
-            Map<String, Integer> response = new HashMap<>();
             response.put("count", 0);
             return ResponseEntity.ok(response);
         }
 
-        User user = userService.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        try {
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        int count = cartService.getCart(user)
-                .map(Cart::getTotalItems)
-                .orElse(0);
+            int count = cartService.getCart(user)
+                    .map(Cart::getTotalItems)
+                    .orElse(0);
 
-        Map<String, Integer> response = new HashMap<>();
-        response.put("count", count);
-        return ResponseEntity.ok(response);
+            response.put("count", count);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("count", 0);
+            return ResponseEntity.ok(response);
+        }
     }
 }
-

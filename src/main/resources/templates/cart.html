@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head('Checkout')"></head>
+<head th:replace="fragments/header :: head('Carrito')"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
-  <div class="container mt-5">
+
+<main class="container py-5">
     <h2 class="mb-4">Tu Carrito de Compras</h2>
 
     <div id="empty-cart-message" th:if="${cart.items.isEmpty()}">
@@ -60,7 +61,7 @@
         Un pedido no puede tener más de 10 productos
       </div>
     </div>
-  </div>
+  </main>
 <footer th:replace="fragments/footer :: footer"></footer>
 <script th:src="@{/js/cart.js}"></script>
 </body>

@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadCartItems();
     }
 });
-
 function addToCart(id, name, price) {
     // Llamar a la API para añadir al carrito
     fetch(`/api/cart/add?productId=${id}&quantity=1`, {
@@ -31,7 +30,7 @@ function addToCart(id, name, price) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al añadir al carrito');
+                throw new Error(`Error al añadir al carrito: ${response.status}`);
             }
             return response.json();
         })
@@ -50,7 +49,6 @@ function addToCart(id, name, price) {
             }
         });
 }
-
 function updateCartCount() {
     // Llamar a la API para obtener el número de items en el carrito
     fetch('/api/cart/count', {
@@ -238,4 +236,3 @@ function removeFromCart(productId) {
             alert('Ha ocurrido un error al eliminar el producto del carrito.');
         });
 }
-
