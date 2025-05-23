@@ -97,6 +97,45 @@ function filterProducts() {
         });
 }
 
+function displayAdminProducts(products) {
+    const tbody = document.querySelector('table.table tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    if (!products.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No se encontraron productos.</td></tr>';
+        return;
+    }
+    products.forEach(product => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${product.id}</td>
+            <td><img src="${product.imageUrl ? product.imageUrl : 'https://via.placeholder.com/50'}" class="img-thumbnail" width="50" alt="Imagen del producto"></td>
+            <td>${product.name}</td>
+            <td>${product.category}</td>
+            <td>$<span>${product.price}</span></td>
+            <td>
+                <span class="badge ${product.available ? 'bg-success' : 'bg-danger'}">${product.available ? 'Disponible' : 'No disponible'}</span>
+            </td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <a href="/admin/products/edit/${product.id}" class="btn btn-outline-primary">Editar</a>
+                    <a href="/admin/products/delete/${product.id}" class="btn btn-outline-danger delete-product" data-id="${product.id}" data-name="${product.name}">Eliminar</a>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    document.querySelectorAll('.delete-product').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productName = this.getAttribute('data-name');
+            if (confirm(`¿Estás seguro de eliminar el producto "${productName}"?`)) {
+                window.location.href = this.href;
+            }
+        });
+    });
+}
+
 function displayProducts(products) {
     const container = document.getElementById('products-container');
 

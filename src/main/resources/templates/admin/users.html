@@ -53,33 +53,6 @@
             </tr>
             </thead>
             <tbody id="table-body">
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}">1</td>
-                <td th:text="${user.username}">usuario123</td>
-                <td th:text="${user.fullName}">Nombre Completo</td>
-                <td th:text="${user.email}">email@example.com</td>
-                <td>
-                    <span th:class="${user.role.name() == 'ROLE_ADMIN' ? 'badge bg-danger' : 'badge bg-info'}"
-                          th:text="${user.role.name() == 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}">
-                        Rol
-                    </span>
-                </td>
-                <td>
-                    <span th:class="${user.enabled ? 'badge bg-success' : 'badge bg-danger'}"
-                          th:text="${user.enabled ? 'Activo' : 'Inactivo'}">
-                        Estado
-                    </span>
-                </td>
-                <td>
-                    <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-outline-primary view-user" th:attr="data-id=${user.id}">Ver</button>
-                        <button type="button" class="btn btn-outline-warning toggle-status"
-                                th:attr="data-id=${user.id}, data-status=${user.enabled}">
-                            <span th:text="${user.enabled ? 'Desactivar' : 'Activar'}">Cambiar estado</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
             </tbody>
         </table>
     </div>
@@ -115,14 +88,12 @@
 <footer th:replace="fragments/footer :: footer"></footer>
 
 <script>
+    // --- Búsqueda dinámica con debounce para gestión de usuarios ---
     document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar el modal
-        const userModal = new bootstrap.Modal(document.getElementById('userModal'));
-
-        // Reemplaza la búsqueda tradicional por búsqueda solo cuando el usuario termina de escribir (al dejar el campo)
         const searchInput = document.getElementById('search-input');
         const roleFilter = document.getElementById('role-filter');
         const tableBody = document.getElementById('table-body');
+        let debounceTimeout;
 
         function renderUsers(users) {
             tableBody.innerHTML = '';
@@ -132,45 +103,58 @@
             }
             users.forEach(user => {
                 tableBody.innerHTML += `
-                <tr>
-                    <td>${user.id}</td>
-                    <td>${user.username}</td>
-                    <td>${user.fullName}</td>
-                    <td>${user.email}</td>
-                    <td><span class="badge ${user.role === 'ROLE_ADMIN' ? 'bg-danger' : 'bg-info'}">${user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}</span></td>
-                    <td><span class="badge ${user.enabled ? 'bg-success' : 'bg-danger'}">${user.enabled ? 'Activo' : 'Inactivo'}</span></td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <button type="button" class="btn btn-outline-primary view-user" data-id="${user.id}">Ver</button>
-                            <button type="button" class="btn btn-outline-warning toggle-status" data-id="${user.id}" data-status="${user.enabled}">
-                                <span>${user.enabled ? 'Desactivar' : 'Activar'}</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>`;
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.fullName || ''}</td>
+                        <td>${user.email}</td>
+                        <td><span class="badge ${user.role === 'ROLE_ADMIN' ? 'bg-danger' : 'bg-info'}">${user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}</span></td>
+                        <td><span class="badge ${user.enabled ? 'bg-success' : 'bg-danger'}">${user.enabled ? 'Activo' : 'Inactivo'}</span></td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-primary view-user" data-id="${user.id}">Ver</button>
+                                <button type="button" class="btn btn-outline-warning toggle-status" data-id="${user.id}" data-status="${user.enabled}">
+                                    <span>${user.enabled ? 'Desactivar' : 'Activar'}</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+            // Registrar eventos después de renderizar la tabla
+            tableBody.querySelectorAll('.view-user').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-id');
+                    const user = users.find(u => u.id == userId);
+                    if (user) {
+                        document.getElementById('user-id').textContent = user.id;
+                        document.getElementById('user-username').textContent = user.username;
+                        document.getElementById('user-fullname').textContent = user.fullName || '';
+                        document.getElementById('user-email').textContent = user.email;
+                        document.getElementById('user-address').textContent = user.address || '';
+                        document.getElementById('user-phone').textContent = user.phone || '';
+                        document.getElementById('user-role').textContent = user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente';
+                        document.getElementById('user-status').textContent = user.enabled ? 'Activo' : 'Inactivo';
+                        const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                        modal.show();
+                    }
+                });
             });
         }
 
-        // --- Normaliza el valor del filtro de rol para el backend ---
         function getRoleValue() {
             const val = roleFilter.value;
             if (val === 'ROLE_CLIENT' || val === 'ROLE_ADMIN') return val;
-            // Corrige posibles variantes del select
-            if (val === 'Cliente') return 'ROLE_CLIENT';
-            if (val === 'Administrador') return 'ROLE_ADMIN';
             return '';
         }
 
-        function fetchUsersLive() {
+        function fetchUsersLive(forceAll = false) {
             const query = searchInput.value.trim();
             const role = getRoleValue();
-            if (!query && !role) {
-                window.location.reload();
-                return;
-            }
             let url = '/api/users/search?';
-            if (query) url += `query=${encodeURIComponent(query)}&`;
-            if (role) url += `role=${encodeURIComponent(role)}`;
+            if (!forceAll) {
+                if (query) url += `query=${encodeURIComponent(query)}&`;
+                if (role) url += `role=${encodeURIComponent(role)}`;
+            }
             fetch(url)
                 .then(res => res.json())
                 .then(renderUsers)
@@ -179,94 +163,50 @@
                 });
         }
 
-        searchInput.addEventListener('blur', fetchUsersLive);
-        roleFilter.addEventListener('change', fetchUsersLive);
+        // Cuando la barra está vacía y el filtro es "Todos", muestra todos los usuarios
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(function() {
+                if (!searchInput.value.trim() && !getRoleValue()) {
+                    fetchUsersLive(true);
+                } else {
+                    fetchUsersLive();
+                }
+            }, 350);
+        });
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (!searchInput.value.trim() && !getRoleValue()) {
+                    fetchUsersLive(true);
+                } else {
+                    fetchUsersLive();
+                }
+            }
+        });
+        roleFilter.addEventListener('change', function() {
+            if (!searchInput.value.trim() && !getRoleValue()) {
+                fetchUsersLive(true);
+            } else {
+                fetchUsersLive();
+            }
+        });
         document.getElementById('search-btn').addEventListener('click', function(e) {
             e.preventDefault();
-            fetchUsersLive();
+            if (!searchInput.value.trim() && !getRoleValue()) {
+                fetchUsersLive(true);
+            } else {
+                fetchUsersLive();
+            }
         });
         document.getElementById('clear-search-btn').addEventListener('click', function() {
             searchInput.value = '';
             roleFilter.value = '';
-            window.location.reload();
+            fetchUsersLive(true);
         });
-
-        // --- Fin búsqueda al terminar de escribir ---
-
-        // Agregar event listeners para los botones de ver usuario
-        tableBody.addEventListener('click', function(event) {
-            if (event.target.classList.contains('view-user')) {
-                const userId = event.target.getAttribute('data-id');
-                loadUserDetails(userId);
-            }
-        });
-
-        // Agregar event listeners para los botones de cambiar estado
-        tableBody.addEventListener('click', function(event) {
-            if (event.target.classList.contains('toggle-status')) {
-                const userId = event.target.getAttribute('data-id');
-                const currentStatus = event.target.getAttribute('data-status') === 'true';
-                const newStatus = !currentStatus;
-
-                if (confirm(`¿Estás seguro de ${newStatus ? 'activar' : 'desactivar'} este usuario?`)) {
-                    toggleUserStatus(userId, newStatus);
-                }
-            }
-        });
-
-        function loadUserDetails(userId) {
-            fetch(`/api/users/${userId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al cargar los detalles del usuario');
-                    }
-                    return response.json();
-                })
-                .then(user => {
-                    document.getElementById('user-id').textContent = user.id;
-                    document.getElementById('user-username').textContent = user.username;
-                    document.getElementById('user-fullname').textContent = user.fullName;
-                    document.getElementById('user-email').textContent = user.email;
-                    document.getElementById('user-address').textContent = user.address || 'No especificado';
-                    document.getElementById('user-phone').textContent = user.phone || 'No especificado';
-                    document.getElementById('user-role').textContent = user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente';
-
-                    const statusElement = document.getElementById('user-status');
-                    statusElement.textContent = user.enabled ? 'Activo' : 'Inactivo';
-                    statusElement.className = user.enabled ? 'badge bg-success' : 'badge bg-danger';
-
-                    userModal.show();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Ha ocurrido un error al cargar los detalles del usuario');
-                });
-        }
-
-        function toggleUserStatus(userId, newStatus) {
-            fetch(`/api/users/${userId}/status`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ enabled: newStatus })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al cambiar el estado del usuario');
-                    }
-                    return response.json();
-                })
-                .then(user => {
-                    alert(`El usuario ha sido ${user.enabled ? 'activado' : 'desactivado'} correctamente`);
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Ha ocurrido un error al cambiar el estado del usuario');
-                });
-        }
+        // Al cargar la página, muestra todos los usuarios
+        fetchUsersLive(true);
     });
+    // --- Fin búsqueda dinámica ---
 </script>
 </body>
 </html>
