@@ -1,10 +1,8 @@
 <!-- src/main/resources/templates/admin/products.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head('Gestión de Productos')">
-    <link rel="stylesheet" th:href="@{/css/custom.css}" />
-</head>
-<body th:attr="data-role=${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'admin' : 'user'}">
+<head th:replace="fragments/header :: head('Gestión de Productos')"></head>
+<body>
 <header th:replace="fragments/header :: header"></header>
 
 <main class="container py-5">
@@ -44,31 +42,6 @@
             <div class="text-end">
                 <button id="search-btn" class="btn btn-primary">Buscar</button>
                 <button id="clear-search-btn" class="btn btn-outline-secondary">Limpiar</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" th:each="product : ${products}">
-            <div class="card h-100">
-                <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" class="card-img-top" alt="Imagen del producto">
-                <img th:unless="${product.imageUrl}" src="https://via.placeholder.com/300x200" class="card-img-top" alt="Imagen de placeholder">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${product.name}">Nombre del producto</h5>
-                    <p class="card-text" th:text="${product.description}">Descripción del producto</p>
-                    <p class="card-text"><strong>$<span th:text="${#numbers.formatInteger(product.price, 0, 'POINT')}">0.00</span></strong></p>
-                    <div class="d-flex align-items-center gap-2 mt-2">
-                        <div class="input-group flex-nowrap" style="max-width:120px;">
-                            <button class="btn btn-outline-secondary btn-decrement" type="button" th:attr="data-id=${product.id}" disabled>-</button>
-                            <input type="number" class="form-control cantidad-input text-center"
-                                   th:id="${'cantidad-' + product.id}" min="1" max="20" value="1" style="width:50px;" disabled>
-                            <button class="btn btn-outline-secondary btn-increment" type="button" th:attr="data-id=${product.id}" disabled>+</button>
-                        </div>
-                        <button class="btn btn-primary add-to-cart" th:attr="data-id=${product.id}, data-name=${product.name}, data-price=${product.price}" disabled>
-                            Añadir al Carrito
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -163,5 +136,6 @@
         window.location.href = '/admin/products';
     }
 </script>
+
 </body>
 </html>
