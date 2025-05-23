@@ -28,15 +28,15 @@
                             <tbody>
                             <tr th:each="item : ${order.items}">
                                 <td th:text="${item.product.name}">Producto</td>
-                                <td>$<span th:text="${item.price}">0.00</span></td>
+                                <td>$<span th:text="${#numbers.formatInteger(item.price, 0, 'POINT')}">0</span></td>
                                 <td th:text="${item.quantity}">1</td>
-                                <td>$<span th:text="${item.price * item.quantity}">0.00</span></td>
+                                <td>$<span th:text="${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">0</span></td>
                             </tr>
                             </tbody>
                             <tfoot>
                             <tr>
                                 <th colspan="3" class="text-end">Total:</th>
-                                <th>$<span th:text="${order.totalAmount}">0.00</span></th>
+                                <th>$<span th:text="${#numbers.formatInteger(order.totalAmount, 0, 'POINT')}">0</span></th>
                             </tr>
                             </tfoot>
                         </table>
@@ -52,18 +52,14 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Estado:</strong>
-                        <span th:class="${'badge ' + (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'bg-warning' :
-                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'bg-info' :
-                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'bg-primary' :
-                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'bg-success' :
-                                                  (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'bg-success' : 'bg-danger')))))}"
-                              th:text="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'Pendiente' :
-                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'Confirmado' :
-                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'Preparando' :
-                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'Listo' :
-                                            (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'Entregado' : 'Cancelado'))))}">
-                                Estado
-                            </span>
+                        <span th:class="${'badge ' + order.status.name().toLowerCase()}"
+                              th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
+                                           (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
+                                           (order.status.name() == 'PREPARING' ? 'Preparando' :
+                                           (order.status.name() == 'READY' ? 'Listo' :
+                                           (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
+                            Estado
+                        </span>
                     </p>
                     <p><strong>Fecha:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</span></p>
                     <hr>

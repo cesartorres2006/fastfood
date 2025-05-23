@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "cart_items")
 @Data
@@ -25,15 +27,19 @@ public class CartItem {
     private Product product;
 
     @Column(nullable = false)
+    private BigDecimal price; // Usa el tipo que corresponde a tu base de datos
+
+    @Column(nullable = false)
     private Integer quantity;
 
     private String notes;
 
     // Constructor para facilitar la creación de items
-    public CartItem(Product product, Integer quantity, String notes) {
+    public CartItem(Product product, Integer quantity, String notes, BigDecimal price) {
         this.product = product;
         this.quantity = quantity;
         this.notes = notes;
+        this.price = price;
     }
 }
 

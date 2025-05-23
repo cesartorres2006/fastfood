@@ -37,11 +37,6 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(Order order) {
-        // Validar que el pedido no tenga más de 10 productos
-        if (order.getItems().size() > 10) {
-            throw new IllegalArgumentException("Un pedido no puede tener más de 10 productos");
-        }
-
         // Establecer fecha de pedido
         order.setOrderDate(LocalDateTime.now());
 
@@ -65,11 +60,6 @@ public class OrderService {
 
     @Transactional
     public Order addItemToOrder(Order order, OrderItem item) {
-        // Validar que no se excedan los 10 productos
-        if (order.getItems().size() >= 10) {
-            throw new IllegalArgumentException("Un pedido no puede tener más de 10 productos");
-        }
-
         order.addItem(item);
         return orderRepository.save(order);
     }
@@ -81,6 +71,16 @@ public class OrderService {
     public List<Order> findOrdersByDateRange(LocalDateTime start, LocalDateTime end) {
         return orderRepository.findByOrderDateBetween(start, end);
     }
+
+    public List<Order> findOrdersFiltered(String status, LocalDateTime from, LocalDateTime to) {
+        if (status != null && !status.isEmpty() && from != null && to != null) {
+            return orderRepository.findByStatusAndOrderDateBetween(Order.OrderStatus.valueOf(status), from, to);
+        } else if (status != null && !status.isEmpty()) {
+            return orderRepository.findByStatus(Order.OrderStatus.valueOf(status));
+        } else if (from != null && to != null) {
+            return orderRepository.findByOrderDateBetween(from, to);
+        } else {
+            return orderRepository.findAll();
+        }
+    }
 }
-
-

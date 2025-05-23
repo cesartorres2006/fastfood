@@ -53,28 +53,35 @@ public class CartService {
         // Obtener el carrito
         Cart cart = getOrCreateCart(user);
 
-        // Verificar que no se exceda el límite de 10 items
-        int currentItems = cart.getTotalItems();
-        if (currentItems + quantity > 10) {
-            throw new IllegalArgumentException("Un pedido no puede tener más de 10 productos");
-        }
-
         // Obtener el producto
         Product product = productService.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
         // Verificar si el producto ya está en el carrito
-        Optional<CartItem> existingItem = cartItemRepository.findByCartAndProduct(cart, product);
+        Optional<CartItem> existingItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().getId().equals(product.getId()))
+                .findFirst();
 
         if (existingItem.isPresent()) {
             // Actualizar la cantidad
             CartItem item = existingItem.get();
-            item.setQuantity(item.getQuantity() + quantity);
+            int newQuantity = item.getQuantity() + quantity;
+            if (newQuantity > 20) {
+                if (item.getQuantity() == 20) {
+                    throw new IllegalArgumentException("Ya tienes 20 unidades de este producto en el carrito. El límite es 20 por producto por pedido.");
+                } else {
+                    throw new IllegalArgumentException("El límite es 20 unidades por producto por pedido.");
+                }
+            }
+            item.setQuantity(newQuantity);
             item.setNotes(notes);
             cartItemRepository.save(item);
         } else {
+            if (quantity > 20) {
+                throw new IllegalArgumentException("El límite es 20 unidades por producto por pedido.");
+            }
             // Crear nuevo item
-            CartItem newItem = new CartItem(product, quantity, notes);
+            CartItem newItem = new CartItem(product, quantity, notes, product.getPrice());
             newItem.setCart(cart);
             cartItemRepository.save(newItem);
             cart.getItems().add(newItem);
@@ -94,30 +101,40 @@ public class CartService {
 
         // Si la cantidad es 0 o menos, eliminar el producto
         if (quantity <= 0) {
-            return removeProductFromCart(user, productId);
+            // Buscar el producto en el carrito
+            Optional<CartItem> existingItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst();
+            if (existingItem.isPresent()) {
+                CartItem item = existingItem.get();
+                cart.getItems().remove(item);
+                cartItemRepository.delete(item);
+                cart.calculateTotal();
+                return cartRepository.save(cart);
+            } else {
+                return cart;
+            }
         }
 
-        // Verificar que no se exceda el límite de 10 items
-        int currentItems = cart.getTotalItems();
+        // Obtener el producto
         Product product = productService.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-        Optional<CartItem> existingItem = cartItemRepository.findByCartAndProduct(cart, product);
+        Optional<CartItem> existingItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().getId().equals(product.getId()))
+                .findFirst();
 
         if (existingItem.isPresent()) {
-            int diff = quantity - existingItem.get().getQuantity();
-            if (currentItems + diff > 10) {
-                throw new IllegalArgumentException("Un pedido no puede tener más de 10 productos");
+            if (quantity > 20) {
+                throw new IllegalArgumentException("El límite es 20 unidades por producto por pedido.");
             }
-
             existingItem.get().setQuantity(quantity);
             cartItemRepository.save(existingItem.get());
         } else {
-            if (currentItems + quantity > 10) {
-                throw new IllegalArgumentException("Un pedido no puede tener más de 10 productos");
+            if (quantity > 20) {
+                throw new IllegalArgumentException("El límite es 20 unidades por producto por pedido.");
             }
-
-            CartItem newItem = new CartItem(product, quantity, null);
+            CartItem newItem = new CartItem(product, quantity, null, product.getPrice());
             newItem.setCart(cart);
             cartItemRepository.save(newItem);
             cart.getItems().add(newItem);
@@ -181,10 +198,6 @@ public class CartService {
 
         if (cart.isEmpty()) {
             throw new IllegalStateException("No se puede crear un pedido con un carrito vacío");
-        }
-
-        if (cart.hasTooManyItems()) {
-            throw new IllegalArgumentException("Un pedido no puede tener más de 10 productos");
         }
 
         // Crear nuevo pedido

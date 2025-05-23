@@ -47,16 +47,10 @@ public class CheckoutController {
             return "redirect:/cart";
         }
 
-        // Verificar si hay demasiados productos
-        if (cart.hasTooManyItems()) {
-            model.addAttribute("error", "Un pedido no puede tener más de 10 productos");
-            return "redirect:/cart";
-        }
-
         model.addAttribute("cart", cart);
         model.addAttribute("user", user);
 
-        return "checkout/index";
+        return "checkout";
     }
 
     @PostMapping("/place-order")

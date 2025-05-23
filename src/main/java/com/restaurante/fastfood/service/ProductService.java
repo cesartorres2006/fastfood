@@ -6,6 +6,7 @@ import com.restaurante.fastfood.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,31 @@ public class ProductService {
         return productRepository.findByNameContainingIgnoreCase(query);
     }
 
+    // Nuevo método para búsqueda combinada, ahora insensible a tildes
+    public List<Product> searchProducts(String query, String category) {
+        // Normalizar la query: quitar tildes y pasar a minúsculas
+        String normalizedQuery = normalizeText(query);
+        List<Product> baseList;
+        if (category != null && !category.isEmpty()) {
+            baseList = productRepository.findByCategory(category);
+        } else {
+            baseList = productRepository.findAll();
+        }
+        // Filtrar productos disponibles y cuyo nombre normalizado contenga la query normalizada
+        return baseList.stream()
+                .filter(Product::isAvailable)
+                .filter(product -> normalizeText(product.getName()).contains(normalizedQuery))
+                .toList();
+    }
+
+    // Utilidad para quitar tildes y pasar a minúsculas
+    private String normalizeText(String text) {
+        if (text == null) return "";
+        String normalized = Normalizer.normalize(text, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return normalized.toLowerCase();
+    }
+
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
     }
@@ -47,4 +73,3 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 }
-

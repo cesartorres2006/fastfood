@@ -28,7 +28,7 @@
           <tbody id="cart-items">
           <tr th:each="item : ${cart.items}">
             <td th:text="${item.product.name}">Producto</td>
-            <td th:text="${'$' + #numbers.formatDecimal(item.product.price, 1, 2)}">$0.00</td>
+            <td th:text="${'$' + #numbers.formatInteger(item.product.price, 0, 'POINT')}">$0.00</td>
             <td>
               <div class="input-group input-group-sm" style="width: 120px;">
                 <button class="btn btn-outline-secondary decrease-quantity" th:data-id="${item.product.id}">-</button>
@@ -36,7 +36,7 @@
                 <button class="btn btn-outline-secondary increase-quantity" th:data-id="${item.product.id}">+</button>
               </div>
             </td>
-            <td th:text="${'$' + #numbers.formatDecimal(item.product.price * item.quantity, 1, 2)}">$0.00</td>
+            <td th:text="${'$' + #numbers.formatInteger(item.product.price * item.quantity, 0, 'POINT')}">$0.00</td>
             <td>
               <button class="btn btn-sm btn-danger remove-item" th:data-id="${item.product.id}">Eliminar</button>
             </td>
@@ -54,11 +54,7 @@
 
       <div class="d-flex justify-content-between mt-4">
         <a th:href="@{/products}" class="btn btn-secondary">Continuar Comprando</a>
-        <a th:href="@{/checkout}" class="btn btn-primary" id="checkout-button" th:disabled="${cart.totalItems > 10}">Proceder al Pago</a>
-      </div>
-
-      <div class="text-danger mt-2" th:if="${cart.totalItems > 10}">
-        Un pedido no puede tener más de 10 productos
+        <a th:href="@{/checkout}" class="btn btn-primary" id="checkout-button">Proceder al Pago</a>
       </div>
     </div>
   </main>
@@ -66,4 +62,3 @@
 <script th:src="@{/js/cart.js}"></script>
 </body>
 </html>
-

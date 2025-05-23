@@ -2,6 +2,9 @@ package com.restaurante.fastfood.controller.api;
 
 import com.restaurante.fastfood.model.Cart;
 import com.restaurante.fastfood.model.User;
+import com.restaurante.fastfood.dto.CartDTO;
+import com.restaurante.fastfood.dto.CartItemDTO;
+import com.restaurante.fastfood.dto.ProductDTO;
 import com.restaurante.fastfood.service.CartService;
 import com.restaurante.fastfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +32,34 @@ public class CartApiController {
 
     @GetMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Cart> getCart(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CartDTO> getCart(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return cartService.getCart(user)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.ok(cartService.getOrCreateCart(user)));
+        Cart cart = cartService.getCart(user)
+                .orElseGet(() -> cartService.getOrCreateCart(user));
+
+        CartDTO dto = new CartDTO();
+        dto.setItems(cart.getItems().stream().map(item -> {
+            CartItemDTO itemDTO = new CartItemDTO();
+            itemDTO.setId(item.getId());
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setId(item.getProduct().getId());
+            productDTO.setName(item.getProduct().getName());
+            productDTO.setPrice(item.getProduct().getPrice());
+            itemDTO.setProduct(productDTO);
+            itemDTO.setQuantity(item.getQuantity());
+            itemDTO.setPrice(item.getPrice());
+            return itemDTO;
+        }).collect(java.util.stream.Collectors.toList()));
+        dto.setTotalAmount(cart.getTotalAmount());
+        dto.setTotalItems(cart.getTotalItems());
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<?> addToCart(
+    public ResponseEntity<CartDTO> addToCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long productId,
             @RequestParam(defaultValue = "1") int quantity,
@@ -51,21 +70,37 @@ public class CartApiController {
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
             Cart updatedCart = cartService.addProductToCart(user, productId, quantity, notes);
-            return ResponseEntity.ok(updatedCart);
+            // Convertir a DTO
+            CartDTO dto = new CartDTO();
+            dto.setItems(updatedCart.getItems().stream().map(item -> {
+                CartItemDTO itemDTO = new CartItemDTO();
+                itemDTO.setId(item.getId());
+                ProductDTO productDTO = new ProductDTO();
+                productDTO.setId(item.getProduct().getId());
+                productDTO.setName(item.getProduct().getName());
+                productDTO.setPrice(item.getProduct().getPrice());
+                itemDTO.setProduct(productDTO);
+                itemDTO.setQuantity(item.getQuantity());
+                itemDTO.setPrice(item.getPrice());
+                return itemDTO;
+            }).collect(java.util.stream.Collectors.toList()));
+            dto.setTotalAmount(updatedCart.getTotalAmount());
+            dto.setTotalItems(updatedCart.getTotalItems());
+            return ResponseEntity.ok(dto);
         } catch (IllegalArgumentException e) {
-            Map<String, String> response = new HashMap<>();
+            java.util.Map<String, String> response = new java.util.HashMap<>();
             response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.badRequest().body(null);
         } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
+            java.util.Map<String, String> response = new java.util.HashMap<>();
             response.put("error", "Error interno al procesar la solicitud");
-            return ResponseEntity.internalServerError().body(response);
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<?> updateCartItem(
+    public ResponseEntity<CartDTO> updateCartItem(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long productId,
             @RequestParam int quantity) {
@@ -75,21 +110,36 @@ public class CartApiController {
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
             Cart updatedCart = cartService.updateCartItemQuantity(user, productId, quantity);
-            return ResponseEntity.ok(updatedCart);
+            CartDTO dto = new CartDTO();
+            dto.setItems(updatedCart.getItems().stream().map(item -> {
+                CartItemDTO itemDTO = new CartItemDTO();
+                itemDTO.setId(item.getId());
+                ProductDTO productDTO = new ProductDTO();
+                productDTO.setId(item.getProduct().getId());
+                productDTO.setName(item.getProduct().getName());
+                productDTO.setPrice(item.getProduct().getPrice());
+                itemDTO.setProduct(productDTO);
+                itemDTO.setQuantity(item.getQuantity());
+                itemDTO.setPrice(item.getPrice());
+                return itemDTO;
+            }).collect(java.util.stream.Collectors.toList()));
+            dto.setTotalAmount(updatedCart.getTotalAmount());
+            dto.setTotalItems(updatedCart.getTotalItems());
+            return ResponseEntity.ok(dto);
         } catch (IllegalArgumentException e) {
-            Map<String, String> response = new HashMap<>();
+            java.util.Map<String, String> response = new java.util.HashMap<>();
             response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.badRequest().body(null);
         } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
+            java.util.Map<String, String> response = new java.util.HashMap<>();
             response.put("error", "Error interno al procesar la solicitud");
-            return ResponseEntity.internalServerError().body(response);
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<?> removeFromCart(
+    public ResponseEntity<CartDTO> removeFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long productId) {
 
@@ -98,11 +148,26 @@ public class CartApiController {
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
             Cart updatedCart = cartService.removeProductFromCart(user, productId);
-            return ResponseEntity.ok(updatedCart);
+            CartDTO dto = new CartDTO();
+            dto.setItems(updatedCart.getItems().stream().map(item -> {
+                CartItemDTO itemDTO = new CartItemDTO();
+                itemDTO.setId(item.getId());
+                ProductDTO productDTO = new ProductDTO();
+                productDTO.setId(item.getProduct().getId());
+                productDTO.setName(item.getProduct().getName());
+                productDTO.setPrice(item.getProduct().getPrice());
+                itemDTO.setProduct(productDTO);
+                itemDTO.setQuantity(item.getQuantity());
+                itemDTO.setPrice(item.getPrice());
+                return itemDTO;
+            }).collect(java.util.stream.Collectors.toList()));
+            dto.setTotalAmount(updatedCart.getTotalAmount());
+            dto.setTotalItems(updatedCart.getTotalItems());
+            return ResponseEntity.ok(dto);
         } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
+            java.util.Map<String, String> response = new java.util.HashMap<>();
             response.put("error", "Error al eliminar producto del carrito");
-            return ResponseEntity.internalServerError().body(response);
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 

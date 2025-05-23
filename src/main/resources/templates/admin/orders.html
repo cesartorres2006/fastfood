@@ -73,16 +73,16 @@
                 <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</td>
                 <td>$<span th:text="${order.totalAmount}">0.00</span></td>
                 <td>
-                            <span th:class="${'badge ' + (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'bg-warning' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'bg-info' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'bg-primary' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'bg-success' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'bg-success' : 'bg-danger')))))}"
-                                  th:text="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'Pendiente' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'Confirmado' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'Preparando' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'Listo' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'Entregado' : 'Cancelado'))))}">
+                            <span th:class="${'badge ' + (order.status.name() == 'PENDING' ? 'bg-warning' :
+                                               (order.status.name() == 'CONFIRMED' ? 'bg-info' :
+                                               (order.status.name() == 'PREPARING' ? 'bg-primary' :
+                                               (order.status.name() == 'READY' ? 'bg-success' :
+                                               (order.status.name() == 'DELIVERED' ? 'bg-success' : 'bg-danger')))))}"
+                                  th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
+                                               (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
+                                               (order.status.name() == 'PREPARING' ? 'Preparando' :
+                                               (order.status.name() == 'READY' ? 'Listo' :
+                                               (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
                                 Estado
                             </span>
                 </td>
@@ -112,6 +112,19 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Limitar el campo "Hasta" (date-to) al día actual
+        const dateToInput = document.getElementById('date-to');
+        if (dateToInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateToInput.setAttribute('max', today);
+        }
+        // Limitar el campo "Desde" (date-from) a días anteriores al de hoy
+        const dateFromInput = document.getElementById('date-from');
+        if (dateFromInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateFromInput.setAttribute('max', today);
+        }
+
         // Agregar event listeners para los filtros
         document.getElementById('apply-filter-btn').addEventListener('click', filterOrders);
         document.getElementById('clear-filter-btn').addEventListener('click', clearFilters);
@@ -134,24 +147,30 @@
     function loadOrders() {
         fetch('/api/orders/all')
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al cargar los pedidos');
-                }
-                return response.json();
+                console.log('Status:', response.status);
+                return response.text().then(text => {
+                    console.log('Raw response:', text);
+                    if (!response.ok) throw new Error('Error al cargar los pedidos. Status: ' + response.status + '\n' + text);
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Respuesta inválida del backend: ' + e + '\n' + text);
+                    }
+                });
             })
             .then(orders => {
                 displayOrders(orders);
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Ha ocurrido un error al cargar los pedidos');
+                alert('Ha ocurrido un error al cargar los pedidos: ' + error.message);
             });
     }
 
     function filterOrders() {
         const status = document.getElementById('status-filter').value;
-        const dateFrom = document.getElementById('date-from').value;
-        const dateTo = document.getElementById('date-to').value;
+        let dateFrom = document.getElementById('date-from').value;
+        let dateTo = document.getElementById('date-to').value;
 
         let url = '/api/orders/all';
         const params = [];
@@ -160,11 +179,14 @@
             params.push(`status=${status}`);
         }
 
+        // Ajustar formato de fechas para LocalDateTime
         if (dateFrom) {
+            dateFrom = dateFrom + 'T00:00:00';
             params.push(`from=${dateFrom}`);
         }
 
         if (dateTo) {
+            dateTo = dateTo + 'T23:59:59';
             params.push(`to=${dateTo}`);
         }
 
@@ -174,17 +196,23 @@
 
         fetch(url)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al filtrar los pedidos');
-                }
-                return response.json();
+                console.log('Status:', response.status);
+                return response.text().then(text => {
+                    console.log('Raw response:', text);
+                    if (!response.ok) throw new Error('Error al filtrar los pedidos. Status: ' + response.status + '\n' + text);
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Respuesta inválida del backend: ' + e + '\n' + text);
+                    }
+                });
             })
             .then(orders => {
                 displayOrders(orders);
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Ha ocurrido un error al filtrar los pedidos');
+                alert('Ha ocurrido un error al filtrar los pedidos: ' + error.message);
             });
     }
 

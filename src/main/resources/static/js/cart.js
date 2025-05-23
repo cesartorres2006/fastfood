@@ -2,53 +2,94 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar el contador del carrito
     updateCartCount();
 
-    // Agregar event listeners a los botones "Añadir al Carrito"
+    // Eliminar listeners duplicados en los botones "Añadir al Carrito"
     const addToCartButtons = document.querySelectorAll('.add-to-cart');
     addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            const productName = this.getAttribute('data-name');
-            const productPrice = parseFloat(this.getAttribute('data-price'));
-
-            addToCart(productId, productName, productPrice);
-        });
+        button.replaceWith(button.cloneNode(true));
     });
+    // Volver a agregar solo un listener por botón
+    const freshAddToCartButtons = document.querySelectorAll('.add-to-cart');
+    const isAdmin = document.body.getAttribute('data-role') === 'admin';
+    // Solo asigna listeners si NO es la vista admin
+    if (!isAdmin) {
+        freshAddToCartButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                const productId = this.getAttribute('data-id');
+                const productName = this.getAttribute('data-name');
+                const productPrice = parseFloat(this.getAttribute('data-price'));
+                const quantityInput = this.parentNode.querySelector('input[type="number"]');
+                const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+                if (isAdmin) {
+                    alert('El admin no puede realizar esta función');
+                    return;
+                }
+                addToCart(productId, quantity, productName);
+            });
+        });
+    } else {
+        // Refuerzo: deshabilita y bloquea los botones en admin
+        freshAddToCartButtons.forEach(btn => {
+            btn.disabled = true;
+            btn.onclick = null;
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }, true);
+        });
+    }
 
     // Si estamos en la página del carrito, cargar los items
     if (window.location.pathname === '/cart') {
         loadCartItems();
     }
 });
-function addToCart(id, name, price) {
-    // Llamar a la API para añadir al carrito
-    fetch(`/api/cart/add?productId=${id}&quantity=1`, {
+
+function addToCart(id, quantity = 1, productName = undefined) {
+    // Evita doble alerta si ya hay una en pantalla
+    if (window._addingToCart) return;
+    window._addingToCart = true;
+    fetch(`/api/cart/add?productId=${id}&quantity=${quantity}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'same-origin'
     })
-        .then(response => {
+        .then(async response => {
             if (!response.ok) {
-                throw new Error(`Error al añadir al carrito: ${response.status}`);
+                let msg = 'La cantidad limite por producto es 20';
+                try {
+                    const errorData = await response.json();
+                    if (errorData && errorData.error && errorData.error.includes('límite de productos')) {
+                        msg = errorData.error;
+                    }
+                } catch (e) {}
+                alert(msg);
+                return Promise.reject(msg); // Solo un alert
             }
             return response.json();
         })
         .then(data => {
-            // Actualizar el contador del carrito
             updateCartCount();
-            // Mostrar mensaje de confirmación
-            alert(`${name} ha sido añadido al carrito.`);
+            const name = data.productName || productName || 'Producto';
+            alert(`${quantity} × ${name} ha sido añadido al carrito.`);
         })
         .catch(error => {
             console.error('Error:', error);
             if (error.message.includes('401')) {
                 alert('Debes iniciar sesión para añadir productos al carrito.');
             } else {
-                alert('Ha ocurrido un error al añadir el producto al carrito.');
+                // No alert extra aquí
             }
+        })
+        .finally(() => {
+            setTimeout(() => { window._addingToCart = false; }, 500);
         });
 }
+
 function updateCartCount() {
     // Llamar a la API para obtener el número de items en el carrito
     fetch('/api/cart/count', {
@@ -78,12 +119,27 @@ function loadCartItems() {
         credentials: 'same-origin'
     })
         .then(response => {
+            const contentType = response.headers.get('content-type');
             if (!response.ok) {
-                throw new Error('Error al cargar el carrito');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json().then(err => {
+                        throw new Error(err.error || `Error al cargar el carrito: ${response.status}`);
+                    });
+                } else {
+                    throw new Error(`Error al cargar el carrito: ${response.status}`);
+                }
             }
-            return response.json();
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                return {}; // No se espera contenido útil
+            }
         })
         .then(cart => {
+            if (!cart || !cart.items) {
+                // Si no hay items, probablemente hubo un error o respuesta inesperada
+                return;
+            }
             const cartItemsElement = document.getElementById('cart-items');
             const emptyCartMessage = document.getElementById('empty-cart-message');
             const cartContent = document.getElementById('cart-content');
@@ -112,7 +168,7 @@ function loadCartItems() {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                     <td>${item.product.name}</td>
-                    <td>$${item.product.price.toFixed(2)}</td>
+                    <td>${item.product.price.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                     <td>
                         <div class="input-group input-group-sm" style="width: 120px;">
                             <button class="btn btn-outline-secondary decrease-quantity" data-id="${item.product.id}">-</button>
@@ -120,7 +176,7 @@ function loadCartItems() {
                             <button class="btn btn-outline-secondary increase-quantity" data-id="${item.product.id}">+</button>
                         </div>
                     </td>
-                    <td>$${subtotal.toFixed(2)}</td>
+                    <td>${subtotal.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                     <td>
                         <button class="btn btn-sm btn-danger remove-item" data-id="${item.product.id}">Eliminar</button>
                     </td>
@@ -131,7 +187,7 @@ function loadCartItems() {
 
             // Actualizar el total
             if (cartTotalElement) {
-                cartTotalElement.textContent = cart.totalAmount.toFixed(2);
+                cartTotalElement.textContent = cart.totalAmount.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 });
             }
 
             // Agregar event listeners a los botones
@@ -167,8 +223,8 @@ function loadCartItems() {
             // Verificar si hay demasiados productos
             if (cart.totalItems > 10 && checkoutButton) {
                 checkoutButton.disabled = true;
-                checkoutButton.title = 'Un pedido no puede tener más de 10 productos';
-                alert('Un pedido no puede tener más de 10 productos. Por favor, ajuste su carrito.');
+                // checkoutButton.title = 'Un pedido no puede tener más de 10 productos';
+                // alert('Un pedido no puede tener más de 10 productos. Por favor, ajuste su carrito.');
             } else if (checkoutButton) {
                 checkoutButton.disabled = false;
                 checkoutButton.title = '';

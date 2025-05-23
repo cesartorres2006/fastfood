@@ -52,23 +52,23 @@
                 <th>Acciones</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="table-body">
             <tr th:each="user : ${users}">
                 <td th:text="${user.id}">1</td>
                 <td th:text="${user.username}">usuario123</td>
                 <td th:text="${user.fullName}">Nombre Completo</td>
                 <td th:text="${user.email}">email@example.com</td>
                 <td>
-                            <span th:class="${user.role.name() == 'ROLE_ADMIN' ? 'badge bg-danger' : 'badge bg-info'}"
-                                  th:text="${user.role.name() == 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}">
-                                Rol
-                            </span>
+                    <span th:class="${user.role.name() == 'ROLE_ADMIN' ? 'badge bg-danger' : 'badge bg-info'}"
+                          th:text="${user.role.name() == 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}">
+                        Rol
+                    </span>
                 </td>
                 <td>
-                            <span th:class="${user.enabled ? 'badge bg-success' : 'badge bg-danger'}"
-                                  th:text="${user.enabled ? 'Activo' : 'Inactivo'}">
-                                Estado
-                            </span>
+                    <span th:class="${user.enabled ? 'badge bg-success' : 'badge bg-danger'}"
+                          th:text="${user.enabled ? 'Activo' : 'Inactivo'}">
+                        Estado
+                    </span>
                 </td>
                 <td>
                     <div class="btn-group btn-group-sm">
@@ -119,29 +119,99 @@
         // Inicializar el modal
         const userModal = new bootstrap.Modal(document.getElementById('userModal'));
 
-        // Agregar event listeners para los botones de búsqueda
-        document.getElementById('search-btn').addEventListener('click', searchUsers);
-        document.getElementById('clear-search-btn').addEventListener('click', clearSearch);
+        // Reemplaza la búsqueda tradicional por búsqueda solo cuando el usuario termina de escribir (al dejar el campo)
+        const searchInput = document.getElementById('search-input');
+        const roleFilter = document.getElementById('role-filter');
+        const tableBody = document.getElementById('table-body');
+
+        function renderUsers(users) {
+            tableBody.innerHTML = '';
+            if (users.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No se encontraron usuarios.</td></tr>';
+                return;
+            }
+            users.forEach(user => {
+                tableBody.innerHTML += `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.fullName}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge ${user.role === 'ROLE_ADMIN' ? 'bg-danger' : 'bg-info'}">${user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}</span></td>
+                    <td><span class="badge ${user.enabled ? 'bg-success' : 'bg-danger'}">${user.enabled ? 'Activo' : 'Inactivo'}</span></td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-primary view-user" data-id="${user.id}">Ver</button>
+                            <button type="button" class="btn btn-outline-warning toggle-status" data-id="${user.id}" data-status="${user.enabled}">
+                                <span>${user.enabled ? 'Desactivar' : 'Activar'}</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        // --- Normaliza el valor del filtro de rol para el backend ---
+        function getRoleValue() {
+            const val = roleFilter.value;
+            if (val === 'ROLE_CLIENT' || val === 'ROLE_ADMIN') return val;
+            // Corrige posibles variantes del select
+            if (val === 'Cliente') return 'ROLE_CLIENT';
+            if (val === 'Administrador') return 'ROLE_ADMIN';
+            return '';
+        }
+
+        function fetchUsersLive() {
+            const query = searchInput.value.trim();
+            const role = getRoleValue();
+            if (!query && !role) {
+                window.location.reload();
+                return;
+            }
+            let url = '/api/users/search?';
+            if (query) url += `query=${encodeURIComponent(query)}&`;
+            if (role) url += `role=${encodeURIComponent(role)}`;
+            fetch(url)
+                .then(res => res.json())
+                .then(renderUsers)
+                .catch(() => {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error al buscar usuarios.</td></tr>';
+                });
+        }
+
+        searchInput.addEventListener('blur', fetchUsersLive);
+        roleFilter.addEventListener('change', fetchUsersLive);
+        document.getElementById('search-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetchUsersLive();
+        });
+        document.getElementById('clear-search-btn').addEventListener('click', function() {
+            searchInput.value = '';
+            roleFilter.value = '';
+            window.location.reload();
+        });
+
+        // --- Fin búsqueda al terminar de escribir ---
 
         // Agregar event listeners para los botones de ver usuario
-        document.querySelectorAll('.view-user').forEach(button => {
-            button.addEventListener('click', function() {
-                const userId = this.getAttribute('data-id');
+        tableBody.addEventListener('click', function(event) {
+            if (event.target.classList.contains('view-user')) {
+                const userId = event.target.getAttribute('data-id');
                 loadUserDetails(userId);
-            });
+            }
         });
 
         // Agregar event listeners para los botones de cambiar estado
-        document.querySelectorAll('.toggle-status').forEach(button => {
-            button.addEventListener('click', function() {
-                const userId = this.getAttribute('data-id');
-                const currentStatus = this.getAttribute('data-status') === 'true';
+        tableBody.addEventListener('click', function(event) {
+            if (event.target.classList.contains('toggle-status')) {
+                const userId = event.target.getAttribute('data-id');
+                const currentStatus = event.target.getAttribute('data-status') === 'true';
                 const newStatus = !currentStatus;
 
                 if (confirm(`¿Estás seguro de ${newStatus ? 'activar' : 'desactivar'} este usuario?`)) {
                     toggleUserStatus(userId, newStatus);
                 }
-            });
+            }
         });
 
         function loadUserDetails(userId) {
@@ -195,34 +265,6 @@
                     console.error('Error:', error);
                     alert('Ha ocurrido un error al cambiar el estado del usuario');
                 });
-        }
-
-        function searchUsers() {
-            const searchQuery = document.getElementById('search-input').value.trim();
-            const role = document.getElementById('role-filter').value;
-
-            let url = '/admin/users';
-            const params = [];
-
-            if (searchQuery) {
-                params.push(`query=${encodeURIComponent(searchQuery)}`);
-            }
-
-            if (role) {
-                params.push(`role=${encodeURIComponent(role)}`);
-            }
-
-            if (params.length > 0) {
-                url += '?' + params.join('&');
-            }
-
-            window.location.href = url;
-        }
-
-        function clearSearch() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('role-filter').value = '';
-            window.location.href = '/admin/users';
         }
     });
 </script>

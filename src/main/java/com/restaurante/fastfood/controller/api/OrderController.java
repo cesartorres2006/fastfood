@@ -69,9 +69,9 @@ public class OrderController {
         return ResponseEntity.ok(updatedOrder);
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Order>> getAllOrders() {
-        return ResponseEntity.ok(orderService.findAllOrders());
-    }
+    // Elimina o comenta este endpoint duplicado para evitar conflicto con AdminOrderApiController
+    // @GetMapping("/all")
+    // public ResponseEntity<List<Order>> getAllOrders() {
+    //     return ResponseEntity.ok(orderService.findAllOrders());
+    // }
 }

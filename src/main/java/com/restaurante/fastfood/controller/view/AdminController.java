@@ -12,6 +12,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -57,7 +64,33 @@ public class AdminController {
     }
 
     @PostMapping("/products/save")
-    public String saveProduct(@ModelAttribute Product product) {
+    public String saveProduct(@ModelAttribute Product product,
+                             @RequestParam("price") String priceRaw,
+                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
+        // Asegura que el precio se procese como número puro sin puntos ni comas
+        if (priceRaw != null && !priceRaw.isEmpty()) {
+            String clean = priceRaw.replaceAll("[.,\\s]", "");
+            try {
+                product.setPrice(new java.math.BigDecimal(clean));
+            } catch (NumberFormatException e) {
+                product.setPrice(java.math.BigDecimal.ZERO);
+            }
+        }
+        // Procesar imagen subida
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String uploadDir = "uploads/products/";
+                File dir = new File(uploadDir);
+                if (!dir.exists()) dir.mkdirs();
+                String ext = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf('.'));
+                String filename = UUID.randomUUID().toString() + ext;
+                Path filePath = Paths.get(uploadDir, filename);
+                Files.copy(imageFile.getInputStream(), filePath);
+                product.setImageUrl("/uploads/products/" + filename);
+            } catch (IOException e) {
+                // Manejo simple: podrías agregar logs o feedback al usuario
+            }
+        }
         productService.saveProduct(product);
         return "redirect:/admin/products";
     }
@@ -92,4 +125,3 @@ public class AdminController {
         return "redirect:/admin/orders";
     }
 }
-

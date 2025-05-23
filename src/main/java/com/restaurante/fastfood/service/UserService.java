@@ -62,5 +62,35 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
-}
 
+    public List<User> searchUsers(String query, String role) {
+        boolean hasQuery = query != null && !query.isEmpty();
+        boolean hasRole = role != null && !role.isEmpty();
+        if (!hasQuery && !hasRole) {
+            return userRepository.findAll();
+        }
+        if (hasQuery && !hasRole) {
+            return userRepository.findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(query, query, query);
+        }
+        if (!hasQuery && hasRole) {
+            // Convierte el string a enum Role
+            com.restaurante.fastfood.model.enums.Role roleEnum;
+            try {
+                roleEnum = com.restaurante.fastfood.model.enums.Role.valueOf(role);
+            } catch (Exception e) {
+                return java.util.Collections.emptyList();
+            }
+            return userRepository.findByRole(roleEnum);
+        }
+        // Ambos filtros (rol y query)
+        com.restaurante.fastfood.model.enums.Role roleEnum;
+        try {
+            roleEnum = com.restaurante.fastfood.model.enums.Role.valueOf(role);
+        } catch (Exception e) {
+            return java.util.Collections.emptyList();
+        }
+        return userRepository.findByRoleAndUsernameContainingIgnoreCaseOrRoleAndFullNameContainingIgnoreCaseOrRoleAndEmailContainingIgnoreCase(
+            roleEnum, query, roleEnum, query, roleEnum, query
+        );
+    }
+}

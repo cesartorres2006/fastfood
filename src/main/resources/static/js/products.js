@@ -11,18 +11,59 @@ document.addEventListener('DOMContentLoaded', function() {
     // Búsqueda de productos
     const searchButton = document.getElementById('search-button');
     if (searchButton) {
-        searchButton.addEventListener('click', function() {
+        searchButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
             filterProducts();
         });
     }
 
     const searchInput = document.getElementById('search-input');
+    let debounceTimeout;
     if (searchInput) {
+        // Búsqueda con Enter
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 filterProducts();
             }
         });
+        // Búsqueda con debounce al escribir
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                filterProducts();
+            }, 350); // 350 ms de espera después de dejar de escribir
+        });
+    }
+
+    // Delegación global para botones + y - (funciona siempre)
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-decrement')) {
+            const id = e.target.getAttribute('data-id');
+            const input = document.getElementById(`cantidad-${id}`);
+            if (input) {
+                let val = parseInt(input.value) || 1;
+                if (val > 1) input.value = val - 1;
+            }
+        } else if (e.target.classList.contains('btn-increment')) {
+            const id = e.target.getAttribute('data-id');
+            const input = document.getElementById(`cantidad-${id}`);
+            if (input) {
+                let val = parseInt(input.value) || 1;
+                if (val < 20) input.value = val + 1;
+            }
+        }
+    });
+
+    // Bloquea cualquier intento de agregar al carrito en la vista admin
+    if (window.location.pathname.startsWith('/admin')) {
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-to-cart')) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }, true);
     }
 });
 
@@ -72,16 +113,25 @@ function displayProducts(products) {
         const productCard = document.createElement('div');
         productCard.className = 'col';
 
+        // IDs y data-id únicos por producto
+        const cantidadId = `cantidad-${product.id}`;
         productCard.innerHTML = `
             <div class="card h-100">
                 <img src="${product.imageUrl || 'https://via.placeholder.com/300x200'}" class="card-img-top" alt="Imagen de ${product.name}">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
                     <p class="card-text">${product.description || ''}</p>
-                    <p class="card-text"><strong>$${product.price.toFixed(2)}</strong></p>
-                    <button class="btn btn-primary add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
-                        Añadir al Carrito
-                    </button>
+                    <p class="card-text"><strong>${product.price.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</strong></p>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <div class="input-group flex-nowrap" style="max-width:120px;">
+                            <button class="btn btn-outline-secondary btn-decrement" type="button" data-id="${product.id}">-</button>
+                            <input type="number" class="form-control cantidad-input text-center" id="${cantidadId}" data-id="${product.id}" min="1" max="20" value="1" style="width:50px;">
+                            <button class="btn btn-outline-secondary btn-increment" type="button" data-id="${product.id}">+</button>
+                        </div>
+                        <button class="btn btn-primary add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+                            Añadir al Carrito
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -94,10 +144,12 @@ function displayProducts(products) {
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function() {
             const productId = this.getAttribute('data-id');
-            const productName = this.getAttribute('data-name');
-            const productPrice = parseFloat(this.getAttribute('data-price'));
-
-            addToCart(productId, productName, productPrice);
+            const cantidadInput = document.getElementById(`cantidad-${productId}`);
+            let cantidad = 1;
+            if (cantidadInput) {
+                cantidad = parseInt(cantidadInput.value) || 1;
+            }
+            addToCart(productId, cantidad);
         });
     });
 }

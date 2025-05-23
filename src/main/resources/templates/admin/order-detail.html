@@ -32,9 +32,9 @@
                             <tbody>
                             <tr th:each="item : ${order.items}">
                                 <td th:text="${item.product.name}">Producto</td>
-                                <td>$<span th:text="${item.price}">0.00</span></td>
+                                <td>$<span th:text="${#numbers.formatInteger(item.price, 0, 'POINT')}">0</span></td>
                                 <td th:text="${item.quantity}">1</td>
-                                <td>$<span th:text="${item.price * item.quantity}">0.00</span></td>
+                                <td>$<span th:text="${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">0</span></td>
                                 <td th:text="${item.notes ?: '-'}">Sin notas</td>
                             </tr>
                             </tbody>
@@ -57,16 +57,16 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Estado:</strong>
-                        <span th:class="${'badge ' + (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'bg-warning' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'bg-info' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'bg-primary' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'bg-success' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'bg-success' : 'bg-danger')))))}"
-                              th:text="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING ? 'Pendiente' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED ? 'Confirmado' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING ? 'Preparando' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY ? 'Listo' :
-                                           (order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED ? 'Entregado' : 'Cancelado'))))}">
+                        <span th:class="${'badge ' + (order.status.name() == 'PENDING' ? 'bg-warning' :
+                                           (order.status.name() == 'CONFIRMED' ? 'bg-info' :
+                                           (order.status.name() == 'PREPARING' ? 'bg-primary' :
+                                           (order.status.name() == 'READY' ? 'bg-success' :
+                                           (order.status.name() == 'DELIVERED' ? 'bg-success' : 'bg-danger')))))}"
+                              th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
+                                           (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
+                                           (order.status.name() == 'PREPARING' ? 'Preparando' :
+                                           (order.status.name() == 'READY' ? 'Listo' :
+                                           (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
                                 Estado
                             </span>
                     </p>
@@ -88,12 +88,12 @@
                     <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post">
                         <div class="mb-3">
                             <select name="status" class="form-select">
-                                <option value="PENDING" th:selected="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PENDING}">Pendiente</option>
-                                <option value="CONFIRMED" th:selected="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CONFIRMED}">Confirmado</option>
-                                <option value="PREPARING" th:selected="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).PREPARING}">Preparando</option>
-                                <option value="READY" th:selected="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).READY}">Listo</option>
-                                <option value="DELIVERED" th:selected="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).DELIVERED}">Entregado</option>
-                                <option value="CANCELLED" th:selected="${order.status == T(com.restaurante.fastfood.model.Order.OrderStatus).CANCELLED}">Cancelado</option>
+                                <option value="PENDING" th:selected="${order.status.name() == 'PENDING'}">Pendiente</option>
+                                <option value="CONFIRMED" th:selected="${order.status.name() == 'CONFIRMED'}">Confirmado</option>
+                                <option value="PREPARING" th:selected="${order.status.name() == 'PREPARING'}">Preparando</option>
+                                <option value="READY" th:selected="${order.status.name() == 'READY'}">Listo</option>
+                                <option value="DELIVERED" th:selected="${order.status.name() == 'DELIVERED'}">Entregado</option>
+                                <option value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">Cancelado</option>
                             </select>
                         </div>
                         <div class="d-grid">

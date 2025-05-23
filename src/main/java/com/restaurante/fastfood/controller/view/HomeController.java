@@ -1,10 +1,13 @@
 package com.restaurante.fastfood.controller.view;
 
+import com.restaurante.fastfood.model.Cart;
 import com.restaurante.fastfood.model.User;
+import com.restaurante.fastfood.service.CartService;
 import com.restaurante.fastfood.service.ProductService;
 import com.restaurante.fastfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +21,14 @@ public class HomeController {
     private final ProductService productService;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final CartService cartService;
 
     @Autowired
-    public HomeController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder) {
+    public HomeController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder, CartService cartService) {
         this.productService = productService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.cartService = cartService;
     }
 
     @GetMapping("/")
@@ -54,14 +59,6 @@ public class HomeController {
         userService.registerNewUser(user);
         return "redirect:/login";
     }
-    // @GetMapping("/checkout")
-    // public String checkout(Authentication authentication, Model model) {
-    //     if (authentication != null) {
-    //         User user = userService.findByUsername(authentication.getName()).orElse(new User());
-    //         model.addAttribute("user", user);
-    //     }
-    //     return "checkout";
-    // }
 
     @GetMapping("/order-confirmation")
     public String orderConfirmation() {
@@ -72,6 +69,15 @@ public class HomeController {
     public String aboutPage() {
         return "about";
     }
+
+    @ModelAttribute("cart")
+    public Cart cart(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            User user = userService.findByUsername(userDetails.getUsername()).orElse(null);
+            if (user != null) {
+                return cartService.getOrCreateCart(user);
+            }
+        }
+        return new Cart();
+    }
 }
-
-
