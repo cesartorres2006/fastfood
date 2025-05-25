@@ -2,37 +2,778 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<footer th:fragment="footer" class="bg-dark text-white py-4 mt-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <h5>FastFood Restaurant</h5>
-        <p>La mejor comida rápida de la ciudad</p>
-      </div>
-      <div class="col-md-4">
-        <h5>Enlaces rápidos</h5>
-        <ul class="list-unstyled">
-          <li><a th:href="@{/}" class="text-white">Inicio</a></li>
-          <li><a th:href="@{/products}" class="text-white">Menú</a></li>
-          <li><a class="text-white" th:href="@{/about}">Sobre Nosotros</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <h5>Contacto</h5>
-        <address>
-          <p>Calle Principal #123</p>
-          <p>Ciudad, País</p>
-          <p>Teléfono: (123) 456-7890</p>
-          <p>Email: info@fastfood.com</p>
-        </address>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-12 text-center">
-        <p class="mb-0">&copy; 2025 FastFood Restaurant. Todos los derechos reservados.</p>
+<footer th:fragment="footer" class="footer-dark">
+  <!-- Elementos decorativos de fondo -->
+  <div class="footer-bg-elements">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-dot dot-1"></div>
+    <div class="bg-dot dot-2"></div>
+    <div class="bg-dot dot-3"></div>
+    <div class="bg-line line-1"></div>
+    <div class="bg-line line-2"></div>
+  </div>
+
+  <div class="footer-top">
+    <div class="container">
+      <div class="row g-4 justify-content-between">
+        <div class="col-lg-5 col-md-6">
+          <div class="footer-brand-section">
+            <div class="footer-logo">
+              <div class="footer-logo-container">
+                <span class="footer-logo-text">Punto</span>
+                <span class="footer-logo-y-wrapper">
+                                    <span class="footer-logo-y">Y</span>
+                                    <span class="footer-logo-y-circle"></span>
+                                    <span class="footer-logo-y-rays">
+                                        <span class="ray ray-1"></span>
+                                        <span class="ray ray-2"></span>
+                                        <span class="ray ray-3"></span>
+                                        <span class="ray ray-4"></span>
+                                    </span>
+                                </span>
+                <span class="footer-logo-text">Koma</span>
+              </div>
+            </div>
+            <p class="footer-slogan">Sabores que cuentan historias</p>
+            <div class="footer-description">
+              <p>Descubre una experiencia gastronómica única donde cada plato es una obra de arte y cada bocado cuenta una historia. Nuestros sabores te transportarán a un viaje culinario inolvidable.</p>
+            </div>
+            <div class="footer-social">
+              <a href="https://www.facebook.com/jefersson.castro.312555" class="social-icon">
+                <i class="bi bi-facebook"></i>
+                <div class="icon-hover-effect"></div>
+              </a>
+              <a href="https://www.instagram.com/puntoykoma2024/" class="social-icon">
+                <i class="bi bi-instagram"></i>
+                <div class="icon-hover-effect"></div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6">
+          <div class="footer-links-section">
+            <h5 class="footer-title">Navegación</h5>
+            <div class="footer-title-underline">
+              <div class="underline-dot"></div>
+            </div>
+            <ul class="footer-links">
+              <li><a th:href="@{/}"><i class="bi bi-chevron-right"></i> Inicio</a></li>
+              <li><a th:href="@{/products}"><i class="bi bi-chevron-right"></i> Menú</a></li>
+              <li><a th:href="@{/about}"><i class="bi bi-chevron-right"></i> Nosotros</a></li>
+            </ul>
+            <div class="footer-decoration">
+              <div class="decoration-element"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-contact-section">
+            <h5 class="footer-title">Contáctanos</h5>
+            <div class="footer-title-underline">
+              <div class="underline-dot"></div>
+            </div>
+            <div class="contact-info">
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="bi bi-geo-alt"></i>
+                  <div class="icon-glow"></div>
+                </div>
+                <div class="contact-text">
+                  <p>Estamos ubicados en nueva florencia frente al caney llanero</p>
+                  <p>Florencia, Caqueta 18001</p>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="bi bi-telephone"></i>
+                  <div class="icon-glow"></div>
+                </div>
+                <div class="contact-text">
+                  <p>+57 311 504 8070</p>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="bi bi-envelope"></i>
+                  <div class="icon-glow"></div>
+                </div>
+                <div class="contact-text">
+                  <p>puntoykoma2024@gmail.com</p>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="bi bi-clock"></i>
+                  <div class="icon-glow"></div>
+                </div>
+                <div class="contact-text">
+                  <p>Mier-Vie: 16:00 - 23:00</p>
+                  <p>Sáb-Lun: 16:00 - 23:00</p>
+                </div>
+              </div>
+            </div>
+            <div class="contact-decoration"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 text-center">
+          <p class="copyright">
+            &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span>
+            <span class="copyright-brand">Punto<span class="copyright-y">Y</span>Koma</span>.
+            Todos los derechos reservados.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Footer Styling */
+    .footer-dark {
+      background-color: #121212;
+      color: rgba(255, 255, 255, 0.8);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Elementos decorativos de fondo */
+    .footer-bg-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.03;
+      background: radial-gradient(circle, #FFD100 10%, transparent 70%);
+    }
+
+    .circle-1 {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      right: -50px;
+    }
+
+    .circle-2 {
+      width: 200px;
+      height: 200px;
+      bottom: 50px;
+      left: -50px;
+    }
+
+    .bg-dot {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: rgba(255, 209, 0, 0.2);
+      box-shadow: 0 0 5px rgba(255, 209, 0, 0.3);
+    }
+
+    .dot-1 {
+      top: 20%;
+      left: 15%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .dot-2 {
+      top: 50%;
+      right: 10%;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+
+    .dot-3 {
+      bottom: 30%;
+      left: 40%;
+      animation: float 7s ease-in-out infinite 1s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(10px) translateX(5px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+
+    .bg-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.1), transparent);
+    }
+
+    .line-1 {
+      width: 80%;
+      top: 30%;
+      left: 10%;
+      opacity: 0.05;
+      transform: rotate(-5deg);
+    }
+
+    .line-2 {
+      width: 60%;
+      bottom: 20%;
+      right: 5%;
+      opacity: 0.05;
+      transform: rotate(3deg);
+    }
+
+    .footer-dark::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 70% 20%, rgba(255, 209, 0, 0.04) 0%, transparent 60%);
+      z-index: -1;
+    }
+
+    .footer-top {
+      padding: 4.5rem 0 3rem;
+      position: relative;
+    }
+
+    .footer-top::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.3), transparent);
+    }
+
+    /* Logo styling */
+    .footer-logo-container {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-logo-text {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #FFFFFF;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .footer-logo-y-wrapper {
+      display: inline-block;
+      position: relative;
+      margin: 0 0.2rem;
+      transform: translateY(-2px);
+    }
+
+    .footer-logo-y {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: #FFD100;
+      display: inline-block;
+      text-shadow: 0 0 5px rgba(255, 209, 0, 0.5);
+      animation: subtle-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes subtle-pulse {
+      0%, 100% { text-shadow: 0 0 5px rgba(255, 209, 0, 0.5); }
+      50% { text-shadow: 0 0 12px rgba(255, 209, 0, 0.8); }
+    }
+
+    .footer-logo-y-circle {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 209, 0, 0.5);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.5;
+      z-index: -1;
+      animation: circle-pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes circle-pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.7; }
+    }
+
+    .footer-logo-y-rays {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -2;
+    }
+
+    .ray {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 1px;
+      width: 15px;
+      background: linear-gradient(90deg, rgba(255, 209, 0, 0.7), transparent);
+      transform-origin: left center;
+    }
+
+    .ray-1 {
+      transform: translateY(-50%) rotate(0deg);
+      animation: ray-pulse 3s ease-in-out infinite 0.2s;
+    }
+
+    .ray-2 {
+      transform: translateY(-50%) rotate(90deg);
+      animation: ray-pulse 3s ease-in-out infinite 0.7s;
+    }
+
+    .ray-3 {
+      transform: translateY(-50%) rotate(45deg);
+      animation: ray-pulse 3s ease-in-out infinite 1.2s;
+    }
+
+    .ray-4 {
+      transform: translateY(-50%) rotate(135deg);
+      animation: ray-pulse 3s ease-in-out infinite 1.7s;
+    }
+
+    @keyframes ray-pulse {
+      0%, 100% { width: 15px; opacity: 0.3; }
+      50% { width: 25px; opacity: 0.7; }
+    }
+
+    .footer-slogan {
+      font-style: italic;
+      margin-bottom: 1.2rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-slogan::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, #FFD100, transparent);
+    }
+
+    /* Descripción adicional */
+    .footer-description {
+      margin-bottom: 1.5rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 90%;
+    }
+
+    /* Social icons - Mejorados */
+    .footer-social {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 1.8rem;
+    }
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .social-icon i {
+      font-size: 1.3rem;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .icon-hover-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 100%;
+      height: 100%;
+      background: #FFD100;
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      color: #121212;
+    }
+
+    .social-icon:hover .icon-hover-effect {
+      transform: translate(-50%, -50%) scale(1.5);
+      opacity: 0.8;
+    }
+
+    /* Section titles */
+    .footer-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-title-underline {
+      position: relative;
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, #FFD100, transparent);
+      margin-bottom: 1.5rem;
+    }
+
+    .underline-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #FFD100;
+      border-radius: 50%;
+      top: -2px;
+      left: 0;
+      animation: moveDot 3s ease-in-out infinite alternate;
+      box-shadow: 0 0 5px rgba(255, 209, 0, 0.5);
+    }
+
+    @keyframes moveDot {
+      0% { left: 0; }
+      100% { left: 44px; }
+    }
+
+    /* Footer links - Mejorados visualmente */
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      position: relative;
+      padding-left: 0.2rem;
+      font-size: 1.05rem;
+      letter-spacing: 0.3px;
+    }
+
+    .footer-links a i {
+      font-size: 0.75rem;
+      margin-right: 0.4rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    .footer-links a:hover {
+      color: #FFD100;
+      transform: translateX(5px);
+    }
+
+    .footer-links a:hover i {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .footer-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: #FFD100;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Elemento decorativo para la sección de enlaces */
+    .footer-decoration {
+      margin-top: 2rem;
+      position: relative;
+      height: 60px;
+    }
+
+    .decoration-element {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255, 209, 0, 0.2);
+      border-radius: 5px;
+      transform: rotate(45deg);
+      left: 20px;
+      animation: float-rotate 8s ease-in-out infinite;
+    }
+
+    @keyframes float-rotate {
+      0% { transform: rotate(45deg) translateY(0); opacity: 0.2; }
+      50% { transform: rotate(60deg) translateY(-10px); opacity: 0.4; }
+      100% { transform: rotate(45deg) translateY(0); opacity: 0.2; }
+    }
+
+    /* Contact info - Mejorado visualmente */
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 209, 0, 0.1);
+      color: #FFD100;
+      margin-right: 1rem;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .icon-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(255, 209, 0, 0.4), transparent 70%);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    .contact-item:hover .contact-icon {
+      transform: scale(1.1);
+    }
+
+    .contact-item:hover .icon-glow {
+      opacity: 1;
+      animation: pulse-glow 2s ease infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+
+    .contact-icon i {
+      font-size: 1.15rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .contact-text p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Decoración para la sección de contacto */
+    .contact-decoration {
+      position: relative;
+      height: 20px;
+      margin-top: 1.5rem;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .contact-decoration::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      right: 0;
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.2));
+    }
+
+    /* Footer bottom - Mejorado */
+    .footer-bottom {
+      padding: 1.8rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .footer-bottom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.1), transparent);
+    }
+
+    .copyright {
+      margin: 0;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.6);
+      position: relative;
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+    }
+
+    .copyright::before, .copyright::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 15px;
+      height: 1px;
+      background: linear-gradient(90deg, #FFD100, transparent);
+    }
+
+    .copyright::before {
+      left: 0;
+    }
+
+    .copyright::after {
+      right: 0;
+      transform: rotate(180deg);
+    }
+
+    .copyright-brand {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .copyright-y {
+      color: #FFD100;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+    }
+
+    .copyright-y::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: rgba(255, 209, 0, 0.3);
+      bottom: -1px;
+      left: 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991px) {
+      .footer-links-section {
+        margin-top: 1.5rem;
+      }
+
+      .footer-contact-section {
+        margin-top: 1.5rem;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .footer-brand-section {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .footer-social {
+        justify-content: center;
+      }
+
+      .footer-slogan {
+        display: block;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .footer-slogan::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .footer-description {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+      }
+
+      .footer-links-section, .footer-contact-section {
+        text-align: center;
+      }
+
+      .footer-title-underline {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .contact-item {
+        justify-content: center;
+      }
+
+      .contact-info {
+        align-items: center;
+      }
+
+      .decoration-element {
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg);
+      }
+
+      @keyframes float-rotate {
+        0% { transform: translateX(-50%) rotate(45deg) translateY(0); opacity: 0.2; }
+        50% { transform: translateX(-50%) rotate(60deg) translateY(-10px); opacity: 0.4; }
+        100% { transform: translateX(-50%) rotate(45deg) translateY(0); opacity: 0.2; }
+      }
+    }
+  </style>
 </footer>
 </body>
 </html>
+

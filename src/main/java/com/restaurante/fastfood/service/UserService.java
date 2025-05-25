@@ -69,37 +69,48 @@ public class UserService {
         String safeQuery = (query == null) ? "" : query;
 
         if (!hasQuery && !hasRole) {
-            return userRepository.findAll();
+            List<User> all = userRepository.findAll();
+            return all != null ? all : java.util.Collections.emptyList();
         }
         if (hasQuery && !hasRole) {
-            return userRepository.findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+            List<User> byText = userRepository.findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                 safeQuery, safeQuery, safeQuery
             );
+            return byText != null ? byText : java.util.Collections.emptyList();
         }
         if (!hasQuery && hasRole) {
             com.restaurante.fastfood.model.enums.Role roleEnum;
             try {
                 roleEnum = com.restaurante.fastfood.model.enums.Role.valueOf(role);
             } catch (Exception e) {
-                return userRepository.findAll();
+                List<User> all = userRepository.findAll();
+                return all != null ? all : java.util.Collections.emptyList();
             }
-            return userRepository.findByRole(roleEnum);
+            List<User> byRole = userRepository.findByRole(roleEnum);
+            return byRole != null ? byRole : java.util.Collections.emptyList();
         }
         // Ambos filtros: primero filtra por rol, luego por texto en memoria
         com.restaurante.fastfood.model.enums.Role roleEnum;
         try {
             roleEnum = com.restaurante.fastfood.model.enums.Role.valueOf(role);
         } catch (Exception e) {
-            return userRepository.findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+            List<User> byText = userRepository.findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                 safeQuery, safeQuery, safeQuery
             );
+            return byText != null ? byText : java.util.Collections.emptyList();
         }
-        return userRepository.findByRole(roleEnum).stream()
-            .filter(user ->
-                (user.getUsername() != null && user.getUsername().toLowerCase().contains(safeQuery.toLowerCase())) ||
-                (user.getFullName() != null && user.getFullName().toLowerCase().contains(safeQuery.toLowerCase())) ||
-                (user.getEmail() != null && user.getEmail().toLowerCase().contains(safeQuery.toLowerCase()))
-            )
+        List<User> byRole = userRepository.findByRole(roleEnum);
+        if (byRole == null) byRole = java.util.Collections.emptyList();
+        return byRole.stream()
+            .filter(user -> {
+                String username = user.getUsername() != null ? user.getUsername() : "";
+                String fullName = user.getFullName() != null ? user.getFullName() : "";
+                String email = user.getEmail() != null ? user.getEmail() : "";
+                String q = safeQuery.toLowerCase();
+                return username.toLowerCase().contains(q)
+                    || fullName.toLowerCase().contains(q)
+                    || email.toLowerCase().contains(q);
+            })
             .collect(java.util.stream.Collectors.toList());
     }
 }

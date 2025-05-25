@@ -12,7 +12,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -64,9 +66,12 @@ public class OrderController {
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestBody Order.OrderStatus status) {
-        Order updatedOrder = orderService.updateOrderStatus(id, status);
-        return ResponseEntity.ok(updatedOrder);
+    public ResponseEntity<Map<String, Object>> updateOrderStatus(@PathVariable Long id, @RequestBody Order.OrderStatus status) {
+        orderService.updateOrderStatus(id, status);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Estado actualizado correctamente");
+        return ResponseEntity.ok(response);
     }
 
     // Elimina o comenta este endpoint duplicado para evitar conflicto con AdminOrderApiController

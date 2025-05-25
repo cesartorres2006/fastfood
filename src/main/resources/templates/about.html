@@ -7,39 +7,121 @@
 <body>
 <header th:replace="fragments/header :: header"></header>
 
-<main class="container py-5">
-    <h1 class="mb-4">Sobre FastFood Restaurant</h1>
+<main class="about-page">
+    <!-- Banner de introducción -->
+    <section class="about-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-hero-content">
+                        <h1 class="about-title">
+                            Nuestra Historia
+                            <span class="title-accent"></span>
+                        </h1>
+                        <p class="about-subtitle">Descubre la esencia de Punto<span class="accent-y">Y</span>Koma</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-hero-image">
+                        <img class="img-fluid" src="/img/restaurant-history.jpg" alt="Historia del restaurante">
+                        <div class="image-accent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Historia -->
-    <section class="mb-5">
-        <h2>Nuestra Historia</h2>
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <p>Fundado en 2010, FastFood Restaurant nació con una misión clara: ofrecer comida rápida de la más alta calidad, utilizando ingredientes frescos y preparaciones artesanales.</p>
-                <p>Lo que comenzó como un pequeño local en el centro de la ciudad, ha crecido hasta convertirse en uno de los restaurantes de comida rápida más queridos de la región, manteniendo siempre nuestros valores de calidad, frescura y servicio excepcional.</p>
-            </div>
-            <div class="col-lg-6">
-                <img class="img-fluid rounded" src="/img/restaurant-history.jpg" alt="Historia del restaurante">
+    <section class="about-section history-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-content">
+                        <h2 class="section-title">
+                            El comienzo de algo especial
+                            <span class="title-underline"><span class="underline-dot"></span></span>
+                        </h2>
+                        <p class="section-text">Fundado en 2024, Punto<span class="accent-y">Y</span>Koma nació con una misión clara: ofrecer comida rápida de la más alta calidad, utilizando ingredientes frescos y preparaciones artesanales que cuenten historias a través de sus sabores.</p>
+                        <p class="section-text">Aunque somos jóvenes, nuestra pasión por la gastronomía y el servicio excepcional nos ha permitido conquistar rápidamente los corazones y paladares de nuestros clientes. Cada día es una nueva oportunidad para escribir nuestra historia.</p>
+                        <div class="content-decoration">
+                            <span class="decoration-element"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="journey-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="bi bi-lightbulb"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <h5>La idea</h5>
+                                <p>Todo comenzó con un sueño: crear un espacio donde la comida rápida se elevara a una experiencia gastronómica memorable.</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="bi bi-house-heart"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <h5>Apertura</h5>
+                                <p>En enero de 2024 abrimos nuestras puertas, con un equipo pequeño pero lleno de pasión y determinación.</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <h5>Nuestra comunidad</h5>
+                                <p>En poco tiempo, hemos formado una comunidad de clientes fieles que nos inspiran a mejorar cada día.</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="bi bi-stars"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <h5>El futuro</h5>
+                                <p>Apenas estamos comenzando. Tenemos grandes planes para seguir creciendo y sorprendiendo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Misión y Visión -->
-    <section class="mb-5">
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title">Nuestra Misión</h3>
-                        <p class="card-text">Ofrecer la mejor experiencia gastronómica rápida, combinando sabores auténticos, ingredientes de calidad y un servicio excepcional, para satisfacer a nuestros clientes en cada visita.</p>
+    <section class="about-section mission-vision-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 class="section-title">
+                    Nuestra filosofía
+                    <span class="title-underline centered"><span class="underline-dot"></span></span>
+                </h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="philosophy-card mission-card">
+                        <div class="card-icon">
+                            <i class="bi bi-flag"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3>Nuestra Misión</h3>
+                        <p>Ofrecer la mejor experiencia gastronómica, combinando sabores auténticos, ingredientes de calidad y un servicio excepcional, para satisfacer a nuestros clientes en cada visita y crear momentos memorables a través de la comida.</p>
+                        <div class="card-decoration"></div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title">Nuestra Visión</h3>
-                        <p class="card-text">Ser reconocidos como el restaurante de comida rápida líder en calidad e innovación, expandiendo nuestra presencia mientras mantenemos nuestro compromiso con la excelencia y la satisfacción del cliente.</p>
+                <div class="col-lg-6">
+                    <div class="philosophy-card vision-card">
+                        <div class="card-icon">
+                            <i class="bi bi-eye"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3>Nuestra Visión</h3>
+                        <p>Convertirnos en un referente gastronómico en nuestra ciudad, expandiendo nuestra presencia mientras mantenemos nuestro compromiso con la excelencia y la satisfacción del cliente, creando tendencias en la gastronomía local.</p>
+                        <div class="card-decoration"></div>
                     </div>
                 </div>
             </div>
@@ -47,79 +129,120 @@
     </section>
 
     <!-- Valores -->
-    <section class="mb-5">
-        <h2>Nuestros Valores</h2>
-        <div class="row">
-            <div class="col-md-3 mb-4">
-                <div class="text-center">
-                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
-                        <i class="bi bi-heart-fill text-danger" style="font-size: 2rem;"></i>
-                    </div>
-                    <h4>Pasión</h4>
-                    <p class="small">Amamos lo que hacemos y eso se refleja en cada plato.</p>
-                </div>
+    <section class="about-section values-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 class="section-title">
+                    Nuestros Valores
+                    <span class="title-underline centered"><span class="underline-dot"></span></span>
+                </h2>
+                <p class="section-subtitle">Los principios que guían cada uno de nuestros platos</p>
             </div>
-            <div class="col-md-3 mb-4">
-                <div class="text-center">
-                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
-                        <i class="bi bi-award-fill text-warning" style="font-size: 2rem;"></i>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="bi bi-heart-fill"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h4>Pasión</h4>
+                        <p>Amamos lo que hacemos y eso se refleja en cada plato que servimos a nuestros clientes.</p>
                     </div>
-                    <h4>Calidad</h4>
-                    <p class="small">Seleccionamos los mejores ingredientes para nuestras recetas.</p>
                 </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="text-center">
-                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
-                        <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="bi bi-award-fill"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h4>Calidad</h4>
+                        <p>Seleccionamos los mejores ingredientes para crear experiencias gastronómicas excepcionales.</p>
                     </div>
-                    <h4>Comunidad</h4>
-                    <p class="small">Apoyamos a nuestra comunidad local y sus productores.</p>
                 </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="text-center">
-                    <div class="bg-light p-3 rounded-circle mb-3 mx-auto" style="width: 80px; height: 80px;">
-                        <i class="bi bi-recycle text-success" style="font-size: 2rem;"></i>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="bi bi-people-fill"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h4>Comunidad</h4>
+                        <p>Apoyamos a nuestra comunidad local y sus productores, creando lazos duraderos.</p>
                     </div>
-                    <h4>Sostenibilidad</h4>
-                    <p class="small">Comprometidos con prácticas respetuosas con el medio ambiente.</p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="bi bi-recycle"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h4>Sostenibilidad</h4>
+                        <p>Comprometidos con prácticas respetuosas con el medio ambiente en toda nuestra operación.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Equipo -->
-    <section class="mb-5">
-        <h2>Nuestro Equipo</h2>
-        <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
-                    <img src="/img/chef.jpg" class="card-img-top" alt="Chef Principal">
-                    <div class="card-body">
-                        <h5 class="card-title">Carlos Ramírez</h5>
-                        <p class="card-subtitle text-muted mb-2">Chef Principal</p>
-                        <p class="card-text small">Con más de 15 años de experiencia, Carlos lidera nuestro equipo de cocina con pasión y creatividad.</p>
+    <section class="about-section team-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 class="section-title">
+                    Nuestro Equipo
+                    <span class="title-underline centered"><span class="underline-dot"></span></span>
+                </h2>
+                <p class="section-subtitle">Las personas que hacen posible la magia</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-card">
+                        <div class="team-image">
+                            <img src="/img/chef.jpg" alt="Chef Principal">
+                            <div class="image-overlay"></div>
+                        </div>
+                        <div class="team-info">
+                            <h5>Carlos Ramírez</h5>
+                            <p class="team-position">Chef Principal</p>
+                            <p class="team-description">Con su creatividad y pasión por la gastronomía, Carlos lidera nuestro equipo de cocina transformando ingredientes en obras de arte culinarias.</p>
+                            <div class="team-social">
+                                <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
-                    <img src="/img/manager.jpg" class="card-img-top" alt="Gerente">
-                    <div class="card-body">
-                        <h5 class="card-title">Laura Mendoza</h5>
-                        <p class="card-subtitle text-muted mb-2">Gerente General</p>
-                        <p class="card-text small">Laura asegura que cada detalle de la operación cumpla con nuestros altos estándares de calidad.</p>
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-card">
+                        <div class="team-image">
+                            <img src="/img/manager.jpg" alt="Gerente">
+                            <div class="image-overlay"></div>
+                        </div>
+                        <div class="team-info">
+                            <h5>Laura Mendoza</h5>
+                            <p class="team-position">Gerente General</p>
+                            <p class="team-description">Laura asegura que cada detalle de la operación cumpla con nuestros altos estándares de calidad, liderando con visión y compromiso.</p>
+                            <div class="team-social">
+                                <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
-                    <img src="/img/service-manager.jpg" class="card-img-top" alt="Jefe de Servicio">
-                    <div class="card-body">
-                        <h5 class="card-title">Miguel Soto</h5>
-                        <p class="card-subtitle text-muted mb-2">Jefe de Servicio</p>
-                        <p class="card-text small">Miguel se asegura de que cada cliente reciba una atención personalizada y excepcional.</p>
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-card">
+                        <div class="team-image">
+                            <img src="/img/service-manager.jpg" alt="Jefe de Servicio">
+                            <div class="image-overlay"></div>
+                        </div>
+                        <div class="team-info">
+                            <h5>Miguel Soto</h5>
+                            <p class="team-position">Jefe de Servicio</p>
+                            <p class="team-description">Miguel se asegura de que cada cliente reciba una atención personalizada y excepcional, creando experiencias memorables en cada visita.</p>
+                            <div class="team-social">
+                                <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -127,43 +250,963 @@
     </section>
 
     <!-- Ubicación -->
-    <section class="mb-5">
-        <h2>Nuestra Ubicación</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="ratio ratio-16x9">
-                    <!-- Aquí puedes insertar un mapa de Google Maps -->
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000.0!3d40.0!4d-3.0!5e0!3m2!1ses!2ses!4v1620000000000!5m2!1ses!2ses"
-                            allowfullscreen="" loading="lazy"></iframe>
-                </div>
+    <section class="about-section location-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 class="section-title">
+                    Encuéntranos
+                    <span class="title-underline centered"><span class="underline-dot"></span></span>
+                </h2>
             </div>
-            <div class="col-md-6">
-                <h4>Horario de Atención</h4>
-                <table class="table table-sm">
-                    <tbody>
-                    <tr>
-                        <td>Lunes - Viernes</td>
-                        <td>11:00 - 22:00</td>
-                    </tr>
-                    <tr>
-                        <td>Sábados</td>
-                        <td>11:00 - 23:00</td>
-                    </tr>
-                    <tr>
-                        <td>Domingos</td>
-                        <td>12:00 - 21:00</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <h4>Contacto</h4>
-                <address>
-                    <p>Calle Principal #123<br>Ciudad, País</p>
-                    <p>Teléfono: (123) 456-7890<br>
-                        Email: <a href="mailto:info@fastfood.com">info@fastfood.com</a></p>
-                </address>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="location-map">
+                        <div class="map-container">
+                            <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d997!2d-75.602278!3d1.604222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMzYnMTUuMiJOIDc1wrAzNicwOC4yIlc!5e0!3m2!1ses-419!2sco!4v1748120357509!5m2!1ses-419!2sco"
+                                    width="100%"
+                                    height="450"
+                                    style="border:0;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                            <div class="map-decoration"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="location-info">
+                        <div class="info-card hours-card">
+                            <div class="card-header">
+                                <div class="header-icon">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+                                <!-- Aquí continúa tu info adicional -->
+
+                                <h4>Horario de Atención</h4>
+                            </div>
+                            <div class="hours-table">
+                                <div class="hours-row">
+                                    <div class="day">Lunes - Viernes</div>
+                                    <div class="time">11:00 - 22:00</div>
+                                </div>
+                                <div class="hours-row">
+                                    <div class="day">Sábados</div>
+                                    <div class="time">11:00 - 23:00</div>
+                                </div>
+                                <div class="hours-row">
+                                    <div class="day">Domingos</div>
+                                    <div class="time">12:00 - 21:00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-card contact-card">
+                            <div class="card-header">
+                                <div class="header-icon">
+                                    <i class="bi bi-geo-alt"></i>
+                                </div>
+                                <h4>Contacto & Ubicación</h4>
+                            </div>
+                            <div class="contact-details">
+                                <div class="contact-item">
+                                    <i class="bi bi-building"></i>
+                                    <p>Estamos ubicados en nueva florencia frente al caney llanero<br>Florencia, Caqueta 18001</p>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="bi bi-telephone"></i>
+                                    <p>+57 311 504 8070</p>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="bi bi-envelope"></i>
+                                    <p><a href="mailto:puntoykoma2024@gmail.com">puntoykoma2024@gmail.com</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+
+    <style>
+        /* Estilos generales de la página About con fondo negro */
+        .about-page {
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: #121212;
+        }
+
+        /* Estilos para títulos y subtítulos */
+        .section-title {
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            position: relative;
+            font-size: 2.2rem;
+        }
+
+        .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+        }
+
+        .title-underline {
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #FFD100, transparent);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .title-underline.centered {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .underline-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #FFD100;
+            border-radius: 50%;
+            top: -2px;
+            left: 0;
+            animation: moveDot 3s ease-in-out infinite alternate;
+            box-shadow: 0 0 5px rgba(255, 209, 0, 0.5);
+        }
+
+        @keyframes moveDot {
+            0% { left: 0; }
+            100% { left: 54px; }
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .about-section {
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-section:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+
+        .section-text {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .accent-y {
+            color: #FFD100;
+            font-weight: 700;
+            position: relative;
+        }
+
+        /* Hero section */
+        .about-hero {
+            padding: 6rem 0 4rem;
+            background: linear-gradient(to right, #121212 50%, #1a1a1a 50%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 30%, rgba(255, 209, 0, 0.05) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 1;
+            padding-right: 2rem;
+        }
+
+        .about-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: #fff;
+        }
+
+        .title-accent {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 209, 0, 0.5);
+            border-radius: 50%;
+            top: -15px;
+            left: -15px;
+            z-index: -1;
+        }
+
+        .about-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .about-hero-image {
+            position: relative;
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-hero-image img {
+            border-radius: 8px;
+            transition: transform 0.5s ease;
+        }
+
+        .about-hero-image:hover img {
+            transform: scale(1.03);
+        }
+
+        .image-accent {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: 2px solid #FFD100;
+            border-radius: 8px;
+            transform: translate(15px, 15px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Journey highlights - Reemplaza la timeline */
+        .journey-highlights {
+            position: relative;
+            margin-top: 2rem;
+        }
+
+        .highlight-item {
+            display: flex;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 209, 0, 0.1);
+            color: #FFD100;
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 209, 0, 0.3);
+            top: 0;
+            left: 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.2; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        .highlight-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            flex-grow: 1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 3px solid #FFD100;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-item:hover .highlight-content {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .highlight-content h5 {
+            margin-bottom: 0.5rem;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .highlight-content p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        .content-decoration {
+            position: relative;
+            height: 50px;
+            margin-top: 2rem;
+        }
+
+        .decoration-element {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 209, 0, 0.3);
+            transform: rotate(45deg);
+            bottom: 0;
+            left: 0;
+        }
+
+        /* Misión y Visión */
+        .mission-vision-section {
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .mission-vision-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 209, 0, 0.03) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .philosophy-card {
+            background: #222;
+            border-radius: 10px;
+            padding: 2.5rem;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .philosophy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .philosophy-card::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 209, 0, 0.05) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: rgba(255, 209, 0, 0.1);
+            color: #FFD100;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .icon-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(255, 209, 0, 0.4), transparent 70%);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .philosophy-card:hover .icon-glow {
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        .philosophy-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: #fff;
+        }
+
+        .philosophy-card p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .card-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD100, transparent);
+        }
+
+        /* Valores */
+        .values-section {
+            background-color: #121212;
+            position: relative;
+        }
+
+        .values-section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 209, 0, 0.03) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            background: #222;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(to bottom, rgba(255, 209, 0, 0.03) 0%, transparent 100%);
+            top: 0;
+            left: 0;
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .value-card:hover::before {
+            height: 100%;
+        }
+
+        .value-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+        }
+
+        .value-icon i {
+            font-size: 2rem;
+            color: #FFD100;
+            position: relative;
+            z-index: 2;
+        }
+
+        .icon-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 209, 0, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover .icon-bg {
+            transform: scale(1.1);
+            background: rgba(255, 209, 0, 0.15);
+            box-shadow: 0 0 20px rgba(255, 209, 0, 0.3);
+        }
+
+        .value-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .value-card p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Equipo */
+        .team-section {
+            background-color: #1a1a1a;
+            position: relative;
+        }
+
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 209, 0, 0.03) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .team-card {
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-image {
+            position: relative;
+            overflow: hidden;
+            height: 280px;
+        }
+
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .team-card:hover .team-image img {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .team-info {
+            padding: 1.8rem;
+            position: relative;
+        }
+
+        .team-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #FFD100;
+        }
+
+        .team-info h5 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .team-position {
+            color: #FFD100;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            position: relative;
+        }
+
+        .team-position::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 1px;
+            background: rgba(255, 209, 0, 0.3);
+        }
+
+        .team-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+        }
+
+        .team-social {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 209, 0, 0.1);
+            color: #FFD100;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #FFD100;
+            color: #222;
+            transform: translateY(-3px);
+        }
+
+        /* Ubicación */
+        .location-section {
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        .location-section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 209, 0, 0.03) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .location-map {
+            position: relative;
+            height: 100%;
+        }
+
+        .map-container {
+            position: relative;
+            height: 100%;
+            min-height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: relative;
+            z-index: 1;
+            filter: grayscale(0.8) invert(0.92) contrast(1.2) hue-rotate(180deg) brightness(0.7);
+        }
+
+        .map-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255, 209, 0, 0.3);
+            border-radius: 10px;
+            top: 15px;
+            left: 15px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .location-info {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background: #222;
+            border-radius: 10px;
+            padding: 1.8rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 209, 0, 0.03) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 209, 0, 0.1);
+            color: #FFD100;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+
+        .card-header h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+
+        .hours-table {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hours-row:last-child {
+            border-bottom: none;
+        }
+
+        .day {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-details {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            margin-bottom: 1.2rem;
+            align-items: flex-start;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-item i {
+            color: #FFD100;
+            font-size: 1.1rem;
+            margin-right: 1rem;
+            margin-top: 0.2rem;
+        }
+
+        .contact-item p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .contact-item a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #FFD100;
+        }
+
+        /* Efectos de partículas y resplandor */
+        .about-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 209, 0, 0.02) 0%, transparent 80%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Animación de brillo para elementos destacados */
+        @keyframes shimmer {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .accent-y::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 209, 0, 0.2),
+            transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+            z-index: -1;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 991px) {
+            .about-hero {
+                background: #121212;
+                padding: 4rem 0 3rem;
+            }
+
+            .about-title {
+                font-size: 2.8rem;
+            }
+
+            .about-hero-content {
+                margin-bottom: 2rem;
+                padding-right: 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .about-section {
+                padding: 4rem 0;
+            }
+
+            .journey-highlights {
+                margin-top: 3rem;
+            }
+
+            .philosophy-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .about-title {
+                font-size: 2.4rem;
+            }
+
+            .about-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .highlight-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .highlight-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .value-card {
+                margin-bottom: 1.5rem;
+            }
+
+            .team-image {
+                height: 240px;
+            }
+
+            .team-info {
+                padding: 1.5rem;
+            }
+
+            .location-map {
+                margin-bottom: 1.5rem;
+            }
+
+            .map-container {
+                min-height: 300px;
+            }
+        }
+    </style>
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>

@@ -19,11 +19,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User registeredUser = userService.registerNewUser(user);
-        return ResponseEntity.ok(registeredUser);
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<User> registerUser(@RequestBody User user) {
+//        User registeredUser = userService.registerNewUser(user);
+//        return ResponseEntity.ok(registeredUser);
+//    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or authentication.principal.username == #username")
@@ -56,4 +56,3 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 }
-

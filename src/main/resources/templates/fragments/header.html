@@ -4,63 +4,841 @@
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title} + ' - FastFood Restaurant'">FastFood Restaurant</title>
+    <title th:text="${title} + ' - Punto y Koma'">Punto y Koma</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/responsive.css}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="/js/cart.js"></script>
+    <style>
+        :root {
+            --primary-color: #FFD100;
+            --primary-hover: #FFDB4D;
+            --dark-bg: #121212;
+            --secondary-dark: #1E1E1E;
+            --text-light: #FFFFFF;
+            --accent-color: #FFD100;
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* Header styling */
+        .navbar {
+            background-color: var(--dark-bg) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 0.6rem 1rem;
+            transition: all 0.4s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.4rem 1rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Impactful & Elegant Logo styling with enhanced Y */
+        .logo-container {
+            position: relative;
+            margin-right: 1.5rem;
+            padding: 0.8rem 0;
+            overflow: hidden;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-text {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #FFFFFF;
+            letter-spacing: 1px;
+            position: relative;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            margin: 0;
+            padding: 0;
+            display: inline-block;
+            background: linear-gradient(to right, #FFFFFF, #FFD100 50%, #FFFFFF);
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            100% { background-position: 100% center; }
+        }
+
+        /* Special Y styling */
+        .logo-y-wrapper {
+            display: inline-block;
+            position: relative;
+            margin: 0 0.3rem;
+            transform: translateY(-2px);
+            z-index: 3;
+        }
+
+        .logo-y {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            transition: all 0.4s ease;
+            display: inline-block;
+            text-shadow: 0 0 5px rgba(255, 209, 0, 0.5);
+            animation: yPulse 2s infinite alternate;
+            transform-origin: center;
+        }
+
+        @keyframes yPulse {
+            0% { transform: scale(1); text-shadow: 0 0 5px rgba(255, 209, 0, 0.5); }
+            100% { transform: scale(1.05); text-shadow: 0 0 15px rgba(255, 209, 0, 0.8); }
+        }
+
+        .logo-y-circle {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.5;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+
+        .logo-y-rays {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .logo-y-ray {
+            position: absolute;
+            width: 2px;
+            height: 10px;
+            background-color: var(--primary-color);
+            top: 50%;
+            left: 50%;
+            transform-origin: center bottom;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Create 8 rays around the Y */
+        .logo-y-ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-20px); }
+        .logo-y-ray:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg) translateY(-20px); }
+        .logo-y-ray:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg) translateY(-20px); }
+        .logo-y-ray:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg) translateY(-20px); }
+        .logo-y-ray:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg) translateY(-20px); }
+        .logo-y-ray:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg) translateY(-20px); }
+        .logo-y-ray:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg) translateY(-20px); }
+        .logo-y-ray:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-20px); }
+
+        .logo-container:hover .logo-y-ray {
+            height: 15px;
+            opacity: 0.7;
+            transition-delay: calc(var(--i) * 0.05s);
+        }
+
+        .logo-container:hover .logo-y-circle {
+            transform: translate(-50%, -50%) scale(1.2);
+            opacity: 0.8;
+            box-shadow: 0 0 15px rgba(255, 209, 0, 0.5);
+        }
+
+        .logo-container:hover .logo-y {
+            color: #FFFFFF;
+            text-shadow: 0 0 20px rgba(255, 209, 0, 1);
+            animation: yGlow 1s infinite alternate;
+        }
+
+        @keyframes yGlow {
+            0% { text-shadow: 0 0 10px rgba(255, 209, 0, 0.8); }
+            100% { text-shadow: 0 0 20px rgba(255, 209, 0, 1), 0 0 30px rgba(255, 209, 0, 0.6); }
+        }
+
+        .logo-backdrop {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,209,0,0.15) 0%, rgba(18,18,18,0) 70%);
+            z-index: 1;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .logo-container:hover .logo-backdrop {
+            opacity: 1;
+            width: 130%;
+            height: 130%;
+        }
+
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            top: 0;
+            left: -10%;
+            z-index: 1;
+        }
+
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            bottom: 0;
+            left: -10%;
+            z-index: 1;
+        }
+
+        .logo-ornament-left,
+        .logo-ornament-right {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--primary-color);
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+
+        .logo-ornament-left {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .logo-ornament-right {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+
+        .logo-container:hover .logo-ornament-left {
+            transform: translate(-3px, -3px);
+            width: 20px;
+            height: 20px;
+        }
+
+        .logo-container:hover .logo-ornament-right {
+            transform: translate(3px, 3px);
+            width: 20px;
+            height: 20px;
+        }
+
+        .logo-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent);
+            z-index: 3;
+            transform: skewX(-25deg);
+            transition: all 0.7s ease;
+        }
+
+        .logo-container:hover .logo-shine {
+            left: 150%;
+            transition: all 1s ease;
+        }
+
+        .logo-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle, rgba(255,209,0,0.4) 0%, rgba(18,18,18,0) 70%);
+            filter: blur(10px);
+            opacity: 0;
+            z-index: 0;
+            transition: all 0.5s ease;
+        }
+
+        .logo-container:hover .logo-glow {
+            opacity: 0.8;
+        }
+
+        /* Enhanced Navigation links */
+        .nav-item {
+            margin: 0 0.2rem;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.85) !important;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-speed);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: rgba(255, 209, 0, 0.15);
+            transition: all var(--transition-speed);
+            z-index: -1;
+            border-radius: var(--border-radius);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover::before {
+            height: 100%;
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: rgba(255, 209, 0, 0.15);
+        }
+
+        .nav-link.active::after {
+            width: 70%;
+        }
+
+        .nav-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover i {
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+
+        /* Enhanced Dropdown styling */
+        .dropdown-menu {
+            background-color: var(--secondary-dark);
+            border: 1px solid rgba(255, 209, 0, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 209, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 0.6rem;
+            margin-top: 0.8rem;
+            min-width: 200px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--secondary-dark);
+            border-top: 1px solid rgba(255, 209, 0, 0.1);
+            border-left: 1px solid rgba(255, 209, 0, 0.1);
+            transform: rotate(45deg);
+        }
+
+        .dropdown-item {
+            color: var(--text-light);
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 209, 0, 0.05),
+            transparent);
+            transition: all 0.5s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 209, 0, 0.15);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .dropdown-item:hover::before {
+            left: 100%;
+        }
+
+        .dropdown-divider {
+            border-color: rgba(255, 255, 255, 0.1);
+            margin: 0.5rem 0;
+        }
+
+        /* Enhanced Badge styling */
+        .badge {
+            background-color: var(--primary-color) !important;
+            color: var(--dark-bg) !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced Toggler styling */
+        .navbar-toggler {
+            border: none;
+            padding: 0.4rem;
+            border-radius: 8px;
+            background-color: rgba(255, 209, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navbar-toggler::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,209,0,0.3) 0%, rgba(18,18,18,0) 70%);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .navbar-toggler:hover {
+            background-color: rgba(255, 209, 0, 0.3);
+        }
+
+        .navbar-toggler:hover::before {
+            opacity: 1;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 209, 0, 0.25);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 209, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Enhanced Button styling */
+        .btn-login, .btn-register {
+            border: 2px solid var(--primary-color);
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 0.5rem 1.4rem;
+            transition: all 0.3s ease;
+            margin-left: 0.5rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-login::before, .btn-register::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            color: var(--primary-color);
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(255, 209, 0, 0.3);
+        }
+
+        .btn-register {
+            background-color: var(--primary-color);
+            color: var(--dark-bg);
+        }
+
+        .btn-register:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(255, 209, 0, 0.3);
+        }
+
+        .btn-login:hover::before, .btn-register:hover::before {
+            left: 100%;
+        }
+
+        /* Enhanced Cart icon styling */
+        .cart-wrapper {
+            position: relative;
+            margin-right: 1rem;
+        }
+
+        .cart-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 209, 0, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cart-link::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,209,0,0.3) 0%, rgba(18,18,18,0) 70%);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .cart-link:hover {
+            background-color: rgba(255, 209, 0, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .cart-link:hover::before {
+            opacity: 1;
+        }
+
+        #cart-icon {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .cart-link:hover #cart-icon {
+            transform: scale(1.1);
+            color: var(--primary-hover);
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 0.7rem;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.4rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Enhanced User avatar styling */
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            font-weight: bold;
+            color: var(--dark-bg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,209,0,0) 70%);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .dropdown-toggle:hover .user-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 209, 0, 0.5);
+        }
+
+        .dropdown-toggle:hover .user-avatar::before {
+            opacity: 1;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 992px) {
+            .navbar-collapse {
+                background-color: var(--secondary-dark);
+                border-radius: var(--border-radius);
+                padding: 1rem;
+                margin-top: 1rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(255, 209, 0, 0.1);
+            }
+
+            .nav-item {
+                margin: 0.3rem 0;
+            }
+
+            .navbar-nav.align-items-center {
+                margin-top: 1rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding-top: 1rem;
+            }
+
+            .btn-login, .btn-register {
+                display: block;
+                margin: 0.5rem 0;
+                text-align: center;
+            }
+
+            .cart-wrapper {
+                margin: 0.5rem auto;
+            }
+
+            .logo-y {
+                font-size: 2rem;
+            }
+
+            .logo-text {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+    <script>
+        // Script para agregar interactividad al header
+        $(document).ready(function() {
+            // Detectar scroll para cambiar estilo del navbar
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('.navbar').addClass('scrolled');
+                } else {
+                    $('.navbar').removeClass('scrolled');
+                }
+            });
+
+            // Marcar enlace activo según la URL actual
+            const currentLocation = window.location.pathname;
+            $('.nav-link').each(function() {
+                const linkPath = $(this).attr('href');
+                if (linkPath === currentLocation) {
+                    $(this).addClass('active');
+                }
+            });
+
+            // Animación para los dropdowns
+            $('.dropdown').on('show.bs.dropdown', function() {
+                $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+            });
+
+            $('.dropdown').on('hide.bs.dropdown', function() {
+                $(this).find('.dropdown-menu').first().stop(true, true).slideUp(200);
+            });
+
+            // Efecto hover para los botones de navegación
+            $('.nav-link').hover(
+                function() {
+                    $(this).find('i').addClass('animate__animated animate__bounce');
+                },
+                function() {
+                    $(this).find('i').removeClass('animate__animated animate__bounce');
+                }
+            );
+        });
+    </script>
 </head>
 <body>
 <header th:fragment="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/about}">FastFood Restaurant</a>
+            <div class="logo-container">
+                <div class="logo-ornament-left"></div>
+                <div class="logo-ornament-right"></div>
+                <div class="logo-backdrop"></div>
+                <div class="logo-glow"></div>
+                <div class="logo-shine"></div>
+                <a class="navbar-brand" th:href="@{/about}">
+                    <span class="logo-text">Punto</span>
+                    <span class="logo-y-wrapper">
+                        <span class="logo-y">Y</span>
+                        <span class="logo-y-circle"></span>
+                        <div class="logo-y-rays">
+                            <div class="logo-y-ray" style="--i:1"></div>
+                            <div class="logo-y-ray" style="--i:2"></div>
+                            <div class="logo-y-ray" style="--i:3"></div>
+                            <div class="logo-y-ray" style="--i:4"></div>
+                            <div class="logo-y-ray" style="--i:5"></div>
+                            <div class="logo-y-ray" style="--i:6"></div>
+                            <div class="logo-y-ray" style="--i:7"></div>
+                            <div class="logo-y-ray" style="--i:8"></div>
+                        </div>
+                    </span>
+                    <span class="logo-text">Koma</span>
+                </a>
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">Inicio</a>
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi bi-house-door me-1"></i> Inicio
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/products}">Productos</a>
+                        <a class="nav-link" th:href="@{/products}">
+                            <i class="bi bi-grid me-1"></i> Menú
+                        </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')">
-                        <a class="nav-link" th:href="@{/admin}">Panel Admin</a>
+                        <a class="nav-link" th:href="@{/admin}">
+                            <i class="bi bi-gear me-1"></i> Panel Admin
+                        </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAuthority('ROLE_CLIENT')">
-                        <a class="nav-link" th:href="@{/orders}">Mis Pedidos</a>
+                        <a class="nav-link" th:href="@{/orders}">
+                            <i class="bi bi-receipt me-1"></i> Mis Pedidos
+                        </a>
                     </li>
                 </ul>
-                <ul class="navbar-nav">
-                    <!-- Carrito solo para clientes -->
-                    <li class="nav-item" sec:authorize="hasAuthority('ROLE_CLIENT')">
-                        <a class="nav-link" th:href="@{/cart}">
-                            <span class="bi bi-cart"></span> Carrito
-                            <span id="cart-count" class="badge bg-danger">0</span>
+                <ul class="navbar-nav align-items-center">
+                    <!-- Carrito rediseñado para clientes -->
+                    <li class="nav-item cart-wrapper" sec:authorize="hasAuthority('ROLE_CLIENT')">
+                        <a class="cart-link" th:href="@{/cart}">
+                            <i class="bi bi-cart3" id="cart-icon"></i>
+                        </a>
+                        <span id="cart-count" class="badge">0</span>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="btn btn-login" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" th:href="@{/login}">Iniciar Sesión</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" th:href="@{/register}">Registrarse</a>
+                        <a class="btn btn-register" th:href="@{/register}">
+                            <i class="bi bi-person-plus me-1"></i> Registrarse
+                        </a>
                     </li>
                     <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <span sec:authentication="name">Usuario</span>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <div class="user-avatar">
+                                <span sec:authentication="name" class="d-none">U</span>
+                                <span th:text="${#strings.substring(#authentication.name,0,1).toUpperCase()}">U</span>
+                            </div>
+                            <span sec:authentication="name" class="d-none d-md-inline">Usuario</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <div class="px-3 py-2 text-white-50 mb-2">
+                                    <small>Hola,</small>
+                                    <h6 class="mb-0 text-white" sec:authentication="name">Usuario</h6>
+                                </div>
+                            </li>
                             <!-- Opción de pedidos solo para clientes -->
                             <li sec:authorize="hasAuthority('ROLE_CLIENT')">
-                                <a class="dropdown-item" th:href="@{/orders}">Mis Pedidos</a>
+                                <a class="dropdown-item" th:href="@{/orders}">
+                                    <i class="bi bi-receipt me-2"></i> Mis Pedidos
+                                </a>
+                            </li>
+                            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                                <a class="dropdown-item" th:href="@{/admin/dashboard}">
+                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <form th:action="@{/logout}" method="post" class="d-inline">
-                                    <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                                <form th:action="@{/logout}" method="post" class="d-inline w-100">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                                    </button>
                                 </form>
                             </li>
                         </ul>
@@ -70,5 +848,48 @@
         </div>
     </nav>
 </header>
+
+<!-- Script para inicializar funcionalidades interactivas -->
+<script th:fragment="footer-scripts">
+    // Inicializar tooltips de Bootstrap
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
+    // Animación para el contador del carrito
+    function updateCartCount(count) {
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            // Guardar el valor anterior
+            const oldValue = parseInt(cartCountElement.textContent) || 0;
+
+            // Establecer el nuevo valor
+            cartCountElement.textContent = count;
+
+            // Animar si el valor ha cambiado
+            if (oldValue !== count) {
+                cartCountElement.classList.add('pulse-animation');
+                setTimeout(() => {
+                    cartCountElement.classList.remove('pulse-animation');
+                }, 500);
+            }
+        }
+    }
+
+    // Estilo para la animación del contador
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .pulse-animation {
+            animation: pulse 0.5s ease;
+        }
+    `;
+    document.head.appendChild(style);
+</script>
 </body>
 </html>

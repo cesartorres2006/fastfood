@@ -32,25 +32,85 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
                 filterProducts();
-            }, 350); // 350 ms de espera después de dejar de escribir
+            }, 350);
         });
     }
 
-    // Delegación global para botones + y - (funciona siempre)
+    // ===== DELEGACIÓN DE EVENTOS MEJORADA =====
+    // Esta es la clave: usar delegación en el contenedor padre que nunca cambia
     document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('btn-decrement')) {
-            const id = e.target.getAttribute('data-id');
+        // Botón decrementar (-)
+        if (e.target.closest('.btn-decrement')) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const button = e.target.closest('.btn-decrement');
+            const id = button.getAttribute('data-id');
             const input = document.getElementById(`cantidad-${id}`);
+
             if (input) {
                 let val = parseInt(input.value) || 1;
-                if (val > 1) input.value = val - 1;
+                if (val > 1) {
+                    input.value = val - 1;
+                    // Disparar evento change para cualquier listener adicional
+                    input.dispatchEvent(new Event('change'));
+                }
             }
-        } else if (e.target.classList.contains('btn-increment')) {
-            const id = e.target.getAttribute('data-id');
+            return false;
+        }
+
+        // Botón incrementar (+)
+        if (e.target.closest('.btn-increment')) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const button = e.target.closest('.btn-increment');
+            const id = button.getAttribute('data-id');
             const input = document.getElementById(`cantidad-${id}`);
+
             if (input) {
                 let val = parseInt(input.value) || 1;
-                if (val < 20) input.value = val + 1;
+                if (val < 20) {
+                    input.value = val + 1;
+                    // Disparar evento change para cualquier listener adicional
+                    input.dispatchEvent(new Event('change'));
+                }
+            }
+            return false;
+        }
+
+        // Botón añadir al carrito
+        if (e.target.closest('.add-to-cart')) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const button = e.target.closest('.add-to-cart');
+            const productId = button.getAttribute('data-id');
+            const cantidadInput = document.getElementById(`cantidad-${productId}`);
+            let cantidad = 1;
+
+            if (cantidadInput) {
+                cantidad = parseInt(cantidadInput.value) || 1;
+            }
+
+            // Verificar que addToCart existe antes de llamarla
+            if (typeof addToCart === 'function') {
+                addToCart(productId, cantidad);
+            } else {
+                console.error('Función addToCart no encontrada');
+            }
+            return false;
+        }
+    });
+
+    // Delegación para inputs de cantidad (validación en tiempo real)
+    document.addEventListener('input', function(e) {
+        if (e.target.classList.contains('cantidad-input')) {
+            let val = parseInt(e.target.value);
+            if (isNaN(val) || val < 1) {
+                e.target.value = 1;
+            } else if (val > 20) {
+                e.target.value = 20;
             }
         }
     });
@@ -58,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Bloquea cualquier intento de agregar al carrito en la vista admin
     if (window.location.pathname.startsWith('/admin')) {
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('add-to-cart')) {
+            if (e.target.closest('.add-to-cart')) {
                 e.preventDefault();
                 e.stopPropagation();
                 return false;
@@ -81,6 +141,10 @@ function filterProducts() {
         url = `/api/products/search?query=${encodeURIComponent(searchQuery)}`;
     }
 
+    // Añadir efecto de carga
+    const container = document.getElementById('products-container');
+    container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Buscando productos...</p></div>';
+
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -89,11 +153,13 @@ function filterProducts() {
             return response.json();
         })
         .then(products => {
-            displayProducts(products);
+            setTimeout(() => {
+                displayProducts(products);
+            }, 300);
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo.');
+            container.innerHTML = '<div class="error-message"><i class="bi bi-exclamation-triangle"></i><p>Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo.</p></div>';
         });
 }
 
@@ -143,34 +209,81 @@ function displayProducts(products) {
     container.innerHTML = '';
 
     if (products.length === 0) {
-        container.innerHTML = '<div class="col-12"><div class="alert alert-info">No se encontraron productos que coincidan con tu búsqueda.</div></div>';
+        container.innerHTML = `
+            <div class="no-products-found">
+                <div class="no-products-content">
+                    <i class="bi bi-search"></i>
+                    <h3>No se encontraron productos</h3>
+                    <p>No hay productos que coincidan con tu búsqueda.</p>
+                    <button class="btn-clear-search" onclick="clearSearch()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        Ver todos los productos
+                    </button>
+                </div>
+            </div>
+        `;
         return;
     }
 
-    // Mostrar los productos
-    products.forEach(product => {
+    // Mostrar los productos con el nuevo diseño elegante
+    products.forEach((product, index) => {
         const productCard = document.createElement('div');
-        productCard.className = 'col';
+        productCard.className = 'product-card-wrapper';
+        productCard.style.animationDelay = `${index * 0.1}s`;
 
-        // IDs y data-id únicos por producto
-        const cantidadId = `cantidad-${product.id}`;
         productCard.innerHTML = `
-            <div class="card h-100">
-                <img src="${product.imageUrl || 'https://via.placeholder.com/300x200'}" class="card-img-top" alt="Imagen de ${product.name}">
-                <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">${product.description || ''}</p>
-                    <p class="card-text"><strong>${product.price.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</strong></p>
-                    <div class="d-flex align-items-center gap-2 mt-2">
-                        <div class="input-group flex-nowrap" style="max-width:120px;">
-                            <button class="btn btn-outline-secondary btn-decrement" type="button" data-id="${product.id}">-</button>
-                            <input type="number" class="form-control cantidad-input text-center" id="${cantidadId}" data-id="${product.id}" min="1" max="20" value="1" style="width:50px;">
-                            <button class="btn btn-outline-secondary btn-increment" type="button" data-id="${product.id}">+</button>
+            <div class="product-card">
+                <div class="card-image-wrapper">
+                    <img src="${product.imageUrl || 'https://via.placeholder.com/300x200'}" 
+                         class="product-image" alt="Imagen de ${product.name}">
+                    <div class="image-overlay">
+                        <div class="overlay-content">
+                            <i class="bi bi-eye"></i>
                         </div>
-                        <button class="btn btn-primary add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
-                            Añadir al Carrito
+                    </div>
+                </div>
+                
+                <div class="card-content">
+                    <div class="product-header">
+                        <h5 class="product-title">${product.name}</h5>
+                        <div class="title-decoration"></div>
+                    </div>
+                    
+                    <p class="product-description">${product.description || 'Delicioso producto de nuestra cocina'}</p>
+                    
+                    <div class="price-section">
+                        <span class="price-label">Precio</span>
+                        <span class="product-price">
+                            $${product.price.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        </span>
+                    </div>
+
+                    <div class="product-actions">
+                        <div class="quantity-controls">
+                            <button class="quantity-btn btn-decrement" type="button" data-id="${product.id}">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <input type="number" class="quantity-input cantidad-input"
+                                   id="cantidad-${product.id}" min="1" max="20" value="1">
+                            <button class="quantity-btn btn-increment" type="button" data-id="${product.id}">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
+                        
+                        <button class="add-to-cart-btn add-to-cart"
+                                data-id="${product.id}" 
+                                data-name="${product.name}" 
+                                data-price="${product.price}">
+                            <i class="bi bi-cart-plus me-2"></i>
+                            <span>Añadir al Carrito</span>
+                            <div class="btn-shine"></div>
                         </button>
                     </div>
+                </div>
+                
+                <div class="card-decoration">
+                    <div class="decoration-corner corner-top-left"></div>
+                    <div class="decoration-corner corner-bottom-right"></div>
                 </div>
             </div>
         `;
@@ -178,17 +291,37 @@ function displayProducts(products) {
         container.appendChild(productCard);
     });
 
-    // Volver a agregar los event listeners para los botones
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            const cantidadInput = document.getElementById(`cantidad-${productId}`);
-            let cantidad = 1;
-            if (cantidadInput) {
-                cantidad = parseInt(cantidadInput.value) || 1;
-            }
-            addToCart(productId, cantidad);
-        });
+    // Añadir animación de entrada
+    const cards = container.querySelectorAll('.product-card-wrapper');
+    cards.forEach(card => {
+        card.classList.add('fade-in-up');
+    });
+
+    // NO agregamos event listeners aquí - la delegación los maneja automáticamente
+    console.log(`✅ Productos cargados: ${products.length}. Event listeners manejados por delegación.`);
+}
+
+// Función para limpiar la búsqueda
+function clearSearch() {
+    document.getElementById('search-input').value = '';
+    document.getElementById('category-filter').value = '';
+    filterProducts();
+}
+
+// Función de utilidad para debugging
+function debugQuantityButtons() {
+    console.log('=== DEBUG: Botones de cantidad ===');
+    const decrementBtns = document.querySelectorAll('.btn-decrement');
+    const incrementBtns = document.querySelectorAll('.btn-increment');
+    const quantityInputs = document.querySelectorAll('.cantidad-input');
+
+    console.log(`Botones decrementar encontrados: ${decrementBtns.length}`);
+    console.log(`Botones incrementar encontrados: ${incrementBtns.length}`);
+    console.log(`Inputs de cantidad encontrados: ${quantityInputs.length}`);
+
+    // Verificar que todos tienen data-id
+    decrementBtns.forEach((btn, index) => {
+        const id = btn.getAttribute('data-id');
+        console.log(`Botón decrementar ${index}: data-id = ${id}`);
     });
 }

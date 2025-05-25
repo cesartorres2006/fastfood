@@ -1,40 +1,1572 @@
-<!-- src/main/resources/templates/index.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head('Inicio')"></head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/header :: head('Inicio')}"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+</head>
 <body>
-<header th:replace="fragments/header :: header"></header>
+<div th:replace="~{fragments/header :: header}"></div>
 
-<main class="container py-5">
-    <div class="jumbotron bg-light p-5 rounded mb-4">
-        <h1>Bienvenido a FastFood Restaurant</h1>
-        <p class="lead">La mejor comida rápida de la ciudad, entregada rápidamente a tu puerta.</p>
-        <a th:href="@{/products}" class="btn btn-primary btn-lg">Ver Menú</a>
-    </div>
-
-    <h2 class="mb-4">Productos Destacados</h2>
-
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" th:each="product, iter : ${products}" th:if="${iter.index < 6}">
-            <div class="card h-100">
-                <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" class="card-img-top" alt="Imagen del producto">
-                <img th:unless="${product.imageUrl}" src="https://via.placeholder.com/300x200" class="card-img-top" alt="Imagen de placeholder">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${product.name}">Nombre del producto</h5>
-                    <p class="card-text" th:text="${product.description}">Descripción del producto</p>
-                    <p class="card-text"><strong>$<span th:text="${product.price}">0.00</span></strong></p>
+<main class="main-content">
+    <!-- ✨ HERO SECTION MEJORADA -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-particles">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+            <div class="particle particle-6"></div>
+        </div>
+        <div class="hero-content">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-10">
+                        <div class="hero-badge" data-aos="fade-down" data-aos-delay="200">
+                            <i class="bi bi-star-fill"></i>
+                            <span>Experiencia Gastronómica Premium</span>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <h1 class="hero-title" data-aos="fade-up" data-aos-delay="400">
+                            Bienvenido a
+                            <span class="hero-brand">Punto Y Koma</span>
+                        </h1>
+                        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="600">
+                            Donde cada sabor cuenta una historia y cada momento se convierte en una experiencia inolvidable
+                        </p>
+                        <div class="hero-buttons" data-aos="fade-up" data-aos-delay="800">
+                            <a th:href="@{/products}" class="btn btn-hero-primary">
+                                <i class="bi bi-grid-3x3-gap me-2"></i>
+                                Explorar Menú
+                                <div class="btn-shine"></div>
+                            </a>
+                            <a th:href="@{/about}" class="btn btn-hero-secondary">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Conoce Más
+                            </a>
+                        </div>
+                        <div class="hero-scroll-indicator" data-aos="fade-in" data-aos-delay="1200">
+                            <div class="scroll-mouse">
+                                <div class="scroll-wheel"></div>
+                            </div>
+                            <span>Desliza para descubrir</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="hero-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-line line-1"></div>
+            <div class="decoration-line line-2"></div>
+        </div>
+    </section>
 
-    <div class="text-center mt-4">
-        <a th:href="@{/products}" class="btn btn-outline-primary">Ver Todos los Productos</a>
-    </div>
+    <!-- 🎯 PRODUCTOS DESTACADOS MEJORADOS -->
+    <section class="featured-products-section" data-aos="fade-up">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-delay="200">
+                <div class="section-badge">
+                    <i class="bi bi-gem"></i>
+                    <span>Lo Mejor de Nuestra Casa</span>
+                </div>
+                <h2 class="section-title">Productos Destacados</h2>
+                <p class="section-subtitle">Descubre nuestras creaciones más populares, cuidadosamente seleccionadas para deleitar tu paladar</p>
+                <div class="section-ornament">
+                    <div class="ornament-dot"></div>
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot"></div>
+                </div>
+            </div>
+
+            <div class="carousel-container" data-aos="zoom-in" data-aos-delay="400">
+                <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="0" class="active"></button>
+                        <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="1"></button>
+                        <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="2"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="featured-slide">
+                                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=800&h=500&fit=crop&auto=format" alt="Pizza Especial" class="slide-image">
+                                <div class="slide-overlay"></div>
+                                <div class="carousel-caption">
+                                    <div class="caption-content">
+                                        <div class="caption-badge">
+                                            <i class="bi bi-award"></i>
+                                            <span>Más Popular</span>
+                                        </div>
+                                        <h3 class="caption-title">Pizza Especial de la Casa</h3>
+                                        <p class="caption-description">Una deliciosa combinación de ingredientes frescos con nuestra salsa secreta que ha conquistado a todos nuestros clientes</p>
+                                        <a th:href="@{/products}" class="price-link">
+                                            <span class="price">$25.000</span>
+                                            <div class="price-glow"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="featured-slide">
+                                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&h=500&fit=crop&auto=format" alt="Hamburguesa Gourmet" class="slide-image">
+                                <div class="slide-overlay"></div>
+                                <div class="carousel-caption">
+                                    <div class="caption-content">
+                                        <div class="caption-badge">
+                                            <i class="bi bi-heart-fill"></i>
+                                            <span>Favorito</span>
+                                        </div>
+                                        <h3 class="caption-title">Hamburguesa Gourmet</h3>
+                                        <p class="caption-description">Carne premium, vegetales frescos y nuestras salsas artesanales en un pan brioche tostado a la perfección</p>
+                                        <a th:href="@{/products}" class="price-link">
+                                            <span class="price">$18.000</span>
+                                            <div class="price-glow"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="featured-slide">
+                                <img src="https://images.unsplash.com/photo-1551782450-17144efb9c50?w=800&h=500&fit=crop&auto=format" alt="Pasta Italiana" class="slide-image">
+                                <div class="slide-overlay"></div>
+                                <div class="carousel-caption">
+                                    <div class="caption-content">
+                                        <div class="caption-badge">
+                                            <i class="bi bi-star-fill"></i>
+                                            <span>Chef's Choice</span>
+                                        </div>
+                                        <h3 class="caption-title">Pasta Italiana Tradicional</h3>
+                                        <p class="caption-description">Pasta fresca hecha en casa con salsa de tomates San Marzano y hierbas aromáticas del mediterráneo</p>
+                                        <a th:href="@{/products}" class="price-link">
+                                            <span class="price">$22.000</span>
+                                            <div class="price-glow"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+                        <div class="control-icon">
+                            <i class="bi bi-chevron-left"></i>
+                        </div>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+                        <div class="control-icon">
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🍽️ CATEGORÍAS MEJORADAS - SECCIÓN CORREGIDA -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-badge">
+                    <i class="bi bi-collection"></i>
+                    <span>Nuestras Especialidades</span>
+                </div>
+                <h2 class="section-title">Explora Nuestras Categorías</h2>
+                <p class="section-subtitle">Cada categoría representa una experiencia culinaria única, diseñada para satisfacer todos los gustos</p>
+                <div class="section-ornament">
+                    <div class="ornament-dot"></div>
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot"></div>
+                </div>
+            </div>
+
+            <div class="categories-grid">
+                <!-- 🍔 HAMBURGUESAS (en lugar de Desayunos) -->
+                <div class="category-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&auto=format" alt="Hamburguesas">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-icon">
+                            <i class="bi bi-stack"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3 class="category-title">Deliciosas Hamburguesas</h3>
+                        <p class="category-description">Disfruta de nuestras jugosas hamburguesas gourmet con ingredientes frescos y carne 100% premium</p>
+                        <a th:href="@{/products?category=hamburguesas}" class="category-link">
+                            <span>Ver Hamburguesas</span>
+                            <i class="bi bi-arrow-right"></i>
+                            <div class="link-shine"></div>
+                        </a>
+                    </div>
+                    <div class="category-decoration">
+                        <div class="decoration-element"></div>
+                    </div>
+                </div>
+
+                <!-- 🥤 BEBIDAS & MALTEADAS (mejorado) -->
+                <div class="category-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&auto=format" alt="Bebidas y Malteadas">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-icon">
+                            <i class="bi bi-cup-straw"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3 class="category-title">Bebidas & Malteadas</h3>
+                        <p class="category-description">Refréscate con nuestra variedad de bebidas artesanales y cremosas malteadas preparadas con amor</p>
+                        <a th:href="@{/products?category=bebidas}" class="category-link">
+                            <span>Ver Bebidas</span>
+                            <i class="bi bi-arrow-right"></i>
+                            <div class="link-shine"></div>
+                        </a>
+                    </div>
+                    <div class="category-decoration">
+                        <div class="decoration-element"></div>
+                    </div>
+                </div>
+
+                <!-- 💰 PRECIOS COMPETITIVOS (en lugar de Combos) -->
+                <div class="category-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop&auto=format" alt="Precios Competitivos">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-icon">
+                            <i class="bi bi-tags"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3 class="category-title">Precios Competitivos</h3>
+                        <p class="category-description">Disfruta de nuestras ofertas especiales y promociones con los precios más competitivos del mercado</p>
+                        <a th:href="@{/products?ofertas=true}" class="category-link">
+                            <span>Ver Ofertas</span>
+                            <i class="bi bi-arrow-right"></i>
+                            <div class="link-shine"></div>
+                        </a>
+                    </div>
+                    <div class="category-decoration">
+                        <div class="decoration-element"></div>
+                    </div>
+                </div>
+
+                <!-- 🍟 SALCHIPAPAS (en lugar de Postres) -->
+                <div class="category-card" data-aos="fade-up" data-aos-delay="800">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=300&fit=crop&auto=format" alt="Salchipapas">
+                        <div class="category-overlay"></div>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-icon">
+                            <i class="bi bi-basket2"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <h3 class="category-title">Salchipapas Especiales</h3>
+                        <p class="category-description">Disfruta de nuestras deliciosas salchipapas con papas crujientes y salsas artesanales únicas</p>
+                        <a th:href="@{/products?category=salchipapas}" class="category-link">
+                            <span>Ver Salchipapas</span>
+                            <i class="bi bi-arrow-right"></i>
+                            <div class="link-shine"></div>
+                        </a>
+                    </div>
+                    <div class="category-decoration">
+                        <div class="decoration-element"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🌟 BENEFICIOS MEJORADOS -->
+    <section class="benefits-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-badge">
+                    <i class="bi bi-shield-check"></i>
+                    <span>¿Por Qué Elegirnos?</span>
+                </div>
+                <h2 class="section-title">La Experiencia Punto Y Koma</h2>
+                <p class="section-subtitle">Nos comprometemos a ofrecerte no solo comida excepcional, sino una experiencia completa que supere tus expectativas</p>
+                <div class="section-ornament">
+                    <div class="ornament-dot"></div>
+                    <div class="ornament-line"></div>
+                    <div class="ornament-dot"></div>
+                </div>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="benefit-icon">
+                        <i class="bi bi-award"></i>
+                        <div class="icon-ripple"></div>
+                    </div>
+                    <h3 class="benefit-title">Calidad Premium</h3>
+                    <p class="benefit-description">Seleccionamos cuidadosamente cada ingrediente para garantizar la máxima calidad en cada plato que servimos</p>
+                    <div class="benefit-decoration">
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benefit-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="benefit-icon">
+                        <i class="bi bi-lightning"></i>
+                        <div class="icon-ripple"></div>
+                    </div>
+                    <h3 class="benefit-title">Servicio Rápido</h3>
+                    <p class="benefit-description">Optimizamos nuestros procesos para que recibas tu pedido en el menor tiempo posible sin comprometer la calidad</p>
+                    <div class="benefit-decoration">
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benefit-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="benefit-icon">
+                        <i class="bi bi-heart"></i>
+                        <div class="icon-ripple"></div>
+                    </div>
+                    <h3 class="benefit-title">Hecho con Amor</h3>
+                    <p class="benefit-description">Cada plato es preparado con pasión y dedicación, porque creemos que el amor es el ingrediente secreto más importante</p>
+                    <div class="benefit-decoration">
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benefit-card" data-aos="fade-up" data-aos-delay="800">
+                    <div class="benefit-icon">
+                        <i class="bi bi-truck"></i>
+                        <div class="icon-ripple"></div>
+                    </div>
+                    <h3 class="benefit-title">Entrega Segura</h3>
+                    <p class="benefit-description">Sistema de entrega confiable que mantiene tus alimentos en perfectas condiciones hasta tu mesa</p>
+                    <div class="benefit-decoration">
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🎯 CTA MEJORADO -->
+    <section class="cta-section" data-aos="fade-up">
+        <div class="cta-background">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&h=600&fit=crop&auto=format" alt="Restaurante" class="cta-bg-image">
+            <div class="cta-overlay"></div>
+        </div>
+        <div class="cta-particles">
+            <div class="cta-particle cta-particle-1"></div>
+            <div class="cta-particle cta-particle-2"></div>
+            <div class="cta-particle cta-particle-3"></div>
+        </div>
+        <div class="cta-content">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <div class="cta-badge" data-aos="fade-down" data-aos-delay="200">
+                            <i class="bi bi-sparkles"></i>
+                            <span>¡No Esperes Más!</span>
+                        </div>
+                        <h2 class="cta-title" data-aos="fade-up" data-aos-delay="400">
+                            ¿Listo para una Experiencia Gastronómica Única?
+                        </h2>
+                        <p class="cta-subtitle" data-aos="fade-up" data-aos-delay="600">
+                            Descubre por qué somos el restaurante favorito de la ciudad. Cada bocado es una nueva aventura de sabores que recordarás para siempre.
+                        </p>
+                        <div class="cta-buttons" data-aos="fade-up" data-aos-delay="800">
+                            <a th:href="@{/products}" class="btn btn-cta-primary">
+                                <i class="bi bi-grid-3x3-gap me-2"></i>
+                                Explorar Menú Completo
+                                <div class="btn-shine"></div>
+                            </a>
+                            <a th:href="@{/about}" class="btn btn-cta-secondary">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Conoce Nuestra Historia
+                            </a>
+                        </div>
+                        <div class="cta-features" data-aos="fade-up" data-aos-delay="1000">
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Ingredientes Frescos</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Entrega Rápida</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Satisfacción Garantizada</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
-<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
-<script th:src="@{/js/cart.js}"></script>
+<!-- CSS MEJORADO -->
+<style>
+    :root {
+        --primary-color: #FFD100;
+        --primary-hover: #FFDB4D;
+        --primary-dark: #E6BC00;
+        --dark-bg: #121212;
+        --secondary-dark: #1E1E1E;
+        --card-bg: #2A2A2A;
+        --text-light: #FFFFFF;
+        --text-muted: #B0B0B0;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --shadow-light: rgba(255, 209, 0, 0.1);
+        --shadow-dark: rgba(0, 0, 0, 0.3);
+        --gradient-primary: linear-gradient(135deg, #FFD100 0%, #FFDB4D 100%);
+        --gradient-dark: linear-gradient(135deg, #121212 0%, #1E1E1E 100%);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        line-height: 1.6;
+        color: var(--text-light);
+        background-color: var(--dark-bg);
+        overflow-x: hidden;
+    }
+
+    .main-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ✨ HERO SECTION MEJORADA */
+    .hero-section {
+        position: relative;
+        height: 100vh;
+        min-height: 700px;
+        background: linear-gradient(135deg, #121212 0%, #1E1E1E 50%, #2A2A2A 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 70%, rgba(255, 209, 0, 0.08) 0%, transparent 50%);
+        z-index: 1;
+    }
+
+    .hero-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+
+    .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .particle-1 { top: 20%; left: 10%; animation-delay: 0s; }
+    .particle-2 { top: 60%; left: 80%; animation-delay: 2s; }
+    .particle-3 { top: 80%; left: 20%; animation-delay: 4s; }
+    .particle-4 { top: 30%; left: 70%; animation-delay: 1s; }
+    .particle-5 { top: 70%; left: 50%; animation-delay: 3s; }
+    .particle-6 { top: 40%; left: 30%; animation-delay: 5s; }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33% { transform: translateY(-20px) rotate(120deg); }
+        66% { transform: translateY(10px) rotate(240deg); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 209, 0, 0.1);
+        border: 1px solid rgba(255, 209, 0, 0.3);
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .hero-badge i {
+        font-size: 0.8rem;
+        animation: sparkle 2s ease-in-out infinite;
+    }
+
+    @keyframes sparkle {
+        0%, 100% { transform: scale(1) rotate(0deg); }
+        50% { transform: scale(1.2) rotate(180deg); }
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+    }
+
+    .hero-brand {
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
+
+    .hero-y {
+        position: relative;
+        display: inline-block;
+        color: var(--primary-color);
+        text-shadow: 0 0 20px rgba(255, 209, 0, 0.5);
+        animation: glow-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes glow-pulse {
+        0%, 100% { text-shadow: 0 0 20px rgba(255, 209, 0, 0.5); }
+        50% { text-shadow: 0 0 30px rgba(255, 209, 0, 0.8), 0 0 40px rgba(255, 209, 0, 0.3); }
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        color: var(--text-muted);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 4rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-hero-primary, .btn-hero-secondary {
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid;
+        display: inline-flex;
+        align-items: center;
+        min-width: 200px;
+        justify-content: center;
+    }
+
+    .btn-hero-primary {
+        background: var(--gradient-primary);
+        color: var(--dark-bg);
+        border-color: var(--primary-color);
+        box-shadow: 0 8px 25px rgba(255, 209, 0,0.3);
+    }
+
+    .btn-hero-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(255, 209, 0, 0.4);
+        color: var(--dark-bg);
+    }
+
+    .btn-hero-secondary {
+        background: transparent;
+        color: var(--text-light);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-hero-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        transform: translateY(-3px);
+    }
+
+    .btn-shine {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.6s ease;
+    }
+
+    .btn-hero-primary:hover .btn-shine {
+        left: 100%;
+    }
+
+    .hero-scroll-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        animation: bounce 2s infinite;
+    }
+
+    .scroll-mouse {
+        width: 24px;
+        height: 40px;
+        border: 2px solid var(--primary-color);
+        border-radius: 12px;
+        position: relative;
+        opacity: 0.7;
+    }
+
+    .scroll-wheel {
+        width: 4px;
+        height: 8px;
+        background: var(--primary-color);
+        border-radius: 2px;
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: scroll-wheel 2s infinite;
+    }
+
+    @keyframes scroll-wheel {
+        0% { top: 6px; opacity: 1; }
+        100% { top: 24px; opacity: 0; }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
+    .hero-decoration {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .decoration-circle {
+        position: absolute;
+        border: 1px solid rgba(255, 209, 0, 0.1);
+        border-radius: 50%;
+        animation: rotate 20s linear infinite;
+    }
+
+    .circle-1 {
+        width: 300px;
+        height: 300px;
+        top: 10%;
+        right: 10%;
+    }
+
+    .circle-2 {
+        width: 200px;
+        height: 200px;
+        bottom: 20%;
+        left: 15%;
+        animation-direction: reverse;
+    }
+
+    .decoration-line {
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.2), transparent);
+    }
+
+    .line-1 {
+        width: 60%;
+        top: 30%;
+        left: 20%;
+        transform: rotate(-15deg);
+    }
+
+    .line-2 {
+        width: 40%;
+        bottom: 40%;
+        right: 10%;
+        transform: rotate(25deg);
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    /* 🎯 SECCIONES GENERALES */
+    .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 209, 0, 0.1);
+        border: 1px solid rgba(255, 209, 0, 0.3);
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-light);
+    }
+
+    .section-subtitle {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .section-ornament {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .ornament-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 209, 0, 0.5);
+    }
+
+    .ornament-line {
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    }
+
+    /* 🎯 PRODUCTOS DESTACADOS */
+    .featured-products-section {
+        padding: 6rem 0;
+        background: var(--secondary-dark);
+        position: relative;
+    }
+
+    .carousel-container {
+        max-width: 900px;
+        margin: 0 auto;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .featured-slide {
+        position: relative;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    .slide-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .carousel-item.active .slide-image {
+        transform: scale(1.05);
+    }
+
+    .slide-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(18, 18, 18, 0.8) 0%, rgba(18, 18, 18, 0.3) 100%);
+    }
+
+    .carousel-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 3rem;
+        text-align: left;
+    }
+
+    .caption-content {
+        max-width: 500px;
+    }
+
+    .caption-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 209, 0, 0.9);
+        color: var(--dark-bg);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .caption-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+    }
+
+    .caption-description {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .price-link {
+        display: inline-block;
+        position: relative;
+        text-decoration: none;
+    }
+
+    .price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-shadow: 0 0 10px rgba(255, 209, 0, 0.5);
+    }
+
+    .price-glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 209, 0, 0.3), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .price-link:hover .price-glow {
+        opacity: 1;
+    }
+
+    .carousel-control-prev, .carousel-control-next {
+        width: 60px;
+        height: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        background: rgba(255, 209, 0, 0.9);
+        border: none;
+        opacity: 1;
+    }
+
+    .carousel-control-prev {
+        left: 20px;
+    }
+
+    .carousel-control-next {
+        right: 20px;
+    }
+
+    .control-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--dark-bg);
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .carousel-indicators {
+        bottom: 20px;
+    }
+
+    .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        border: none;
+        margin: 0 5px;
+    }
+
+    .carousel-indicators button.active {
+        background: var(--primary-color);
+    }
+
+    /* 🍽️ CATEGORÍAS */
+    .categories-section {
+        padding: 6rem 0;
+        background: var(--dark-bg);
+    }
+
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .category-card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        position: relative;
+        border: 1px solid var(--border-color);
+    }
+
+    .category-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(255, 209, 0, 0.1);
+    }
+
+    .category-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .category-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .category-card:hover .category-image img {
+        transform: scale(1.1);
+    }
+
+    .category-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(18, 18, 18, 0.6) 0%, transparent 100%);
+    }
+
+    .category-content {
+        padding: 2rem;
+        position: relative;
+    }
+
+    .category-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 209, 0, 0.1);
+        border: 2px solid var(--primary-color);
+        border-radius: 50%;
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .icon-glow {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 209, 0, 0.3), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .category-card:hover .icon-glow {
+        opacity: 1;
+    }
+
+    .category-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+    }
+
+    .category-description {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .category-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        padding: 0.5rem 0;
+    }
+
+    .category-link:hover {
+        color: var(--primary-hover);
+        transform: translateX(5px);
+    }
+
+    .link-shine {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.2), transparent);
+        transition: all 0.5s ease;
+    }
+
+    .category-link:hover .link-shine {
+        left: 100%;
+    }
+
+    .category-decoration {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+    }
+
+    .decoration-element {
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba(255, 209, 0, 0.2);
+        border-radius: 50%;
+        animation: pulse-decoration 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-decoration {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.2); opacity: 0.6; }
+    }
+
+    /* 🌟 BENEFICIOS */
+    .benefits-section {
+        padding: 6rem 0;
+        background: var(--secondary-dark);
+    }
+
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .benefit-card {
+        text-align: center;
+        padding: 2.5rem 1.5rem;
+        background: var(--card-bg);
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .benefit-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(255, 209, 0, 0.1);
+    }
+
+    .benefit-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 209, 0, 0.1);
+        border: 2px solid var(--primary-color);
+        border-radius: 50%;
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .icon-ripple {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: var(--primary-color);
+        border-radius: 50%;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.6s ease;
+    }
+
+    .benefit-card:hover .icon-ripple {
+        opacity: 0.2;
+        transform: scale(1.5);
+    }
+
+    .benefit-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+    }
+
+    .benefit-description {
+        color: var(--text-muted);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .benefit-decoration {
+        display: flex;
+        justify-content: center;
+    }
+
+    .decoration-dots {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .decoration-dots span {
+        width: 6px;
+        height: 6px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: dot-wave 2s ease-in-out infinite;
+    }
+
+    .decoration-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .decoration-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dot-wave {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.5); opacity: 1; }
+    }
+
+    /* 🎯 CTA SECTION */
+    .cta-section {
+        position: relative;
+        padding: 8rem 0;
+        overflow: hidden;
+    }
+
+    .cta-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .cta-bg-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .cta-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(18, 18, 18, 0.9) 0%, rgba(18, 18, 18, 0.7) 100%);
+    }
+
+    .cta-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+
+    .cta-particle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        opacity: 0.4;
+        animation: cta-float 10s ease-in-out infinite;
+    }
+
+    .cta-particle-1 { top: 20%; left: 20%; animation-delay: 0s; }
+    .cta-particle-2 { top: 60%; right: 20%; animation-delay: 3s; }
+    .cta-particle-3 { bottom: 30%; left: 60%; animation-delay: 6s; }
+
+    @keyframes cta-float {
+        0%, 100% { transform: translateY(0px) translateX(0px); }
+        33% { transform: translateY(-30px) translateX(20px); }
+        66% { transform: translateY(15px) translateX(-15px); }
+    }
+
+    .cta-content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+    }
+
+    .cta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 209, 0, 0.15);
+        border: 1px solid rgba(255, 209, 0, 0.4);
+        padding: 0.6rem 1.8rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .cta-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-light);
+        line-height: 1.2;
+    }
+
+    .cta-subtitle {
+        font-size: 1.3rem;
+        color: var(--text-muted);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-cta-primary, .btn-cta-secondary {
+        padding: 1.2rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid;
+        display: inline-flex;
+        align-items: center;
+        min-width: 250px;
+        justify-content: center;
+    }
+
+    .btn-cta-primary {
+        background: var(--gradient-primary);
+        color: var(--dark-bg);
+        border-color: var(--primary-color);
+        box-shadow: 0 10px 30px rgba(255, 209, 0, 0.3);
+    }
+
+    .btn-cta-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(255, 209, 0, 0.4);
+        color: var(--dark-bg);
+    }
+
+    .btn-cta-secondary {
+        background: transparent;
+        color: var(--text-light);
+        border-color: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-cta-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        transform: translateY(-3px);
+    }
+
+    .cta-features {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-muted);
+        font-size: 1rem;
+    }
+
+    .feature-item i {
+        color: var(--primary-color);
+        font-size: 1.1rem;
+    }
+
+    /* 📱 RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-hero-primary, .btn-hero-secondary {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .caption-title {
+            font-size: 1.8rem;
+        }
+
+        .caption-description {
+            font-size: 1rem;
+        }
+
+        .carousel-caption {
+            padding: 1.5rem;
+        }
+
+        .categories-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .benefits-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+        }
+
+        .btn-cta-primary, .btn-cta-secondary {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .cta-features {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-section {
+            min-height: 600px;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+        }
+
+        .featured-products-section,
+        .categories-section,
+        .benefits-section {
+            padding: 4rem 0;
+        }
+
+        .cta-section {
+            padding: 5rem 0;
+        }
+    }
+</style>
+
+<!-- JavaScript mejorado -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Parallax effect para hero
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.hero-decoration');
+
+            parallaxElements.forEach(element => {
+                const speed = 0.5;
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Animación de contador para precios
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const priceObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const priceElement = entry.target;
+                    animatePrice(priceElement);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.price').forEach(price => {
+            priceObserver.observe(price);
+        });
+
+        function animatePrice(element) {
+            const finalPrice = element.textContent;
+            const numericPrice = parseInt(finalPrice.replace(/[^\d]/g, ''));
+            let currentPrice = 0;
+            const increment = numericPrice / 50;
+            const timer = setInterval(() => {
+                currentPrice += increment;
+                if (currentPrice >= numericPrice) {
+                    currentPrice = numericPrice;
+                    clearInterval(timer);
+                }
+                element.textContent = `$${Math.floor(currentPrice).toLocaleString()}`;
+            }, 30);
+        }
+
+        // Efecto de hover mejorado para cards
+        document.querySelectorAll('.category-card, .benefit-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Smooth scroll para el indicador de scroll
+        document.querySelector('.hero-scroll-indicator')?.addEventListener('click', function() {
+            document.querySelector('.featured-products-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Preloader para imágenes
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+            });
+        });
+    });
+</script>
 </body>
 </html>
+

@@ -55,9 +55,21 @@ public class HomeController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user) {
-        userService.registerNewUser(user);
-        return "redirect:/login";
+    public String registerUser(@ModelAttribute User user, org.springframework.ui.Model model) {
+        try {
+            userService.registerNewUser(user);
+            return "redirect:/login";
+        } catch (RuntimeException e) {
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("usuario")) {
+                model.addAttribute("usernameError", "Nombre de usuario ya existe");
+            }
+            if (msg != null && msg.contains("correo")) {
+                model.addAttribute("emailError", "Correo electrónico ya en uso");
+            }
+            model.addAttribute("user", user);
+            return "register";
+        }
     }
 
     @GetMapping("/order-confirmation")

@@ -71,7 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/", "/index", "/products",
                                 "/register", "/login",
-                                "/css/**", "/static/js/**", "/js/**", "/images/**"
+                                "/css/**", "/static/js/**", "/js/**", "/images/**", "/about/**"
                         ).permitAll()
                         .requestMatchers("/api/products/**").permitAll()
                         .requestMatchers("/api/cart/count").permitAll() // Permitir verificar cantidad del carrito sin autenticación

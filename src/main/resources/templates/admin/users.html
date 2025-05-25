@@ -88,125 +88,142 @@
 <footer th:replace="fragments/footer :: footer"></footer>
 
 <script>
-    // --- Búsqueda dinámica con debounce para gestión de usuarios ---
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search-input');
-        const roleFilter = document.getElementById('role-filter');
-        const tableBody = document.getElementById('table-body');
-        let debounceTimeout;
+// --- Búsqueda dinámica con debounce para gestión de usuarios ---
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const roleFilter = document.getElementById('role-filter');
+    const tableBody = document.getElementById('table-body');
+    let debounceTimeout;
 
-        function renderUsers(users) {
-            tableBody.innerHTML = '';
-            if (users.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No se encontraron usuarios.</td></tr>';
-                return;
-            }
-            users.forEach(user => {
-                tableBody.innerHTML += `
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td>${user.fullName || ''}</td>
-                        <td>${user.email}</td>
-                        <td><span class="badge ${user.role === 'ROLE_ADMIN' ? 'bg-danger' : 'bg-info'}">${user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}</span></td>
-                        <td><span class="badge ${user.enabled ? 'bg-success' : 'bg-danger'}">${user.enabled ? 'Activo' : 'Inactivo'}</span></td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <button type="button" class="btn btn-outline-primary view-user" data-id="${user.id}">Ver</button>
-                                <button type="button" class="btn btn-outline-warning toggle-status" data-id="${user.id}" data-status="${user.enabled}">
-                                    <span>${user.enabled ? 'Desactivar' : 'Activar'}</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>`;
-            });
-            // Registrar eventos después de renderizar la tabla
-            tableBody.querySelectorAll('.view-user').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-id');
-                    const user = users.find(u => u.id == userId);
-                    if (user) {
-                        document.getElementById('user-id').textContent = user.id;
-                        document.getElementById('user-username').textContent = user.username;
-                        document.getElementById('user-fullname').textContent = user.fullName || '';
-                        document.getElementById('user-email').textContent = user.email;
-                        document.getElementById('user-address').textContent = user.address || '';
-                        document.getElementById('user-phone').textContent = user.phone || '';
-                        document.getElementById('user-role').textContent = user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente';
-                        document.getElementById('user-status').textContent = user.enabled ? 'Activo' : 'Inactivo';
-                        const modal = new bootstrap.Modal(document.getElementById('userModal'));
-                        modal.show();
-                    }
-                });
-            });
+    function renderUsers(users) {
+        tableBody.innerHTML = '';
+        if (users.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No se encontraron usuarios.</td></tr>';
+            return;
         }
-
-        function getRoleValue() {
-            const val = roleFilter.value;
-            if (val === 'ROLE_CLIENT' || val === 'ROLE_ADMIN') return val;
-            return '';
-        }
-
-        function fetchUsersLive(forceAll = false) {
-            const query = searchInput.value.trim();
-            const role = getRoleValue();
-            let url = '/api/users/search?';
-            if (!forceAll) {
-                if (query) url += `query=${encodeURIComponent(query)}&`;
-                if (role) url += `role=${encodeURIComponent(role)}`;
-            }
-            fetch(url)
-                .then(res => res.json())
-                .then(renderUsers)
-                .catch(() => {
-                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error al buscar usuarios.</td></tr>';
-                });
-        }
-
-        // Cuando la barra está vacía y el filtro es "Todos", muestra todos los usuarios
-        searchInput.addEventListener('input', function() {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(function() {
-                if (!searchInput.value.trim() && !getRoleValue()) {
-                    fetchUsersLive(true);
-                } else {
-                    fetchUsersLive();
-                }
-            }, 350);
+        users.forEach(user => {
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.fullName || ''}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge ${user.role === 'ROLE_ADMIN' ? 'bg-danger' : 'bg-info'}">${user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'}</span></td>
+                    <td><span class="badge ${user.enabled ? 'bg-success' : 'bg-danger'}">${user.enabled ? 'Activo' : 'Inactivo'}</span></td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-primary view-user" data-id="${user.id}">Ver</button>
+                            ${user.role === 'ROLE_CLIENT' ? `<button type="button" class="btn btn-outline-warning toggle-status" data-id="${user.id}" data-status="${user.enabled}"><span>${user.enabled ? 'Desactivar' : 'Activar'}</span></button>` : ''}
+                        </div>
+                    </td>
+                </tr>`;
         });
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                if (!searchInput.value.trim() && !getRoleValue()) {
-                    fetchUsersLive(true);
-                } else {
-                    fetchUsersLive();
+        // Registrar eventos después de renderizar la tabla
+        tableBody.querySelectorAll('.view-user').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const userId = this.getAttribute('data-id');
+                const user = users.find(u => u.id == userId);
+                if (user) {
+                    document.getElementById('user-id').textContent = user.id;
+                    document.getElementById('user-username').textContent = user.username;
+                    document.getElementById('user-fullname').textContent = user.fullName || '';
+                    document.getElementById('user-email').textContent = user.email;
+                    document.getElementById('user-address').textContent = user.address || '';
+                    document.getElementById('user-phone').textContent = user.phone || '';
+                    document.getElementById('user-role').textContent = user.role === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente';
+                    document.getElementById('user-status').textContent = user.enabled ? 'Activo' : 'Inactivo';
+                    const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                    modal.show();
                 }
-            }
+            });
         });
-        roleFilter.addEventListener('change', function() {
+        // Evento para activar/desactivar cliente
+        tableBody.querySelectorAll('.toggle-status').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const userId = this.getAttribute('data-id');
+                const currentStatus = this.getAttribute('data-status') === 'true';
+                fetch(`/api/users/${userId}/enabled`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled: !currentStatus })
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('Error al cambiar el estado');
+                    return res.json();
+                })
+                .then(() => fetchUsersLive())
+                .catch(() => alert('No se pudo cambiar el estado del usuario.'));
+            });
+        });
+    }
+
+    function getRoleValue() {
+        const val = roleFilter.value;
+        if (val === 'ROLE_CLIENT' || val === 'ROLE_ADMIN') return val;
+        return '';
+    }
+
+    function fetchUsersLive(loadAll) {
+        let url = '/api/users/search?';
+        const query = searchInput.value.trim();
+        const role = getRoleValue();
+        if (!loadAll) {
+            if (query) url += `query=${encodeURIComponent(query)}&`;
+            if (role) url += `role=${encodeURIComponent(role)}`;
+        }
+        fetch(url)
+            .then(res => res.json())
+            .then(renderUsers)
+            .catch(() => {
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error al buscar usuarios.</td></tr>';
+            });
+    }
+
+    // Cuando la barra está vacía y el filtro es "Todos", muestra todos los usuarios
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(function() {
             if (!searchInput.value.trim() && !getRoleValue()) {
                 fetchUsersLive(true);
             } else {
                 fetchUsersLive();
             }
-        });
-        document.getElementById('search-btn').addEventListener('click', function(e) {
-            e.preventDefault();
+        }, 350);
+    });
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
             if (!searchInput.value.trim() && !getRoleValue()) {
                 fetchUsersLive(true);
             } else {
                 fetchUsersLive();
             }
-        });
-        document.getElementById('clear-search-btn').addEventListener('click', function() {
-            searchInput.value = '';
-            roleFilter.value = '';
+        }
+    });
+    roleFilter.addEventListener('change', function() {
+        if (!searchInput.value.trim() && !getRoleValue()) {
             fetchUsersLive(true);
-        });
-        // Al cargar la página, muestra todos los usuarios
+        } else {
+            fetchUsersLive();
+        }
+    });
+    document.getElementById('search-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!searchInput.value.trim() && !getRoleValue()) {
+            fetchUsersLive(true);
+        } else {
+            fetchUsersLive();
+        }
+    });
+    document.getElementById('clear-search-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        searchInput.value = '';
+        roleFilter.value = '';
         fetchUsersLive(true);
     });
-    // --- Fin búsqueda dinámica ---
+    // Al cargar la página, muestra todos los usuarios
+    fetchUsersLive(true);
+});
+// --- Fin búsqueda dinámica ---
 </script>
 </body>
 </html>

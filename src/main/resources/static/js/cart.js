@@ -67,7 +67,8 @@ function addToCart(id, quantity = 1, productName = undefined) {
                         msg = errorData.error;
                     }
                 } catch (e) {}
-                alert(msg);
+                // alert(msg);
+                showCartLimitModal();
                 return Promise.reject(msg); // Solo un alert
             }
             return response.json();
@@ -75,7 +76,7 @@ function addToCart(id, quantity = 1, productName = undefined) {
         .then(data => {
             updateCartCount();
             const name = data.productName || productName || 'Producto';
-            alert(`${quantity} × ${name} ha sido añadido al carrito.`);
+            showCartSuccessModal(quantity, name);
         })
         .catch(error => {
             console.error('Error:', error);

@@ -1,52 +1,1209 @@
 <!-- src/main/resources/templates/order-history.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head('Historial de Pedidos')"></head>
+<head th:replace="fragments/header :: head('Historial de Pedidos')">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 
-<main class="container py-5">
-    <h1 class="mb-4">Mi Historial de Pedidos</h1>
-
-    <div th:if="${#lists.isEmpty(orders)}" class="alert alert-info">
-        No tienes pedidos realizados aún. <a th:href="@{/products}">¡Haz tu primer pedido!</a>
+<main class="main-container">
+    <!-- Hero Section elegante -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="title-accent">Mi</span>
+                <span class="title-main">Historial</span>
+            </h1>
+            <div class="hero-subtitle">
+                <span class="subtitle-line"></span>
+                <span class="subtitle-text">✦ Seguimiento de Pedidos ✦</span>
+                <span class="subtitle-line"></span>
+            </div>
+            <p class="hero-description">Revisa el estado y detalles de todos tus pedidos realizados</p>
+        </div>
+        <div class="hero-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-dot dot-1"></div>
+            <div class="decoration-dot dot-2"></div>
+            <div class="decoration-dot dot-3"></div>
+        </div>
     </div>
 
-    <div th:unless="${#lists.isEmpty(orders)}" class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Número de Pedido</th>
-                <th>Fecha</th>
-                <th>Total</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="order : ${orders}">
-                <td th:text="${order.id}">123</td>
-                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</td>
-                <td>$<span th:text="${#numbers.formatInteger(order.totalAmount, 0, 'POINT')}">0</span></td>
-                <td>
-                    <span th:class="${'badge ' + order.status.name().toLowerCase()}"
-                          th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
-                                   (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
-                                   (order.status.name() == 'PREPARING' ? 'Preparando' :
-                                   (order.status.name() == 'READY' ? 'Listo' :
-                                   (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
-                        Estado
-                    </span>
-                </td>
-                <td>
-                    <a th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-sm btn-outline-primary">Ver Detalles</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="container py-5">
+        <!-- Estado sin pedidos -->
+        <div th:if="${#lists.isEmpty(orders)}" class="no-orders-section">
+            <div class="no-orders-card">
+                <div class="no-orders-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+                <h3 class="no-orders-title">¡Aún no tienes pedidos!</h3>
+                <p class="no-orders-description">
+                    Descubre nuestro delicioso menú y realiza tu primer pedido para comenzar tu experiencia gastronómica.
+                </p>
+                <a th:href="@{/products}" class="btn-first-order">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    <span>Hacer mi primer pedido</span>
+                    <div class="btn-shine"></div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Lista de pedidos -->
+        <div th:unless="${#lists.isEmpty(orders)}" class="orders-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="bi bi-clock-history me-2"></i>
+                    Tus Pedidos Realizados
+                </h2>
+                <p class="section-subtitle">Gestiona y revisa el estado de todos tus pedidos</p>
+            </div>
+
+            <div class="orders-grid">
+                <div class="order-card" th:each="order : ${orders}">
+                    <div class="order-header">
+                        <div class="order-number">
+                            <span class="order-label">Pedido</span>
+                            <span class="order-id" th:text="'#' + ${order.id}">#123</span>
+                        </div>
+                        <div class="order-status">
+                            <span th:class="${'status-badge status-' + order.status.name().toLowerCase()}"
+                                  th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
+                                           (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
+                                           (order.status.name() == 'PREPARING' ? 'Preparando' :
+                                           (order.status.name() == 'READY' ? 'Listo' :
+                                           (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
+                                Estado
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="order-content">
+                        <div class="order-info">
+                            <div class="info-item">
+                                <i class="bi bi-calendar3"></i>
+                                <div class="info-details">
+                                    <span class="info-label">Fecha del pedido</span>
+                                    <span class="info-value" th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}">01/01/2025</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-clock"></i>
+                                <div class="info-details">
+                                    <span class="info-label">Hora</span>
+                                    <span class="info-value" th:text="${#temporals.format(order.orderDate, 'HH:mm')}">12:00</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-cash-coin"></i>
+                                <div class="info-details">
+                                    <span class="info-label">Total pagado</span>
+                                    <span class="info-value total-amount">
+                                        $<span th:text="${#numbers.formatInteger(order.totalAmount, 0, 'POINT')}">0</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-actions">
+                            <a th:href="@{/orders/{id}(id=${order.id})}" class="btn-view-details">
+                                <i class="bi bi-eye me-2"></i>
+                                <span>Ver Detalles</span>
+                                <div class="btn-shine"></div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Barra de progreso del estado -->
+                    <div class="status-progress">
+                        <div class="progress-bar"
+                             th:style="${'width: ' +
+                                       (order.status.name() == 'PENDING' ? '20%' :
+                                       (order.status.name() == 'CONFIRMED' ? '40%' :
+                                       (order.status.name() == 'PREPARING' ? '60%' :
+                                       (order.status.name() == 'READY' ? '80%' :
+                                       (order.status.name() == 'DELIVERED' ? '100%' : '0%')))))}">
+                        </div>
+                    </div>
+
+                    <!-- Decoración de la tarjeta -->
+                    <div class="card-decoration">
+                        <div class="decoration-corner corner-top-left"></div>
+                        <div class="decoration-corner corner-bottom-right"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>
+
+<!-- Estilos personalizados -->
+<style>
+    /* Variables CSS coherentes */
+    :root {
+        --primary-gold: #FFD700;
+        --primary-hover: #FFC107;
+        --secondary-gold: #F4D03F;
+        --dark-bg: #1a1a1a;
+        --darker-bg: #0f0f0f;
+        --card-bg: #2a2a2a;
+        --card-hover: #333333;
+        --text-light: #ffffff;
+        --text-muted: #b8b8b8;
+        --text-gold: #FFD700;
+        --border-gold: rgba(255, 215, 0, 0.3);
+        --shadow-gold: rgba(255, 215, 0, 0.2);
+        --gradient-gold: linear-gradient(135deg, #FFD700, #FFC107);
+        --gradient-dark: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+        --gradient-hero: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+        --gradient-card: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+
+        /* Estados */
+        --status-pending: #ffc107;
+        --status-confirmed: #17a2b8;
+        --status-preparing: #fd7e14;
+        --status-ready: #28a745;
+        --status-delivered: #6f42c1;
+        --status-cancelled: #dc3545;
+
+        /* Transiciones */
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-fast: all 0.2s ease;
+        --transition-slow: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Reset y estilos base */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: var(--dark-bg);
+        color: var(--text-light);
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    .main-container {
+        background: var(--dark-bg);
+        min-height: calc(100vh - 76px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        position: relative;
+        background: var(--gradient-hero);
+        padding: 4rem 0 3rem;
+        overflow: hidden;
+        border-bottom: 2px solid var(--primary-gold);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 3;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-family: 'Cinzel', serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+        line-height: 1.2;
+    }
+
+    .title-accent {
+        color: var(--text-light);
+        display: inline-block;
+        margin-right: 1rem;
+        opacity: 0.9;
+    }
+
+    .title-main {
+        color: var(--primary-gold);
+        display: inline-block;
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        animation: titleGlow 4s ease-in-out infinite alternate;
+        position: relative;
+    }
+
+    .title-main::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--gradient-gold);
+        border-radius: 2px;
+        animation: underlineGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0% {
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            transform: scale(1);
+        }
+        100% {
+            text-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+            transform: scale(1.02);
+        }
+    }
+
+    @keyframes underlineGlow {
+        0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+    }
+
+    .hero-subtitle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .subtitle-line {
+        width: 80px;
+        height: 2px;
+        background: var(--gradient-gold);
+        border-radius: 1px;
+        animation: lineExpand 3s ease-in-out infinite;
+    }
+
+    @keyframes lineExpand {
+        0%, 100% { width: 80px; opacity: 0.7; }
+        50% { width: 100px; opacity: 1; }
+    }
+
+    .subtitle-text {
+        font-family: 'Montserrat', sans-serif;
+        color: var(--primary-gold);
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .hero-description {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        font-style: italic;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* Decoraciones del hero */
+    .hero-decoration {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .decoration-circle {
+        position: absolute;
+        border: 2px solid rgba(255, 215, 0, 0.2);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .circle-1 {
+        width: 120px;
+        height: 120px;
+        top: 15%;
+        right: 10%;
+        animation-delay: 0s;
+    }
+
+    .circle-2 {
+        width: 80px;
+        height: 80px;
+        bottom: 20%;
+        left: 15%;
+        animation-delay: 2s;
+    }
+
+    .decoration-dot {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: var(--primary-gold);
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    .dot-1 {
+        top: 25%;
+        left: 20%;
+        animation-delay: 1s;
+    }
+
+    .dot-2 {
+        bottom: 30%;
+        right: 25%;
+        animation-delay: 3s;
+    }
+
+    .dot-3 {
+        top: 60%;
+        left: 80%;
+        animation-delay: 5s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(180deg); }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 0.4;
+            transform: scale(1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.5);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 1);
+        }
+    }
+
+    /* Sección sin pedidos */
+    .no-orders-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        padding: 2rem;
+    }
+
+    .no-orders-card {
+        text-align: center;
+        max-width: 500px;
+        background: var(--gradient-dark);
+        padding: 4rem 3rem;
+        border-radius: 20px;
+        border: 1px solid var(--border-gold);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .no-orders-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gradient-gold);
+    }
+
+    .no-orders-icon {
+        margin-bottom: 2rem;
+    }
+
+    .no-orders-icon i {
+        font-size: 5rem;
+        color: var(--primary-gold);
+        opacity: 0.7;
+        animation: noOrdersFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes noOrdersFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .no-orders-title {
+        font-family: 'Cinzel', serif;
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .no-orders-description {
+        color: var(--text-muted);
+        margin-bottom: 2.5rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .btn-first-order {
+        background: var(--gradient-gold);
+        border: none;
+        color: var(--dark-bg);
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-first-order:hover {
+        background: linear-gradient(135deg, var(--primary-hover), var(--secondary-gold));
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(255, 209, 0, 0.4);
+        color: var(--dark-bg);
+        text-decoration: none;
+    }
+
+    /* Sección de pedidos */
+    .orders-section {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-title {
+        font-family: 'Cinzel', serif;
+        color: var(--text-light);
+        font-size: 2.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .section-title i {
+        color: var(--primary-gold);
+        animation: iconRotate 4s ease-in-out infinite;
+    }
+
+    @keyframes iconRotate {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(15deg); }
+    }
+
+    .section-subtitle {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Grid de pedidos */
+    .orders-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    /* Tarjeta de pedido */
+    .order-card {
+        background: var(--gradient-card);
+        border-radius: 15px;
+        border: 1px solid var(--border-gold);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    .order-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        border-color: var(--primary-gold);
+    }
+
+    /* Header de la tarjeta */
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-gold);
+        background: linear-gradient(135deg, var(--darker-bg), var(--card-bg));
+    }
+
+    .order-number {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .order-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .order-id {
+        font-family: 'Cinzel', serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary-gold);
+    }
+
+    /* Estados */
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 2px solid;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .status-pending {
+        background: rgba(255, 193, 7, 0.1);
+        color: var(--status-pending);
+        border-color: var(--status-pending);
+    }
+
+    .status-confirmed {
+        background: rgba(23, 162, 184, 0.1);
+        color: var(--status-confirmed);
+        border-color: var(--status-confirmed);
+    }
+
+    .status-preparing {
+        background: rgba(253, 126, 20, 0.1);
+        color: var(--status-preparing);
+        border-color: var(--status-preparing);
+    }
+
+    .status-ready {
+        background: rgba(40, 167, 69, 0.1);
+        color: var(--status-ready);
+        border-color: var(--status-ready);
+    }
+
+    .status-delivered {
+        background: rgba(111, 66, 193, 0.1);
+        color: var(--status-delivered);
+        border-color: var(--status-delivered);
+    }
+
+    .status-cancelled {
+        background: rgba(220, 53, 69, 0.1);
+        color: var(--status-cancelled);
+        border-color: var(--status-cancelled);
+    }
+
+    /* Contenido de la tarjeta */
+    .order-content {
+        padding: 1.5rem;
+    }
+
+    .order-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, var(--darker-bg), rgba(42, 42, 42, 0.5));
+        border-radius: 8px;
+        border: 1px solid rgba(255, 215, 0, 0.1);
+        transition: var(--transition-fast);
+    }
+
+    .info-item:hover {
+        border-color: var(--border-gold);
+        background: linear-gradient(135deg, var(--card-bg), var(--darker-bg));
+    }
+
+    .info-item i {
+        color: var(--primary-gold);
+        font-size: 1.2rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .info-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        color: var(--text-light);
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .total-amount {
+        font-family: 'Cinzel', serif;
+        color: var(--primary-gold);
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    /* Acciones */
+    .order-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-view-details {
+        background: linear-gradient(135deg, var(--darker-bg), var(--card-bg));
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-view-details:hover {
+        background: var(--gradient-gold);
+        color: var(--dark-bg);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 209, 0, 0.4);
+        text-decoration: none;
+    }
+
+    /* Barra de progreso */
+    .status-progress {
+        height: 4px;
+        background: var(--darker-bg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: var(--gradient-gold);
+        transition: width 1s ease;
+        position: relative;
+    }
+
+    .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: progressShine 2s ease-in-out infinite;
+    }
+
+    @keyframes progressShine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* Decoraciones de la tarjeta */
+    .card-decoration {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .decoration-corner {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--primary-gold);
+        opacity: 0;
+        transition: var(--transition-smooth);
+    }
+
+    .corner-top-left {
+        top: 15px;
+        left: 15px;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .corner-bottom-right {
+        bottom: 15px;
+        right: 15px;
+        border-left: none;
+        border-top: none;
+    }
+
+    .order-card:hover .decoration-corner {
+        opacity: 0.6;
+    }
+
+    .order-card:hover .corner-top-left {
+        transform: translate(-3px, -3px);
+    }
+
+    .order-card:hover .corner-bottom-right {
+        transform: translate(3px, 3px);
+    }
+
+    /* Efecto de brillo en botones */
+    .btn-shine {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.6s ease;
+    }
+
+    .btn-first-order:hover .btn-shine,
+    .btn-view-details:hover .btn-shine {
+        left: 100%;
+    }
+
+    /* Animaciones de entrada */
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Efecto de aparición escalonada */
+    .order-card:nth-child(1) { animation-delay: 0.1s; }
+    .order-card:nth-child(2) { animation-delay: 0.2s; }
+    .order-card:nth-child(3) { animation-delay: 0.3s; }
+    .order-card:nth-child(4) { animation-delay: 0.4s; }
+    .order-card:nth-child(5) { animation-delay: 0.5s; }
+    .order-card:nth-child(6) { animation-delay: 0.6s; }
+    .order-card:nth-child(n+7) { animation-delay: 0.7s; }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 3rem 0 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .title-accent, .title-main {
+            display: block;
+            margin: 0;
+            text-align: center;
+        }
+
+        .hero-subtitle {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .subtitle-line {
+            width: 60px;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            padding: 0 1rem;
+        }
+
+        .orders-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .no-orders-card {
+            padding: 3rem 2rem;
+            margin: 0 1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .order-header {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .order-info {
+            gap: 0.75rem;
+        }
+
+        .info-item {
+            padding: 0.5rem;
+        }
+
+        .decoration-circle {
+            display: none;
+        }
+
+        .decoration-dot {
+            width: 6px;
+            height: 6px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-section {
+            padding: 2rem 0 1.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(1.8rem, 8vw, 2.5rem);
+        }
+
+        .hero-description {
+            font-size: 0.95rem;
+        }
+
+        .container {
+            padding: 0 1rem;
+        }
+
+        .no-orders-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .no-orders-icon i {
+            font-size: 4rem;
+        }
+
+        .no-orders-title {
+            font-size: 1.6rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+        }
+
+        .order-card {
+            margin: 0 0.5rem;
+        }
+
+        .order-header {
+            padding: 1rem;
+        }
+
+        .order-content {
+            padding: 1rem;
+        }
+
+        .order-id {
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-view-details {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .decoration-dot {
+            display: none;
+        }
+    }
+
+    /* Mejoras adicionales para accesibilidad */
+    .order-card:focus-within {
+        outline: 2px solid var(--primary-gold);
+        outline-offset: 2px;
+    }
+
+    .btn-first-order:focus,
+    .btn-view-details:focus {
+        outline: 2px solid var(--primary-gold);
+        outline-offset: 2px;
+    }
+
+    /* Animación de entrada para toda la página */
+    .main-container {
+        animation: pageLoad 1s ease-out;
+    }
+
+    @keyframes pageLoad {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Efectos de hover mejorados */
+    .orders-section:hover .order-card:not(:hover) {
+        opacity: 0.7;
+        transform: scale(0.98);
+    }
+
+    .hero-section:hover .decoration-dot {
+        animation-duration: 2s;
+    }
+
+    .hero-section:hover .decoration-circle {
+        animation-duration: 6s;
+    }
+
+    /* Transiciones suaves para cambios de tema */
+    * {
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Efectos adicionales para las tarjetas */
+    .order-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 0;
+        border-radius: 15px;
+    }
+
+    .order-card:hover::before {
+        opacity: 1;
+    }
+
+    .order-header,
+    .order-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Efecto de brillo sutil en las tarjetas */
+    .order-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.03), transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s ease;
+        opacity: 0;
+        z-index: 1;
+    }
+
+    .order-card:hover::after {
+        opacity: 1;
+        transform: rotate(45deg) translate(50%, 50%);
+    }
+
+    /* Estados de carga */
+    .loading-orders {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .loading-orders .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--card-bg);
+        border-top: 4px solid var(--primary-gold);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-orders p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    /* Mejoras de contraste */
+    .order-label {
+        color: #a0a0a0;
+    }
+
+    .info-label {
+        color: #a0a0a0;
+    }
+
+    .info-value {
+        color: #e0e0e0;
+    }
+
+    /* Efectos de pulsación para estados activos */
+    .status-preparing {
+        animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(253, 126, 20, 0.4);
+        }
+        50% {
+            box-shadow: 0 0 0 8px rgba(253, 126, 20, 0);
+        }
+    }
+
+    .status-ready {
+        animation: statusReady 1.5s ease-in-out infinite;
+    }
+
+    @keyframes statusReady {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+        }
+        50% {
+            box-shadow: 0 0 0 6px rgba(40, 167, 69, 0);
+        }
+    }
+
+    /* Tooltip para estados */
+    .status-badge {
+        position: relative;
+        cursor: help;
+    }
+
+    .status-badge::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--darker-bg);
+        color: var(--text-light);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-gold);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        z-index: 10;
+    }
+
+    .status-badge:hover::before {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(-5px);
+    }
+
+    /* Indicador de nuevo pedido */
+    .order-card.new-order {
+        border-color: var(--primary-gold);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        animation: newOrderGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes newOrderGlow {
+        0% {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        100% {
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.6);
+        }
+    }
+
+    /* Mejoras para la experiencia de usuario */
+    .order-card {
+        cursor: pointer;
+    }
+
+    .order-card:active {
+        transform: translateY(-2px) scale(0.98);
+    }
+
+    /* Separador visual entre secciones */
+    .section-divider {
+        height: 2px;
+        background: var(--gradient-gold);
+        margin: 3rem 0;
+        border-radius: 1px;
+        opacity: 0.3;
+    }
+
+    /* Efectos de micro-interacciones */
+    .info-item:hover i {
+        transform: scale(1.2);
+        color: var(--primary-hover);
+    }
+
+    .order-number:hover .order-id {
+        transform: scale(1.05);
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    /* Estados de error específicos */
+    .order-card.error-state {
+        border-color: var(--status-cancelled);
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), var(--card-bg));
+    }
+
+    .order-card.error-state .order-id {
+        color: var(--status-cancelled);
+    }
+</style>
+
 </body>
 </html>
