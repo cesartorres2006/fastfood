@@ -1,100 +1,299 @@
-<!-- src/main/resources/templates/admin/dashboard.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: head('Panel de Administración')"></head>
 <body>
 <header th:replace="fragments/header :: header"></header>
-<main class="container py-5">
-    <h1 class="mb-4">Panel de Administración</h1>
 
-    <div class="row">
-        <div class="col-md-3 mb-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total de Pedidos</h5>
-                    <h2 class="card-text" th:text="${totalOrders}">0</h2>
-                    <a th:href="@{/admin/orders}" class="btn btn-light mt-2">Ver Pedidos</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-4">
-            <div class="card bg-warning text-dark">
-                <div class="card-body">
-                    <h5 class="card-title">Pedidos Pendientes</h5>
-                    <h2 class="card-text" th:text="${pendingOrders}">0</h2>
-                    <a th:href="@{/admin/orders}" class="btn btn-dark mt-2">Gestionar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total de Productos</h5>
-                    <h2 class="card-text" th:text="${totalProducts}">0</h2>
-                    <a th:href="@{/admin/products}" class="btn btn-light mt-2">Gestion de Productos</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-4">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total de Usuarios</h5>
-                    <h2 class="card-text" th:text="${totalUsers}">0</h2>
-                    <a th:href="@{/admin/users}" class="btn btn-light mt-2">Gestion de Usuarios</a>
-                </div>
-            </div>
-        </div>
+<main class="admin-dashboard-container">
+    <!-- Elementos decorativos de fondo -->
+    <div class="dashboard-bg-elements">
+        <div class="bg-circuit circuit-1"></div>
+        <div class="bg-circuit circuit-2"></div>
+        <div class="bg-circuit circuit-3"></div>
+        <div class="floating-data data-1"><i class="bi bi-graph-up"></i></div>
+        <div class="floating-data data-2"><i class="bi bi-pie-chart"></i></div>
+        <div class="floating-data data-3"><i class="bi bi-bar-chart"></i></div>
+        <div class="grid-pattern"></div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Acciones Rápidas</h5>
+    <div class="container dashboard-content">
+        <!-- Header del Dashboard -->
+        <div class="dashboard-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 class="dashboard-title">
+                        <span class="title-icon">
+                            <i class="bi bi-speedometer2"></i>
+                            <div class="icon-orbit">
+                                <div class="orbit-dot"></div>
+                            </div>
+                        </span>
+                        Panel de Administración
+                    </h1>
+                    <div class="title-underline">
+                        <div class="underline-progress"></div>
+                    </div>
+                    <p class="dashboard-subtitle">Centro de control y gestión del sistema</p>
                 </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <a th:href="@{/admin/products/new}" class="list-group-item list-group-item-action">
-                            <i class="bi bi-plus-circle"></i> Añadir Nuevo Producto
-                        </a>
-                        <a th:href="@{/admin/orders}" class="list-group-item list-group-item-action">
-                            <i class="bi bi-list-check"></i> Gestionar Pedidos
-                        </a>
-                        <a th:href="@{/}" target="_blank" class="list-group-item list-group-item-action">
-                            <i class="bi bi-eye"></i> Ver Tienda
-                        </a>
+
+                <div class="header-actions">
+                    <div class="time-display">
+                        <i class="bi bi-clock"></i>
+                        <span id="current-time"></span>
+                    </div>
+                    <div class="admin-badge">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Administrador</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Últimos Pedidos</h5>
+        <!-- Tarjetas de Métricas - CORREGIDO -->
+        <div class="metrics-section">
+            <div class="metrics-grid">
+                <div class="metric-card orders-card">
+                    <div class="card-background"></div>
+                    <div class="card-content">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="bi bi-receipt"></i>
+                                <div class="icon-pulse"></div>
+                            </div>
+                            <div class="metric-trend">
+                                <i class="bi bi-arrow-up trend-icon"></i>
+                                <span class="trend-value">+12%</span>
+                            </div>
+                        </div>
+                        <div class="metric-body">
+                            <h5 class="metric-title">Total de Pedidos</h5>
+                            <div class="metric-value-container">
+                                <h2 class="metric-value" th:text="${totalOrders ?: '0'}">0</h2>
+                                <div class="value-animation"></div>
+                            </div>
+                            <p class="metric-description">Pedidos procesados este mes</p>
+                        </div>
+                        <div class="metric-footer">
+                            <a th:href="@{/admin/orders}" class="metric-action-btn">
+                                <span class="btn-text">Ver Pedidos</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <div class="btn-shine"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Cliente</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th>Total</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- Esta parte se podría llenar con datos reales -->
-                            <tr>
-                                <td colspan="5" class="text-center">Cargando datos...</td>
-                            </tr>
-                            </tbody>
-                        </table>
+
+                <div class="metric-card pending-card">
+                    <div class="card-background"></div>
+                    <div class="card-content">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="bi bi-hourglass-split"></i>
+                                <div class="icon-pulse"></div>
+                            </div>
+                            <div class="metric-trend urgent">
+                                <i class="bi bi-exclamation-triangle trend-icon"></i>
+                                <span class="trend-value">¡Urgente!</span>
+                            </div>
+                        </div>
+                        <div class="metric-body">
+                            <h5 class="metric-title">Pedidos Pendientes</h5>
+                            <div class="metric-value-container">
+                                <h2 class="metric-value" th:text="${pendingOrders ?: '0'}">0</h2>
+                                <div class="value-animation"></div>
+                            </div>
+                            <p class="metric-description">Requieren atención inmediata</p>
+                        </div>
+                        <div class="metric-footer">
+                            <a th:href="@{/admin/orders}" class="metric-action-btn">
+                                <span class="btn-text">Gestionar</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <div class="btn-shine"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+
+                <div class="metric-card products-card">
+                    <div class="card-background"></div>
+                    <div class="card-content">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="bi bi-box-seam"></i>
+                                <div class="icon-pulse"></div>
+                            </div>
+                            <div class="metric-trend">
+                                <i class="bi bi-arrow-up trend-icon"></i>
+                                <span class="trend-value">+5%</span>
+                            </div>
+                        </div>
+                        <div class="metric-body">
+                            <h5 class="metric-title">Total de Productos</h5>
+                            <div class="metric-value-container">
+                                <h2 class="metric-value" th:text="${totalProducts ?: '0'}">0</h2>
+                                <div class="value-animation"></div>
+                            </div>
+                            <p class="metric-description">Productos en catálogo</p>
+                        </div>
+                        <div class="metric-footer">
+                            <a th:href="@{/admin/products}" class="metric-action-btn">
+                                <span class="btn-text">Gestión de Productos</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <div class="btn-shine"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+
+                <div class="metric-card users-card">
+                    <div class="card-background"></div>
+                    <div class="card-content">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="bi bi-people"></i>
+                                <div class="icon-pulse"></div>
+                            </div>
+                            <div class="metric-trend">
+                                <i class="bi bi-arrow-up trend-icon"></i>
+                                <span class="trend-value">+8%</span>
+                            </div>
+                        </div>
+                        <div class="metric-body">
+                            <h5 class="metric-title">Total de Usuarios</h5>
+                            <div class="metric-value-container">
+                                <h2 class="metric-value" th:text="${totalUsers ?: '0'}">0</h2>
+                                <div class="value-animation"></div>
+                            </div>
+                            <p class="metric-description">Usuarios registrados</p>
+                        </div>
+                        <div class="metric-footer">
+                            <a th:href="@{/admin/users}" class="metric-action-btn">
+                                <span class="btn-text">Gestión de Usuarios</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <div class="btn-shine"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Gestión -->
+        <div class="management-section">
+            <div class="row g-4">
+                <!-- Acciones Rápidas -->
+                <div class="col-lg-6">
+                    <div class="management-card quick-actions-card">
+                        <div class="card-header-custom">
+                            <div class="header-icon">
+                                <i class="bi bi-lightning"></i>
+                                <div class="icon-spark"></div>
+                            </div>
+                            <div class="header-text">
+                                <h5 class="card-title-custom">Acciones Rápidas</h5>
+                                <p class="card-subtitle-custom">Operaciones frecuentes del sistema</p>
+                            </div>
+                        </div>
+
+                        <div class="card-body-custom">
+                            <div class="quick-actions-list">
+                                <a th:href="@{/admin/products/new}" class="quick-action-item">
+                                    <div class="action-icon">
+                                        <i class="bi bi-plus-circle"></i>
+                                        <div class="icon-bg"></div>
+                                    </div>
+                                    <div class="action-content">
+                                        <span class="action-title">Añadir Nuevo Producto</span>
+                                        <span class="action-description">Crear producto en el catálogo</span>
+                                    </div>
+                                    <div class="action-arrow">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </div>
+                                    <div class="action-hover-effect"></div>
+                                </a>
+
+                                <a th:href="@{/admin/orders}" class="quick-action-item">
+                                    <div class="action-icon">
+                                        <i class="bi bi-list-check"></i>
+                                        <div class="icon-bg"></div>
+                                    </div>
+                                    <div class="action-content">
+                                        <span class="action-title">Gestionar Pedidos</span>
+                                        <span class="action-description">Revisar y procesar pedidos</span>
+                                    </div>
+                                    <div class="action-arrow">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </div>
+                                    <div class="action-hover-effect"></div>
+                                </a>
+
+                                <a th:href="@{/}" target="_blank" class="quick-action-item">
+                                    <div class="action-icon">
+                                        <i class="bi bi-eye"></i>
+                                        <div class="icon-bg"></div>
+                                    </div>
+                                    <div class="action-content">
+                                        <span class="action-title">Ver Tienda</span>
+                                        <span class="action-description">Vista del cliente final</span>
+                                    </div>
+                                    <div class="action-arrow">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </div>
+                                    <div class="action-hover-effect"></div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Últimos Pedidos -->
+                <div class="col-lg-6">
+                    <div class="management-card recent-orders-card">
+                        <div class="card-header-custom">
+                            <div class="header-icon">
+                                <i class="bi bi-clock-history"></i>
+                                <div class="icon-spark"></div>
+                            </div>
+                            <div class="header-text">
+                                <h5 class="card-title-custom">Últimos Pedidos</h5>
+                                <p class="card-subtitle-custom">Actividad reciente del sistema</p>
+                            </div>
+                            <div class="refresh-button" onclick="refreshOrders()">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </div>
+                        </div>
+
+                        <div class="card-body-custom">
+                            <div class="orders-table-container">
+                                <div class="table-loading" id="table-loading">
+                                    <div class="loading-spinner"></div>
+                                    <span>Cargando datos...</span>
+                                </div>
+
+                                <div class="custom-table">
+                                    <div class="table-header">
+                                        <div class="header-cell">#</div>
+                                        <div class="header-cell">Cliente</div>
+                                        <div class="header-cell">Fecha</div>
+                                        <div class="header-cell">Estado</div>
+                                        <div class="header-cell">Total</div>
+                                    </div>
+
+                                    <div class="table-body" id="orders-table-body">
+                                        <!-- Los datos se cargarán aquí dinámicamente -->
+                                    </div>
+                                </div>
+
+                                <div class="no-data-message" id="no-data-message" style="display: none;">
+                                    <i class="bi bi-inbox"></i>
+                                    <span>No hay pedidos recientes</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,7 +305,55 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar el dashboard
+        initializeDashboard();
+
         // Cargar los últimos pedidos
+        loadRecentOrders();
+
+        // Actualizar el reloj
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Animar las métricas al cargar
+        animateMetrics();
+
+        // Mostrar las tarjetas de métricas con delay
+        setTimeout(() => {
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        }, 500);
+    });
+
+    function initializeDashboard() {
+        // Agregar efectos de hover a las tarjetas métricas
+        const metricCards = document.querySelectorAll('.metric-card');
+        metricCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.classList.add('hovered');
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.classList.remove('hovered');
+            });
+        });
+    }
+
+    function loadRecentOrders() {
+        const tableBody = document.getElementById('orders-table-body');
+        const loading = document.getElementById('table-loading');
+        const noDataMessage = document.getElementById('no-data-message');
+
+        // Mostrar loading
+        loading.style.display = 'flex';
+        tableBody.innerHTML = '';
+        noDataMessage.style.display = 'none';
+
         fetch('/api/orders/all')
             .then(response => {
                 if (!response.ok) {
@@ -115,36 +362,58 @@
                 return response.json();
             })
             .then(orders => {
+                loading.style.display = 'none';
                 displayLatestOrders(orders.slice(0, 5)); // Mostrar solo los 5 últimos
             })
             .catch(error => {
                 console.error('Error:', error);
+                loading.style.display = 'none';
+                showErrorMessage();
             });
-    });
+    }
 
     function displayLatestOrders(orders) {
-        const tableBody = document.querySelector('.table tbody');
+        const tableBody = document.getElementById('orders-table-body');
+        const noDataMessage = document.getElementById('no-data-message');
 
         if (orders.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay pedidos recientes</td></tr>';
+            noDataMessage.style.display = 'flex';
             return;
         }
 
         tableBody.innerHTML = '';
 
-        orders.forEach(order => {
-            const row = document.createElement('tr');
+        orders.forEach((order, index) => {
+            const row = document.createElement('div');
+            row.className = 'table-row';
+            row.style.animationDelay = `${index * 0.1}s`;
 
             const statusClass = getStatusClass(order.status);
-            const formattedDate = new Date(order.orderDate).toLocaleString();
+            const formattedDate = new Date(order.orderDate).toLocaleDateString();
 
             row.innerHTML = `
-                    <td>${order.id}</td>
-                    <td>${order.customerName}</td>
-                    <td>${formattedDate}</td>
-                    <td><span class="badge ${statusClass}">${translateStatus(order.status)}</span></td>
-                    <td>$${order.totalAmount.toFixed(2)}</td>
-                `;
+                <div class="table-cell">#${order.id}</div>
+                <div class="table-cell">
+                    <div class="customer-info">
+                        <div class="customer-avatar">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <span class="customer-name">${order.customerName}</span>
+                    </div>
+                </div>
+                <div class="table-cell">
+                    <span class="date-text">${formattedDate}</span>
+                </div>
+                <div class="table-cell">
+                    <span class="status-badge ${statusClass}">
+                        <i class="status-icon"></i>
+                        ${translateStatus(order.status)}
+                    </span>
+                </div>
+                <div class="table-cell">
+                    <span class="amount-text">$${order.totalAmount.toFixed(2)}</span>
+                </div>
+            `;
 
             tableBody.appendChild(row);
         });
@@ -152,15 +421,15 @@
 
     function getStatusClass(status) {
         const statusMap = {
-            'PENDING': 'bg-warning',
-            'CONFIRMED': 'bg-info',
-            'PREPARING': 'bg-primary',
-            'READY': 'bg-success',
-            'DELIVERED': 'bg-success',
-            'CANCELLED': 'bg-danger'
+            'PENDING': 'status-pending',
+            'CONFIRMED': 'status-confirmed',
+            'PREPARING': 'status-preparing',
+            'READY': 'status-ready',
+            'DELIVERED': 'status-delivered',
+            'CANCELLED': 'status-cancelled'
         };
 
-        return statusMap[status] || 'bg-secondary';
+        return statusMap[status] || 'status-default';
     }
 
     function translateStatus(status) {
@@ -175,6 +444,1182 @@
 
         return statusMap[status] || status;
     }
+
+    function refreshOrders() {
+        const refreshBtn = document.querySelector('.refresh-button');
+        refreshBtn.classList.add('spinning');
+
+        loadRecentOrders();
+
+        setTimeout(() => {
+            refreshBtn.classList.remove('spinning');
+        }, 1000);
+    }
+
+    function showErrorMessage() {
+        const tableBody = document.getElementById('orders-table-body');
+        tableBody.innerHTML = `
+            <div class="error-message">
+                <i class="bi bi-exclamation-triangle"></i>
+                <span>Error al cargar los datos</span>
+                <button onclick="loadRecentOrders()" class="retry-btn">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Reintentar
+                </button>
+            </div>
+        `;
+    }
+
+    function updateClock() {
+        const timeDisplay = document.getElementById('current-time');
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        timeDisplay.textContent = timeString;
+    }
+
+    function animateMetrics() {
+        const metricValues = document.querySelectorAll('.metric-value');
+
+        metricValues.forEach(value => {
+            const finalValue = parseInt(value.textContent);
+            let currentValue = 0;
+            const increment = finalValue / 50;
+
+            const animation = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= finalValue) {
+                    currentValue = finalValue;
+                    clearInterval(animation);
+                }
+                value.textContent = Math.floor(currentValue);
+            }, 30);
+        });
+    }
 </script>
+
+<style>
+    /* =================================
+       ADMIN DASHBOARD MAIN STYLING
+    ================================= */
+    .admin-dashboard-container {
+        background: linear-gradient(135deg, #0a0a0a 0%, #121212 50%, #0a0a0a 100%);
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        padding: 2rem 0;
+    }
+
+    .admin-dashboard-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+                radial-gradient(circle at 20% 20%, rgba(255, 209, 0, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 123, 255, 0.02) 0%, transparent 50%);
+        z-index: 0;
+    }
+
+    /* =================================
+       ELEMENTOS DECORATIVOS DE FONDO
+    ================================= */
+    .dashboard-bg-elements {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .bg-circuit {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        opacity: 0.02;
+        background:
+                linear-gradient(90deg, transparent 49%, #FFD100 50%, transparent 51%),
+                linear-gradient(0deg, transparent 49%, #FFD100 50%, transparent 51%);
+        background-size: 15px 15px;
+    }
+
+    .circuit-1 {
+        top: 10%;
+        right: 5%;
+        animation: float 25s ease-in-out infinite;
+    }
+
+    .circuit-2 {
+        bottom: 20%;
+        left: 10%;
+        animation: float 30s ease-in-out infinite reverse;
+    }
+
+    .circuit-3 {
+        top: 60%;
+        right: 15%;
+        animation: float 20s ease-in-out infinite 10s;
+    }
+
+    .floating-data {
+        position: absolute;
+        color: rgba(255, 209, 0, 0.05);
+        font-size: 1.5rem;
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .data-1 { top: 15%; left: 5%; animation-delay: 0s; }
+    .data-2 { top: 70%; right: 8%; animation-delay: 7s; }
+    .data-3 { bottom: 30%; left: 80%; animation-delay: 14s; }
+
+    .grid-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+                linear-gradient(rgba(255, 209, 0, 0.005) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 209, 0, 0.005) 1px, transparent 1px);
+        background-size: 40px 40px;
+        animation: gridMove 60s linear infinite;
+    }
+
+    @keyframes gridMove {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(40px, 40px); }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+        25% { transform: translateY(-10px) translateX(5px) rotate(1deg); }
+        50% { transform: translateY(0) translateX(10px) rotate(0deg); }
+        75% { transform: translateY(10px) translateX(5px) rotate(-1deg); }
+    }
+
+    .dashboard-content {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+    }
+
+    /* =================================
+       HEADER DEL DASHBOARD
+    ================================= */
+    .dashboard-header {
+        margin-bottom: 2rem;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    .title-section {
+        flex: 1;
+    }
+
+    .dashboard-title {
+        font-family: 'Cinzel', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #FFFFFF;
+        margin: 0 0 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .title-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.05));
+        color: #FFD100;
+        font-size: 2rem;
+        overflow: hidden;
+    }
+
+    .icon-orbit {
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        border: 2px solid rgba(255, 209, 0, 0.2);
+        border-radius: 50%;
+        animation: rotate 10s linear infinite;
+    }
+
+    .orbit-dot {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #FFD100;
+        border-radius: 50%;
+        top: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 0 8px rgba(255, 209, 0, 0.6);
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .title-underline {
+        position: relative;
+        width: 120px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 0 1rem 0;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .underline-progress {
+        position: absolute;
+        width: 0;
+        height: 100%;
+        background: linear-gradient(90deg, #FFD100, #FFDB4D);
+        border-radius: 2px;
+        animation: progressFill 3s ease-out forwards;
+    }
+
+    @keyframes progressFill {
+        0% { width: 0; }
+        100% { width: 100%; }
+    }
+
+    .dashboard-subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.2rem;
+        margin: 0;
+        font-weight: 300;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .time-display, .admin-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+    }
+
+    .time-display i, .admin-badge i {
+        color: #FFD100;
+        font-size: 1.1rem;
+    }
+
+    /* =================================
+       SECCIÓN DE MÉTRICAS - CORREGIDO
+    ================================= */
+    .metrics-section {
+        margin-bottom: 3rem;
+    }
+
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .metric-card {
+        position: relative;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(30px);
+        min-height: 280px;
+    }
+
+    .metric-card.hovered {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .metric-card.hovered .card-background {
+        opacity: 1;
+    }
+
+    .orders-card .card-background {
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.05));
+    }
+
+    .pending-card .card-background {
+        background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+    }
+
+    .products-card .card-background {
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+    }
+
+    .users-card .card-background {
+        background: linear-gradient(135deg, rgba(108, 117, 125, 0.1), rgba(108, 117, 125, 0.05));
+    }
+
+    .card-content {
+        position: relative;
+        z-index: 2;
+        padding: 2rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+    }
+
+    .metric-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        color: #FFD100;
+        font-size: 1.8rem;
+        overflow: hidden;
+    }
+
+    .icon-pulse {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 2px solid rgba(255, 209, 0, 0.3);
+        border-radius: 50%;
+        animation: pulse-ring 2s ease infinite;
+    }
+
+    @keyframes pulse-ring {
+        0% { transform: scale(0.8); opacity: 1; }
+        100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    .metric-trend {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(40, 167, 69, 0.2);
+        border: 1px solid rgba(40, 167, 69, 0.3);
+        border-radius: 50px;
+        color: #28a745;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .metric-trend.urgent {
+        background: rgba(255, 193, 7, 0.2);
+        border-color: rgba(255, 193, 7, 0.3);
+        color: #ffc107;
+        animation: pulse-urgent 2s ease infinite;
+    }
+
+    @keyframes pulse-urgent {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    .trend-icon {
+        font-size: 0.9rem;
+    }
+
+    .metric-body {
+        flex: 1;
+        margin-bottom: 1.5rem;
+    }
+
+    .metric-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0 0 1rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .metric-value-container {
+        position: relative;
+        margin-bottom: 0.8rem;
+    }
+
+    .metric-value {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #FFFFFF;
+        margin: 0;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .value-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.3), transparent);
+        opacity: 0;
+        animation: valueShine 3s ease infinite;
+    }
+
+    @keyframes valueShine {
+        0%, 90%, 100% { opacity: 0; transform: translateX(-100%); }
+        50% { opacity: 1; transform: translateX(100%); }
+    }
+
+    .metric-description {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 400;
+    }
+
+    .metric-footer {
+        margin-top: auto;
+    }
+
+    .metric-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .metric-action-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-shine {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: all 0.5s ease;
+    }
+
+    .metric-action-btn:hover .btn-shine {
+        left: 100%;
+    }
+
+    .card-glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(255, 209, 0, 0.1), transparent 70%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .metric-card.hovered .card-glow {
+        opacity: 1;
+    }
+
+    /* =================================
+       SECCIÓN DE GESTIÓN
+    ================================= */
+    .management-section {
+        margin-top: 3rem;
+    }
+
+    .management-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        position: relative;
+        animation: slideInUp 0.8s ease forwards;
+    }
+
+    .card-header-custom {
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+        padding: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        position: relative;
+    }
+
+    .header-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        color: #FFD100;
+        font-size: 1.5rem;
+    }
+
+    .icon-spark {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 2px solid rgba(255, 209, 0, 0.3);
+        border-radius: 50%;
+        animation: spark 3s ease infinite;
+    }
+
+    @keyframes spark {
+        0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 1; }
+        50% { transform: scale(1.2) rotate(180deg); opacity: 0.3; }
+    }
+
+    .header-text {
+        flex: 1;
+    }
+
+    .card-title-custom {
+        font-family: 'Cinzel', serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #FFFFFF;
+        margin: 0 0 0.5rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .card-subtitle-custom {
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .refresh-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.2rem;
+    }
+
+    .refresh-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #FFFFFF;
+        transform: scale(1.1);
+    }
+
+    .refresh-button.spinning {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .card-body-custom {
+        padding: 2rem;
+    }
+
+    /* =================================
+       ACCIONES RÁPIDAS
+    ================================= */
+    .quick-actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .quick-action-item {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .quick-action-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 209, 0, 0.3);
+        color: #FFFFFF;
+        transform: translateX(10px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        color: #FFD100;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    .icon-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .quick-action-item:hover .icon-bg {
+        opacity: 1;
+        animation: iconShine 0.6s ease;
+    }
+
+    @keyframes iconShine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .action-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .action-title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: inherit;
+    }
+
+    .action-description {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .action-arrow {
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .quick-action-item:hover .action-arrow {
+        color: #FFD100;
+        transform: translateX(5px);
+    }
+
+    .action-hover-effect {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.1), transparent);
+        transition: all 0.5s ease;
+    }
+
+    .quick-action-item:hover .action-hover-effect {
+        left: 100%;
+    }
+
+    /* =================================
+       TABLA DE PEDIDOS PERSONALIZADA
+    ================================= */
+    .orders-table-container {
+        position: relative;
+        min-height: 300px;
+    }
+
+    .table-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        color: rgba(255, 255, 255, 0.8);
+        z-index: 10;
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255, 209, 0, 0.2);
+        border-top: 3px solid #FFD100;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .custom-table {
+        width: 100%;
+    }
+
+    .table-header {
+        display: grid;
+        grid-template-columns: 0.8fr 2fr 1.2fr 1.2fr 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 209, 0, 0.1);
+        border-radius: 10px 10px 0 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-cell {
+        font-family: 'Cinzel', serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #FFD100;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .table-row {
+        display: grid;
+        grid-template-columns: 0.8fr 2fr 1.2fr 1.2fr 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.4s ease forwards;
+        opacity: 0;
+    }
+
+    .table-row:hover {
+        background: rgba(255, 255, 255, 0.03);
+        transform: translateX(5px);
+    }
+
+    .table-row:last-child {
+        border-bottom: none;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .table-cell {
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+    }
+
+    .customer-info {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .customer-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        color: #FFD100;
+        font-size: 0.9rem;
+    }
+
+    .customer-name {
+        font-weight: 500;
+    }
+
+    .date-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.85rem;
+    }
+
+    .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .status-icon {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: pulse-status 2s ease infinite;
+    }
+
+    @keyframes pulse-status {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .status-pending {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .status-confirmed {
+        background: rgba(23, 162, 184, 0.2);
+        color: #17a2b8;
+        border: 1px solid rgba(23, 162, 184, 0.3);
+    }
+
+    .status-preparing {
+        background: rgba(0, 123, 255, 0.2);
+        color: #007bff;
+        border: 1px solid rgba(0, 123, 255, 0.3);
+    }
+
+    .status-ready, .status-delivered {
+        background: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+        border: 1px solid rgba(40, 167, 69, 0.3);
+    }
+
+    .status-cancelled {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+        border: 1px solid rgba(220, 53, 69, 0.3);
+    }
+
+    .amount-text {
+        font-weight: 600;
+        color: #FFD100;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .no-data-message, .error-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 3rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+    }
+
+    .no-data-message i, .error-message i {
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .retry-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        border: 1px solid rgba(255, 209, 0, 0.3);
+        border-radius: 25px;
+        color: #FFD100;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .retry-btn:hover {
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.3), rgba(255, 209, 0, 0.2));
+        transform: translateY(-2px);
+    }
+
+    /* =================================
+       ANIMACIONES DE ENTRADA
+    ================================= */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* =================================
+       RESPONSIVE DESIGN
+    ================================= */
+    @media (max-width: 1199px) {
+        .dashboard-title {
+            font-size: 2.4rem;
+        }
+
+        .metrics-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+    }
+
+    @media (max-width: 991px) {
+        .header-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .header-actions {
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .metrics-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .admin-dashboard-container {
+            padding: 1rem 0;
+        }
+
+        .dashboard-title {
+            font-size: 1.8rem;
+        }
+
+        .card-header-custom,
+        .card-body-custom {
+            padding: 1.5rem;
+        }
+
+        .metric-card .card-content {
+            padding: 1.5rem;
+        }
+
+        .table-header,
+        .table-row {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .table-header {
+            display: none;
+        }
+
+        .table-cell {
+            justify-content: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .table-cell:last-child {
+            border-bottom: none;
+        }
+
+        .customer-info {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+        }
+
+        .metrics-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .card-header-custom,
+        .card-body-custom {
+            padding: 1rem;
+        }
+
+        .metric-card .card-content {
+            padding: 1rem;
+        }
+
+        .quick-action-item {
+            padding: 1rem;
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .action-content {
+            align-items: center;
+        }
+
+        .time-display, .admin-badge {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* =================================
+       ESTADOS DE CARGA Y ERROR
+    ================================= */
+    .metric-card.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .metric-card.loading .metric-value {
+        animation: pulse 1.5s ease infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    /* =================================
+       MEJORAS DE ACCESIBILIDAD
+    ================================= */
+    .metric-action-btn:focus,
+    .quick-action-item:focus,
+    .refresh-button:focus,
+    .retry-btn:focus {
+        outline: 2px solid #FFD100;
+        outline-offset: 2px;
+    }
+
+    /* =================================
+       PRINT STYLES
+    ================================= */
+    @media print {
+        .dashboard-bg-elements,
+        .floating-data,
+        .refresh-button,
+        .metric-action-btn {
+            display: none !important;
+        }
+
+        .admin-dashboard-container {
+            background: white !important;
+            color: black !important;
+        }
+
+        .metric-card,
+        .management-card {
+            border: 1px solid #000 !important;
+            background: white !important;
+            box-shadow: none !important;
+            break-inside: avoid;
+        }
+
+        .dashboard-title,
+        .card-title-custom,
+        .metric-title,
+        .metric-value {
+            color: black !important;
+        }
+    }
+</style>
+
 </body>
 </html>
