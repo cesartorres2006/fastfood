@@ -2,104 +2,274 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: head('Detalle de Pedido')"></head>
-<body>
+<body class="admin-body">
 <header th:replace="fragments/header :: header"></header>
 
-<main class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Detalle del Pedido #<span th:text="${order.id}">123</span></h1>
-        <a th:href="@{/admin/orders}" class="btn btn-outline-primary">Volver a Pedidos</a>
-    </div>
+<main class="admin-main-content">
+    <div class="admin-container">
+        <!-- Header Section con Breadcrumb -->
+        <div class="page-header">
+            <div class="breadcrumb-section">
+                <nav class="breadcrumb-nav">
+                    <a href="/admin/dashboard" class="breadcrumb-link">
+                        <i class="bi bi-house"></i>
+                        Dashboard
+                    </a>
+                    <i class="bi bi-chevron-right breadcrumb-separator"></i>
+                    <a href="/admin/orders" class="breadcrumb-link">Pedidos</a>
+                    <i class="bi bi-chevron-right breadcrumb-separator"></i>
+                    <span class="breadcrumb-current">Pedido #<span th:text="${order.id}">123</span></span>
+                </nav>
+            </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Productos</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Subtotal</th>
-                                <th>Notas</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="item : ${order.items}">
-                                <td th:text="${item.product.name}">Producto</td>
-                                <td>$<span th:text="${#numbers.formatInteger(item.price, 0, 'POINT')}">0</span></td>
-                                <td th:text="${item.quantity}">1</td>
-                                <td>$<span th:text="${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">0</span></td>
-                                <td th:text="${item.notes ?: '-'}">Sin notas</td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th colspan="3" class="text-end">Total:</th>
-                                <th colspan="2">$<span th:text="${order.totalAmount}">0.00</span></th>
-                            </tr>
-                            </tfoot>
-                        </table>
+            <div class="page-title-section">
+                <div class="page-title-content">
+                    <div class="order-title-wrapper">
+                        <div class="order-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                        <div class="order-title-info">
+                            <h1 class="page-title">Pedido #<span th:text="${order.id}">123</span></h1>
+                            <p class="page-subtitle">
+                                <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025 14:30</span>
+                                • Cliente: <span th:text="${order.customerName}">Nombre del Cliente</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="page-actions">
+                        <a th:href="@{/admin/orders}" class="btn-back">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Volver a Pedidos</span>
+                        </a>
+                        <button class="btn-print" onclick="window.print()">
+                            <i class="bi bi-printer"></i>
+                            <span>Imprimir</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Información del Pedido</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Estado:</strong>
-                        <span th:class="${'badge ' + (order.status.name() == 'PENDING' ? 'bg-warning' :
-                                           (order.status.name() == 'CONFIRMED' ? 'bg-info' :
-                                           (order.status.name() == 'PREPARING' ? 'bg-primary' :
-                                           (order.status.name() == 'READY' ? 'bg-success' :
-                                           (order.status.name() == 'DELIVERED' ? 'bg-success' : 'bg-danger')))))}"
-                              th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
-                                           (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
-                                           (order.status.name() == 'PREPARING' ? 'Preparando' :
-                                           (order.status.name() == 'READY' ? 'Listo' :
-                                           (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
-                                Estado
-                            </span>
-                    </p>
-                    <p><strong>Fecha:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</span></p>
-                    <hr>
-                    <p><strong>Cliente:</strong> <span th:text="${order.customerName}">Nombre del Cliente</span></p>
-                    <p><strong>Usuario:</strong> <span th:text="${order.user.username}">usuario123</span></p>
-                    <p><strong>Email:</strong> <span th:text="${order.user.email}">email@example.com</span></p>
-                    <p><strong>Dirección:</strong> <span th:text="${order.deliveryAddress}">Dirección de Entrega</span></p>
-                    <p><strong>Teléfono:</strong> <span th:text="${order.contactPhone}">Teléfono de Contacto</span></p>
+        <!-- Main Content Grid -->
+        <div class="order-detail-grid">
+            <!-- Products Section -->
+            <div class="order-section order-products">
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="bi bi-bag-check"></i>
+                            <h2>Productos del Pedido</h2>
+                        </div>
+                        <div class="products-count">
+                            <span th:text="${#lists.size(order.items)}">3</span> productos
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <div class="products-table-wrapper">
+                            <table class="products-table">
+                                <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                    <th>Notas</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item, iterStat : ${order.items}" class="product-row">
+                                    <td class="product-info">
+                                        <div class="product-details">
+                                            <div class="product-avatar">
+                                                <span th:text="${T(java.lang.Character).toUpperCase(item.product.name.charAt(0))}">P</span>
+                                            </div>
+                                            <div class="product-text">
+                                                <span class="product-name" th:text="${item.product.name}">Producto</span>
+                                                <small class="product-category">Categoría</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="product-price">
+                                        <span class="price-amount">$<span th:text="${#numbers.formatInteger(item.price, 0, 'POINT')}">0</span></span>
+                                    </td>
+                                    <td class="product-quantity">
+                                        <div class="quantity-badge">
+                                            <span th:text="${item.quantity}">1</span>
+                                        </div>
+                                    </td>
+                                    <td class="product-subtotal">
+                                        <span class="subtotal-amount">$<span th:text="${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">0</span></span>
+                                    </td>
+                                    <td class="product-notes">
+                                            <span th:if="${item.notes != null and !item.notes.isEmpty()}"
+                                                  class="notes-text" th:text="${item.notes}">Notas especiales</span>
+                                        <span th:if="${item.notes == null or item.notes.isEmpty()}"
+                                              class="no-notes">Sin notas</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Order Total -->
+                        <div class="order-total-section">
+                            <div class="total-breakdown">
+                                <div class="total-row">
+                                    <span class="total-label">Subtotal:</span>
+                                    <span class="total-value">$<span th:text="${order.totalAmount}">0.00</span></span>
+                                </div>
+                                <div class="total-row">
+                                    <span class="total-label">Delivery:</span>
+                                    <span class="total-value">$0.00</span>
+                                </div>
+                                <div class="total-row total-final">
+                                    <span class="total-label">Total Final:</span>
+                                    <span class="total-value">$<span th:text="${order.totalAmount}">0.00</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Cambiar Estado</h5>
+            <!-- Order Info Sidebar -->
+            <div class="order-sidebar">
+                <!-- Order Status Card -->
+                <div class="sidebar-card status-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="bi bi-info-circle"></i>
+                            <h3>Estado del Pedido</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-display">
+                            <div class="status-badge-large"
+                                 th:classappend="${order.status.name() == 'PENDING' ? 'status-pending' :
+                                                 (order.status.name() == 'CONFIRMED' ? 'status-confirmed' :
+                                                 (order.status.name() == 'PREPARING' ? 'status-preparing' :
+                                                 (order.status.name() == 'READY' ? 'status-ready' :
+                                                 (order.status.name() == 'DELIVERED' ? 'status-delivered' : 'status-cancelled'))))}">
+                                <div class="status-icon">
+                                    <i th:class="${order.status.name() == 'PENDING' ? 'bi bi-clock' :
+                                                 (order.status.name() == 'CONFIRMED' ? 'bi bi-check-circle' :
+                                                 (order.status.name() == 'PREPARING' ? 'bi bi-gear' :
+                                                 (order.status.name() == 'READY' ? 'bi bi-check2-circle' :
+                                                 (order.status.name() == 'DELIVERED' ? 'bi bi-truck' : 'bi bi-x-circle'))))}"></i>
+                                </div>
+                                <span class="status-text"
+                                      th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
+                                               (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
+                                               (order.status.name() == 'PREPARING' ? 'Preparando' :
+                                               (order.status.name() == 'READY' ? 'Listo' :
+                                               (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
+                                    Estado
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Status Timeline -->
+                        <div class="status-timeline">
+                            <div class="timeline-item" th:classappend="${order.status.name() == 'PENDING' or order.status.name() == 'CONFIRMED' or order.status.name() == 'PREPARING' or order.status.name() == 'READY' or order.status.name() == 'DELIVERED' ? 'completed' : ''}">
+                                <div class="timeline-dot"></div>
+                                <span>Pedido Recibido</span>
+                            </div>
+                            <div class="timeline-item" th:classappend="${order.status.name() == 'CONFIRMED' or order.status.name() == 'PREPARING' or order.status.name() == 'READY' or order.status.name() == 'DELIVERED' ? 'completed' : ''}">
+                                <div class="timeline-dot"></div>
+                                <span>Confirmado</span>
+                            </div>
+                            <div class="timeline-item" th:classappend="${order.status.name() == 'PREPARING' or order.status.name() == 'READY' or order.status.name() == 'DELIVERED' ? 'completed' : ''}">
+                                <div class="timeline-dot"></div>
+                                <span>En Preparación</span>
+                            </div>
+                            <div class="timeline-item" th:classappend="${order.status.name() == 'READY' or order.status.name() == 'DELIVERED' ? 'completed' : ''}">
+                                <div class="timeline-dot"></div>
+                                <span>Listo</span>
+                            </div>
+                            <div class="timeline-item" th:classappend="${order.status.name() == 'DELIVERED' ? 'completed' : ''}">
+                                <div class="timeline-dot"></div>
+                                <span>Entregado</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post">
-                        <div class="mb-3">
-                            <select name="status" class="form-select">
-                                <option value="PENDING" th:selected="${order.status.name() == 'PENDING'}">Pendiente</option>
-                                <option value="CONFIRMED" th:selected="${order.status.name() == 'CONFIRMED'}">Confirmado</option>
-                                <option value="PREPARING" th:selected="${order.status.name() == 'PREPARING'}">Preparando</option>
-                                <option value="READY" th:selected="${order.status.name() == 'READY'}">Listo</option>
-                                <option value="DELIVERED" th:selected="${order.status.name() == 'DELIVERED'}">Entregado</option>
-                                <option value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">Cancelado</option>
-                            </select>
+
+                <!-- Customer Info Card -->
+                <div class="sidebar-card customer-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="bi bi-person"></i>
+                            <h3>Información del Cliente</h3>
                         </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+                    </div>
+                    <div class="card-content">
+                        <div class="customer-info">
+                            <div class="customer-avatar-large">
+                                <span th:text="${T(java.lang.Character).toUpperCase(order.customerName.charAt(0))}">C</span>
+                            </div>
+                            <div class="customer-details">
+                                <h4 class="customer-name" th:text="${order.customerName}">Nombre del Cliente</h4>
+                                <p class="customer-username">@<span th:text="${order.user.username}">usuario123</span></p>
+                            </div>
                         </div>
-                    </form>
+
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="bi bi-envelope"></i>
+                                <span th:text="${order.user.email}">email@example.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="bi bi-telephone"></i>
+                                <span th:text="${order.contactPhone}">Teléfono de Contacto</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span th:text="${order.deliveryAddress}">Dirección de Entrega</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Status Card -->
+                <div class="sidebar-card action-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="bi bi-arrow-repeat"></i>
+                            <h3>Cambiar Estado</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post" class="status-form">
+                            <div class="form-group">
+                                <label for="status-select" class="form-label">Nuevo Estado:</label>
+                                <select name="status" id="status-select" class="status-select">
+                                    <option value="PENDING" th:selected="${order.status.name() == 'PENDING'}">
+                                        🕐 Pendiente
+                                    </option>
+                                    <option value="CONFIRMED" th:selected="${order.status.name() == 'CONFIRMED'}">
+                                        ✅ Confirmado
+                                    </option>
+                                    <option value="PREPARING" th:selected="${order.status.name() == 'PREPARING'}">
+                                        ⚙️ Preparando
+                                    </option>
+                                    <option value="READY" th:selected="${order.status.name() == 'READY'}">
+                                        ✅ Listo
+                                    </option>
+                                    <option value="DELIVERED" th:selected="${order.status.name() == 'DELIVERED'}">
+                                        🚚 Entregado
+                                    </option>
+                                    <option value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">
+                                        ❌ Cancelado
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-update-status">
+                                <i class="bi bi-check-circle"></i>
+                                <span>Actualizar Estado</span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,5 +277,1004 @@
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>
+
+<style>
+    /* Variables CSS para coherencia */
+    :root {
+        --admin-primary: #FFD100;
+        --admin-secondary: #1a1a1a;
+        --admin-dark: #0d0d0d;
+        --admin-text: #ffffff;
+        --admin-text-muted: rgba(255, 255, 255, 0.7);
+        --admin-border: rgba(255, 209, 0, 0.2);
+        --admin-hover: rgba(255, 209, 0, 0.1);
+        --status-pending: #f59e0b;
+        --status-confirmed: #3b82f6;
+        --status-preparing: #8b5cf6;
+        --status-ready: #10b981;
+        --status-delivered: #059669;
+        --status-cancelled: #ef4444;
+    }
+
+    /* Base Styles */
+    .admin-body {
+        background: var(--admin-dark);
+        color: var(--admin-text);
+        min-height: 100vh;
+    }
+
+    .admin-main-content {
+        padding-top: 100px;
+        min-height: calc(100vh - 200px);
+    }
+
+    .admin-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Page Header */
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+    .breadcrumb-section {
+        margin-bottom: 20px;
+    }
+
+    .breadcrumb-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+
+    .breadcrumb-link {
+        color: var(--admin-text-muted);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: color 0.3s ease;
+    }
+
+    .breadcrumb-link:hover {
+        color: var(--admin-primary);
+    }
+
+    .breadcrumb-separator {
+        color: var(--admin-text-muted);
+        font-size: 0.8rem;
+    }
+
+    .breadcrumb-current {
+        color: var(--admin-primary);
+        font-weight: 500;
+    }
+
+    .page-title-section {
+        background: var(--admin-secondary);
+        border: 1px solid var(--admin-border);
+        border-radius: 16px;
+        padding: 24px;
+    }
+
+    .page-title-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .order-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .order-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--admin-primary), #ffed4e);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: var(--admin-dark);
+    }
+
+    .order-title-info .page-title {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--admin-text);
+    }
+
+    .order-title-info .page-subtitle {
+        margin: 5px 0 0 0;
+        color: var(--admin-text-muted);
+        font-size: 0.95rem;
+    }
+
+    .page-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-back, .btn-print {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--admin-text);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--admin-text);
+        transform: translateY(-2px);
+    }
+
+    .btn-print {
+        background: var(--admin-primary);
+        color: var(--admin-dark);
+    }
+
+    .btn-print:hover {
+        background: #ffed4e;
+        transform: translateY(-2px);
+    }
+
+    /* Main Grid Layout */
+    .order-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 30px;
+        align-items: start;
+    }
+
+    /* Section Cards */
+    .section-card, .sidebar-card {
+        background: var(--admin-secondary);
+        border: 1px solid var(--admin-border);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .section-card:hover, .sidebar-card:hover {
+        border-color: var(--admin-primary);
+        box-shadow: 0 10px 30px rgba(255, 209, 0, 0.1);
+    }
+
+    .section-header, .card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--admin-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .section-title, .card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0;
+    }
+
+    .section-title h2, .card-title h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--admin-text);
+    }
+
+    .section-title i, .card-title i {
+        color: var(--admin-primary);
+        font-size: 1.2rem;
+    }
+
+    .products-count {
+        background: rgba(255, 209, 0, 0.1);
+        color: var(--admin-primary);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .section-content, .card-content {
+        padding: 24px;
+    }
+
+    /* Products Table */
+    .products-table-wrapper {
+        overflow-x: auto;
+        margin-bottom: 20px;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .products-table th {
+        background: rgba(255, 209, 0, 0.1);
+        color: var(--admin-primary);
+        padding: 16px 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid var(--admin-border);
+    }
+
+    .products-table td {
+        padding: 16px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        vertical-align: middle;
+    }
+
+    .product-row {
+        transition: all 0.3s ease;
+    }
+
+    .product-row:hover {
+        background: rgba(255, 209, 0, 0.05);
+        transform: translateX(5px);
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .product-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--admin-primary), #ffed4e);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--admin-dark);
+    }
+
+    .product-name {
+        font-weight: 500;
+        color: var(--admin-text);
+        display: block;
+    }
+
+    .product-category {
+        color: var(--admin-text-muted);
+        font-size: 0.8rem;
+    }
+
+    .price-amount, .subtotal-amount {
+        font-weight: 600;
+        color: var(--admin-primary);
+        font-size: 1.1rem;
+    }
+
+    .quantity-badge {
+        background: rgba(255, 209, 0, 0.2);
+        color: var(--admin-primary);
+        padding: 6px 12px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 500;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .notes-text {
+        color: var(--admin-text);
+        font-style: italic;
+    }
+
+    .no-notes {
+        color: var(--admin-text-muted);
+        font-style: italic;
+    }
+
+    /* Order Total */
+    .order-total-section {
+        background: rgba(255, 209, 0, 0.05);
+        border: 1px solid var(--admin-border);
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    .total-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+    }
+
+    .total-row.total-final {
+        border-top: 2px solid var(--admin-border);
+        padding-top: 16px;
+        margin-top: 8px;
+    }
+
+    .total-label {
+        color: var(--admin-text-muted);
+        font-weight: 500;
+    }
+
+    .total-final .total-label {
+        color: var(--admin-text);
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .total-value {
+        color: var(--admin-primary);
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .total-final .total-value {
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    /* Sidebar */
+    .order-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Status Card */
+    .status-display {
+        margin-bottom: 24px;
+    }
+
+    .status-badge-large {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .status-badge-large.status-pending {
+        background: rgba(245, 158, 11, 0.2);
+        color: var(--status-pending);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .status-badge-large.status-confirmed {
+        background: rgba(59, 130, 246, 0.2);
+        color: var(--status-confirmed);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .status-badge-large.status-preparing {
+        background: rgba(139, 92, 246, 0.2);
+        color: var(--status-preparing);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .status-badge-large.status-ready {
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--status-ready);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-badge-large.status-delivered {
+        background: rgba(5, 150, 105, 0.2);
+        color: var(--status-delivered);
+        border: 1px solid rgba(5, 150, 105, 0.3);
+    }
+
+    .status-badge-large.status-cancelled {
+        background: rgba(239, 68, 68, 0.2);
+        color: var(--status-cancelled);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-icon {
+        font-size: 1.3rem;
+    }
+
+    /* Status Timeline */
+    .status-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .timeline-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        color: var(--admin-text-muted);
+        position: relative;
+    }
+
+    .timeline-item.completed {
+        color: var(--admin-primary);
+    }
+
+    .timeline-item.completed .timeline-dot {
+        background: var(--admin-primary);
+        border-color: var(--admin-primary);
+    }
+
+    .timeline-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 32px;
+        width: 2px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .timeline-item.completed:not(:last-child)::after {
+        background: var(--admin-primary);
+    }
+
+    .timeline-dot {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        background: transparent;
+        transition: all 0.3s ease;
+    }
+
+    /* Customer Info */
+    .customer-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .customer-avatar-large {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--admin-primary), #ffed4e);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--admin-dark);
+    }
+
+    .customer-name {
+        margin: 0 0 4px 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--admin-text);
+    }
+
+    .customer-username {
+        margin: 0;
+        color: var(--admin-text-muted);
+        font-size: 0.9rem;
+    }
+
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        color: var(--admin-text-muted);
+    }
+
+    .contact-item i {
+        color: var(--admin-primary);
+        width: 16px;
+        text-align: center;
+    }
+
+    /* Status Form */
+    .status-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-label {
+        color: var(--admin-text);
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .status-select {
+        background: var(--admin-dark);
+        border: 1px solid var(--admin-border);
+        border-radius: 10px;
+        padding: 12px 16px;
+        color: var(--admin-text);
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .status-select:focus {
+        outline: none;
+        border-color: var(--admin-primary);
+        box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.1);
+    }
+
+    .status-select option {
+        background: var(--admin-dark);
+        color: var(--admin-text);
+        padding: 8px;
+    }
+
+    .btn-update-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--admin-primary), #ffed4e);
+        color: var(--admin-dark);
+        border: none;
+        border-radius: 10px;
+        padding: 14px 20px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-update-status:hover {
+        background: linear-gradient(135deg, #ffed4e, var(--admin-primary));
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 209, 0, 0.3);
+    }
+
+    .btn-update-status:active {
+        transform: translateY(0);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .order-detail-grid {
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .order-detail-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .order-sidebar {
+            order: -1;
+        }
+
+        .page-title-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .page-actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .admin-container {
+            padding: 0 15px;
+        }
+
+        .page-title-section {
+            padding: 20px;
+        }
+
+        .order-title-wrapper {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .order-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .order-title-info .page-title {
+            font-size: 1.6rem;
+        }
+
+        .section-content, .card-content {
+            padding: 16px;
+        }
+
+        .products-table {
+            font-size: 0.85rem;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 12px 8px;
+        }
+
+        .page-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn-back, .btn-print {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .breadcrumb-nav {
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .customer-info {
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .products-table-wrapper {
+            overflow-x: scroll;
+        }
+
+        .products-table {
+            min-width: 600px;
+        }
+    }
+
+    /* Print Styles */
+    @media print {
+        .page-actions,
+        .action-card,
+        .btn-update-status {
+            display: none !important;
+        }
+
+        .admin-body {
+            background: white !important;
+            color: black !important;
+        }
+
+        .section-card,
+        .sidebar-card {
+            background: white !important;
+            border: 1px solid #ddd !important;
+            box-shadow: none !important;
+        }
+
+        .order-detail-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+        }
+
+        .page-title-section {
+            background: #f8f9fa !important;
+            border: 1px solid #ddd !important;
+        }
+    }
+
+    /* Animation Classes */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .section-card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .sidebar-card {
+        animation: slideInRight 0.6s ease-out;
+    }
+
+    .sidebar-card:nth-child(1) { animation-delay: 0.1s; }
+    .sidebar-card:nth-child(2) { animation-delay: 0.2s; }
+    .sidebar-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .product-row {
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    .product-row:nth-child(1) { animation-delay: 0.1s; }
+    .product-row:nth-child(2) { animation-delay: 0.2s; }
+    .product-row:nth-child(3) { animation-delay: 0.3s; }
+    .product-row:nth-child(4) { animation-delay: 0.4s; }
+    .product-row:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Loading States */
+    .loading {
+        opacity: 0.6;
+        pointer-events: none;
+        position: relative;
+    }
+
+    .loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--admin-primary);
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Success/Error States */
+    .status-updated {
+        animation: pulse 0.6s ease-in-out;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* Hover Effects */
+    .section-card:hover .section-title i,
+    .sidebar-card:hover .card-title i {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
+    }
+
+    .timeline-item:hover {
+        transform: translateX(5px);
+        transition: transform 0.3s ease;
+    }
+
+    .contact-item:hover {
+        transform: translateX(5px);
+        transition: transform 0.3s ease;
+    }
+
+    .contact-item:hover i {
+        transform: scale(1.2);
+        transition: transform 0.3s ease;
+    }
+
+    /* Focus States */
+    .btn-back:focus,
+    .btn-print:focus,
+    .btn-update-status:focus {
+        outline: 2px solid var(--admin-primary);
+        outline-offset: 2px;
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* Dark mode enhancements */
+    @media (prefers-color-scheme: dark) {
+        .admin-body {
+            background: #000;
+        }
+
+        .section-card,
+        .sidebar-card {
+            background: #111;
+            border-color: rgba(255, 209, 0, 0.15);
+        }
+    }
+
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+        .section-card,
+        .sidebar-card {
+            border-width: 2px;
+        }
+
+        .status-badge-large {
+            border-width: 2px;
+        }
+
+        .timeline-dot {
+            border-width: 3px;
+        }
+    }
+</style>
+
+<script>
+    // JavaScript para mejorar la interactividad
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animación de entrada para las tarjetas
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observar todas las tarjetas
+        document.querySelectorAll('.section-card, .sidebar-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Efecto hover mejorado para filas de productos
+        document.querySelectorAll('.product-row').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(8px)';
+                this.style.boxShadow = '0 4px 15px rgba(255, 209, 0, 0.1)';
+            });
+
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // Animación para el formulario de cambio de estado
+        const statusForm = document.querySelector('.status-form');
+        if (statusForm) {
+            statusForm.addEventListener('submit', function(e) {
+                const submitBtn = this.querySelector('.btn-update-status');
+                submitBtn.classList.add('loading');
+                submitBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i> <span>Actualizando...</span>';
+            });
+        }
+
+        // Efecto de clic en botones
+        document.querySelectorAll('.btn-back, .btn-print, .btn-update-status').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Efecto ripple
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.pointerEvents = 'none';
+
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Tooltip para elementos truncados
+        document.querySelectorAll('.product-name, .customer-name').forEach(element => {
+            if (element.scrollWidth > element.clientWidth) {
+                element.title = element.textContent;
+            }
+        });
+
+        // Smooth scroll para navegación interna
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+
+    // CSS para el efecto ripple
+    const rippleCSS = `
+<style>
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+</style>
+`;
+    document.head.insertAdjacentHTML('beforeend', rippleCSS);
+</script>
+
 </body>
 </html>

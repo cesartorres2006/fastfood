@@ -6,86 +6,1206 @@
 <header th:replace="fragments/header :: header"></header>
 
 <main class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 th:text="${product.id} ? 'Editar Producto' : 'Nuevo Producto'">Producto</h1>
-        <a th:href="@{/admin/products}" class="btn btn-outline-primary">Volver a Productos</a>
+    <!-- Header Section con animaciones -->
+    <div class="page-header-section">
+        <div class="header-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-line line-1"></div>
+            <div class="decoration-line line-2"></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div class="page-title-wrapper">
+                <h1 class="page-title" th:text="${product.id} ? 'Editar Producto' : 'Nuevo Producto'">Producto</h1>
+                <div class="title-underline">
+                    <div class="underline-dot"></div>
+                </div>
+                <p class="page-subtitle">Gestiona la información del producto</p>
+            </div>
+            <div class="action-buttons">
+                <a th:href="@{/admin/products}" class="btn btn-back">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    <span>Volver a Productos</span>
+                    <div class="btn-shine"></div>
+                </a>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <form th:action="@{/admin/products/save}" th:object="${product}" method="post" enctype="multipart/form-data">
-                <input type="hidden" th:field="*{id}">
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="name" class="form-label">Nombre del Producto *</label>
-                        <input type="text" id="name" th:field="*{name}" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="category" class="form-label">Categoría *</label>
-                        <select id="category" th:field="*{category}" class="form-select" required>
-                            <option value="">Seleccionar categoría</option>
-                            <option value="Hamburguesas">Hamburguesas</option>
-                            <option value="Quesadillas">Quesadillas</option>
-                            <option value="Bebidas">Bebidas</option>
-                            <option value="Complementos">Complementos</option>
-                        </select>
-                    </div>
+    <!-- Form Card con efectos visuales -->
+    <div class="form-card-wrapper">
+        <div class="form-card">
+            <div class="card-glow"></div>
+            <div class="card-header-custom">
+                <div class="card-icon">
+                    <i class="bi bi-box-seam"></i>
+                    <div class="icon-pulse"></div>
                 </div>
+                <h3 class="card-title">Información del Producto</h3>
+            </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="price" class="form-label">Precio *</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="text" id="price" th:field="*{price}" class="form-control" min="0" required oninput="formatPriceInput(this)">
+            <div class="card-body-custom">
+                <form th:action="@{/admin/products/save}" th:object="${product}" method="post" enctype="multipart/form-data" class="modern-form">
+                    <input type="hidden" th:field="*{id}">
+
+                    <!-- Primera fila de campos -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Información Básica
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group-modern">
+                                    <label for="name" class="form-label-modern">
+                                        <i class="bi bi-tag me-2"></i>
+                                        Nombre del Producto *
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="name" th:field="*{name}" class="form-control-modern" required>
+                                        <div class="input-focus-line"></div>
+                                        <div class="input-icon">
+                                            <i class="bi bi-check-circle"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-modern">
+                                    <label for="category" class="form-label-modern">
+                                        <i class="bi bi-grid-3x3-gap me-2"></i>
+                                        Categoría *
+                                    </label>
+                                    <div class="select-wrapper">
+                                        <select id="category" th:field="*{category}" class="form-select-modern" required>
+                                            <option value="">Seleccionar categoría</option>
+                                            <option value="Hamburguesas">🍔 Hamburguesas</option>
+                                            <option value="Quesadillas">🌯 Quesadillas</option>
+                                            <option value="Bebidas">🥤 Bebidas</option>
+                                            <option value="Complementos">🍟 Complementos</option>
+                                        </select>
+                                        <div class="select-arrow">
+                                            <i class="bi bi-chevron-down"></i>
+                                        </div>
+                                        <div class="input-focus-line"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="available" class="form-label">Disponibilidad</label>
-                        <div class="form-check form-switch mt-2">
-                            <input type="checkbox" id="available" th:field="*{available}" class="form-check-input">
-                            <label for="available" class="form-check-label">Producto disponible</label>
+
+                    <!-- Segunda fila de campos -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-currency-dollar me-2"></i>
+                            Precio y Disponibilidad
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group-modern">
+                                    <label for="price" class="form-label-modern">
+                                        <i class="bi bi-cash me-2"></i>
+                                        Precio *
+                                    </label>
+                                    <div class="input-group-modern">
+                                        <span class="input-group-text-modern">$</span>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="price" th:field="*{price}" class="form-control-modern" min="0" required oninput="formatPriceInput(this)">
+                                            <div class="input-focus-line"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-modern">
+                                    <label for="available" class="form-label-modern">
+                                        <i class="bi bi-toggle-on me-2"></i>
+                                        Disponibilidad
+                                    </label>
+                                    <div class="switch-wrapper">
+                                        <div class="form-check-modern">
+                                            <input type="checkbox" id="available" th:field="*{available}" class="form-check-input-modern">
+                                            <label for="available" class="form-check-label-modern">
+                                                <span class="switch-slider">
+                                                    <span class="switch-button"></span>
+                                                </span>
+                                                <span class="switch-text">Producto disponible</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="mb-3">
-                    <label for="description" class="form-label">Descripción</label>
-                    <textarea id="description" th:field="*{description}" class="form-control" rows="3"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="imageUrl" class="form-label">URL de la Imagen</label>
-                    <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label for="imageFile" class="form-label">O subir imagen</label>
-                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*">
-                </div>
-
-                <div class="mb-3" th:if="${product.imageUrl}">
-                    <label class="form-label">Imagen Actual</label>
-                    <div>
-                        <img th:src="${product.imageUrl}" class="img-thumbnail" style="max-width: 200px;" alt="Imagen del producto">
+                    <!-- Descripción -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-card-text me-2"></i>
+                            Descripción
+                        </div>
+                        <div class="form-group-modern">
+                            <label for="description" class="form-label-modern">
+                                <i class="bi bi-file-text me-2"></i>
+                                Descripción del producto
+                            </label>
+                            <div class="textarea-wrapper">
+                                <textarea id="description" th:field="*{description}" class="form-control-modern textarea-modern" rows="4" placeholder="Describe las características del producto..."></textarea>
+                                <div class="input-focus-line"></div>
+                                <div class="textarea-counter">
+                                    <span class="counter-text">0 caracteres</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
-                </div>
-            </form>
+                    <!-- Imagen -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="bi bi-image me-2"></i>
+                            Imagen del Producto
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group-modern">
+                                    <label for="imageUrl" class="form-label-modern">
+                                        <i class="bi bi-link-45deg me-2"></i>
+                                        URL de la Imagen
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control-modern" placeholder="https://ejemplo.com/imagen.jpg">
+                                        <div class="input-focus-line"></div>
+                                        <div class="input-icon">
+                                            <i class="bi bi-globe"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-modern">
+                                    <label for="imageFile" class="form-label-modern">
+                                        <i class="bi bi-cloud-upload me-2"></i>
+                                        O subir imagen
+                                    </label>
+                                    <div class="file-upload-wrapper">
+                                        <input type="file" id="imageFile" name="imageFile" class="file-input-modern" accept="image/*">
+                                        <label for="imageFile" class="file-label-modern">
+                                            <i class="bi bi-cloud-arrow-up"></i>
+                                            <span class="file-text">Seleccionar archivo</span>
+                                            <div class="file-upload-effect"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Imagen actual -->
+                    <div class="form-section" th:if="${product.imageUrl}">
+                        <div class="section-title">
+                            <i class="bi bi-eye me-2"></i>
+                            Vista Previa
+                        </div>
+                        <div class="image-preview-wrapper">
+                            <div class="image-preview-card">
+                                <img th:src="${product.imageUrl}" class="preview-image" alt="Imagen del producto">
+                                <div class="image-overlay">
+                                    <i class="bi bi-zoom-in"></i>
+                                </div>
+                            </div>
+                            <div class="image-info">
+                                <p class="image-label">Imagen Actual</p>
+                                <small class="image-note">Haz clic para ampliar</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="form-actions">
+                        <div class="actions-wrapper">
+                            <button type="reset" class="btn btn-reset">
+                                <i class="bi bi-arrow-clockwise me-2"></i>
+                                <span>Limpiar</span>
+                                <div class="btn-shine"></div>
+                            </button>
+                            <button type="submit" class="btn btn-save">
+                                <i class="bi bi-check-lg me-2"></i>
+                                <span>Guardar Producto</span>
+                                <div class="btn-shine"></div>
+                                <div class="btn-glow"></div>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>
 
+<!-- Estilos CSS modernos -->
+<style>
+    /* Variables globales coherentes con header/footer */
+    :root {
+        --primary-color: #FFD100;
+        --primary-hover: #FFDB4D;
+        --dark-bg: #121212;
+        --secondary-dark: #1E1E1E;
+        --card-bg: #1A1A1A;
+        --text-light: #FFFFFF;
+        --text-muted: rgba(255, 255, 255, 0.7);
+        --accent-color: #FFD100;
+        --border-radius: 12px;
+        --transition-speed: 0.3s;
+        --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.15);
+        --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Fondo oscuro para toda la página */
+    body {
+        background-color: var(--dark-bg) !important;
+        color: var(--text-light);
+        min-height: 100vh;
+    }
+
+    /* Header de página con decoraciones */
+    .page-header-section {
+        position: relative;
+        margin-bottom: 3rem;
+        overflow: hidden;
+    }
+
+    .header-decoration {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .decoration-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 209, 0, 0.05) 0%, transparent 70%);
+    }
+
+    .circle-1 {
+        width: 200px;
+        height: 200px;
+        top: -50px;
+        right: -30px;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .circle-2 {
+        width: 120px;
+        height: 120px;
+        bottom: -20px;
+        left: -20px;
+        animation: float 10s ease-in-out infinite reverse;
+    }
+
+    .decoration-line {
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.1), transparent);
+    }
+
+    .line-1 {
+        width: 60%;
+        top: 30%;
+        left: 0;
+        transform: rotate(-5deg);
+    }
+
+    .line-2 {
+        width: 40%;
+        bottom: 20%;
+        right: 0;
+        transform: rotate(3deg);
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0) translateX(0); }
+        50% { transform: translateY(-10px) translateX(5px); }
+        100% { transform: translateY(0) translateX(0); }
+    }
+
+    /* Título de página mejorado */
+    .page-title-wrapper {
+        position: relative;
+    }
+
+    .page-title {
+        font-family: 'Cinzel', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-light);
+        margin: 0;
+        background: linear-gradient(135deg, #FFFFFF, #FFD100);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+        0% { filter: drop-shadow(0 0 5px rgba(255, 209, 0, 0.3)); }
+        100% { filter: drop-shadow(0 0 15px rgba(255, 209, 0, 0.6)); }
+    }
+
+    .title-underline {
+        position: relative;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #FFD100, transparent);
+        margin: 0.5rem 0 1rem 0;
+        border-radius: 2px;
+    }
+
+    .underline-dot {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #FFD100;
+        border-radius: 50%;
+        top: -2.5px;
+        left: 0;
+        animation: moveDot 3s ease-in-out infinite alternate;
+        box-shadow: 0 0 10px rgba(255, 209, 0, 0.5);
+    }
+
+    @keyframes moveDot {
+        0% { left: 0; }
+        100% { left: 72px; }
+    }
+
+    .page-subtitle {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin: 0;
+        font-style: italic;
+    }
+
+    /* Botón de volver mejorado */
+    .btn-back {
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        color: var(--primary-color);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-back:hover {
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        border-color: var(--primary-color);
+        color: var(--dark-bg);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 209, 0, 0.3);
+    }
+
+    .btn-shine {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.6s ease;
+        transform: skewX(-25deg);
+    }
+
+    .btn-back:hover .btn-shine {
+        left: 100%;
+    }
+
+    /* Card principal del formulario */
+    .form-card-wrapper {
+        position: relative;
+        margin-bottom: 3rem;
+    }
+
+    .form-card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-heavy);
+        border: 1px solid rgba(255, 209, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(20px);
+    }
+
+    .card-glow {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 209, 0, 0.03) 0%, transparent 70%);
+        animation: cardGlow 8s ease-in-out infinite alternate;
+        z-index: -1;
+    }
+
+    @keyframes cardGlow {
+        0% { opacity: 0.3; transform: scale(1); }
+        100% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    /* Header de la card */
+    .card-header-custom {
+        padding: 2rem 2rem 1rem;
+        border-bottom: 1px solid rgba(255, 209, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+    }
+
+    .card-header-custom::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 2rem;
+        right: 2rem;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.3), transparent);
+    }
+
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-icon i {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        z-index: 2;
+        position: relative;
+    }
+
+    .icon-pulse {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 209, 0, 0.4), transparent 70%);
+        animation: iconPulse 2s ease-in-out infinite;
+        z-index: 1;
+    }
+
+    @keyframes iconPulse {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.2); }
+    }
+
+    .card-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-light);
+        margin: 0;
+    }
+
+    /* Body de la card */
+    .card-body-custom {
+        padding: 2rem;
+    }
+
+    /* Secciones del formulario */
+    .form-section {
+        margin-bottom: 2.5rem;
+        position: relative;
+    }
+
+    .form-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -2rem;
+        right: -2rem;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.1), transparent);
+        opacity: 0.5;
+    }
+
+    .form-section:first-child::before {
+        display: none;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary-color), transparent);
+        border-radius: 1px;
+    }
+
+    /* Grupos de formulario modernos */
+    .form-group-modern {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .form-label-modern {
+        font-weight: 600;
+        color: var(--text-light);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+    }
+
+    .form-label-modern i {
+        color: var(--primary-color);
+        font-size: 1rem;
+    }
+
+    /* Input wrapper para efectos */
+    .input-wrapper {
+        position: relative;
+    }
+
+    .form-control-modern {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+        color: var(--text-light);
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        backdrop-filter: blur(10px);
+    }
+
+    .form-control-modern:focus {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(255, 209, 0, 0.25);
+        outline: none;
+        color: var(--text-light);
+    }
+
+    .form-control-modern::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Línea de enfoque animada */
+    .input-focus-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+        transition: width 0.3s ease;
+        border-radius: 1px;
+    }
+
+    .form-control-modern:focus + .input-focus-line {
+        width: 100%;
+    }
+
+    /* Iconos de input */
+    .input-icon {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-modern:focus ~ .input-icon,
+    .form-control-modern:valid ~ .input-icon {
+        opacity: 1;
+    }
+
+    /* Select moderno */
+    .select-wrapper {
+        position: relative;
+    }
+
+    .form-select-modern {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+        color: var(--text-light);
+        padding: 0.875rem 3rem 0.875rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        appearance: none;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+    }
+
+    .form-select-modern:focus {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(255, 209, 0, 0.25);
+        outline: none;
+        color: var(--text-light);
+    }
+
+    .form-select-modern option {
+        background-color: var(--secondary-dark);
+        color: var(--text-light);
+        padding: 0.5rem;
+    }
+
+    .select-arrow {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .form-select-modern:focus ~ .select-arrow {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    /* Input group moderno */
+    .input-group-modern {
+        display: flex;
+        align-items: stretch;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+
+    .input-group-text-modern {
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-right: none;
+        color: var(--primary-color);
+        padding: 0.875rem 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .input-group-modern .form-control-modern {
+        border-left: none;
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    }
+
+    /* Switch moderno */
+    .switch-wrapper {
+        margin-top: 0.5rem;
+    }
+
+    .form-check-modern {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .form-check-input-modern {
+        display: none;
+    }
+
+    .form-check-label-modern {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--text-light);
+    }
+
+    .switch-slider {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+    }
+
+    .switch-button {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 22px;
+        height: 22px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+    }
+
+    /* Textarea moderno */
+    .textarea-wrapper {
+        position: relative;
+    }
+
+    .textarea-modern {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.6;
+    }
+
+    .textarea-counter {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 1rem;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        backdrop-filter: blur(5px);
+    }
+
+    /* File upload moderno */
+    .file-upload-wrapper {
+        position: relative;
+    }
+
+    .file-input-modern {
+        display: none;
+    }
+
+    .file-label-modern {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        border: 2px dashed rgba(255, 209, 0, 0.3);
+        border-radius: var(--border-radius);
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.05), rgba(255, 209, 0, 0.02));
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+    }
+
+    .file-label-modern:hover {
+        border-color: var(--primary-color);
+        background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+        color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+
+    .file-label-modern i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: var(--primary-color);
+    }
+
+    .file-text {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    .file-upload-effect {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 209, 0, 0.2), transparent 70%);
+        border-radius: 50%;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+
+    .file-label-modern:hover .file-upload-effect {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 1;
+    }
+
+    /* Vista previa de imagen */
+    .image-preview-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: var(--border-radius);
+        border: 1px solid rgba(255, 209, 0, 0.1);
+    }
+
+    .image-preview-card {
+        position: relative;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .image-preview-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(255, 209, 0, 0.2);
+    }
+
+    .preview-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: var(--border-radius);
+        border: 2px solid rgba(255, 209, 0, 0.2);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+        border-radius: var(--border-radius);
+    }
+
+    .image-overlay i {
+        font-size: 2rem;
+        color: var(--primary-color);
+    }
+
+    .image-preview-card:hover .image-overlay {
+        opacity: 1;
+    }
+
+    .image-info {
+        flex: 1;
+    }
+
+    .image-label {
+        font-weight: 600;
+        color: var(--text-light);
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .image-note {
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    /* Acciones del formulario */
+    .form-actions {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 209, 0, 0.1);
+        position: relative;
+    }
+
+    .form-actions::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.3), transparent);
+    }
+
+    .actions-wrapper {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    /* Botón reset */
+    .btn-reset {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: var(--text-light);
+        padding: 0.875rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .btn-reset:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+        border-color: rgba(255, 255, 255, 0.4);
+        color: var(--text-light);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Botón save */
+    .btn-save {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+        border: 2px solid var(--primary-color);
+        color: var(--dark-bg);
+        padding: 0.875rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba(255, 209, 0, 0.3);
+    }
+
+    .btn-save:hover {
+        background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 209, 0, 0.4);
+        color: var(--dark-bg);
+    }
+
+    .btn-glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        border-radius: 50px;
+    }
+
+    .btn-save:hover .btn-glow {
+        opacity: 1;
+        animation: btnGlow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes btnGlow {
+        0% { transform: scale(1); opacity: 0.3; }
+        100% { transform: scale(1.1); opacity: 0.6; }
+    }
+
+    .btn-save:hover .btn-shine,
+    .btn-reset:hover .btn-shine {
+        left: 100%;
+    }
+
+    /* Efectos de validación */
+    .form-control-modern:invalid:not(:placeholder-shown) {
+        border-color: #ff4757;
+        box-shadow: 0 0 0 0.2rem rgba(255, 71, 87, 0.25);
+    }
+
+    .form-control-modern:valid:not(:placeholder-shown) {
+        border-color: #2ed573;
+        box-shadow: 0 0 0 0.2rem rgba(46, 213, 115, 0.25);
+    }
+
+    /* Animaciones de carga */
+    .form-card {
+        animation: cardSlideIn 0.6s ease-out;
+    }
+
+    @keyframes cardSlideIn {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-section {
+        animation: sectionFadeIn 0.8s ease-out forwards;
+        opacity: 0;
+    }
+
+    .form-section:nth-child(1) { animation-delay: 0.1s; }
+    .form-section:nth-child(2) { animation-delay: 0.2s; }
+    .form-section:nth-child(3) { animation-delay: 0.3s; }
+    .form-section:nth-child(4) { animation-delay: 0.4s; }
+    .form-section:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes sectionFadeIn {
+        0% {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .card-header-custom,
+        .card-body-custom {
+            padding: 1.5rem;
+        }
+
+        .actions-wrapper {
+            flex-direction: column;
+        }
+
+        .btn-save,
+        .btn-reset {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .image-preview-wrapper {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .decoration-circle {
+            display: none;
+        }
+
+        .page-header-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .page-title {
+            font-size: 1.75rem;
+        }
+
+        .card-header-custom {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+        .form-control-modern,
+        .form-select-modern {
+            padding: 0.75rem;
+        }
+
+        .file-label-modern {
+            padding: 1.5rem;
+        }
+
+        .preview-image {
+            width: 120px;
+            height: 120px;
+        }
+    }
+
+    /* Efectos adicionales para interactividad */
+    .form-control-modern:focus,
+    .form-select-modern:focus,
+    .textarea-modern:focus {
+        animation: inputFocus 0.3s ease-out;
+    }
+
+    @keyframes inputFocus {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+    }
+
+    /* Tooltip personalizado para ayuda */
+    .form-label-modern[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        background: var(--dark-bg);
+        color: var(--text-light);
+        padding: 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        z-index: 1000;
+        border: 1px solid var(--primary-color);
+        animation: tooltipShow 0.3s ease-out;
+    }
+
+    @keyframes tooltipShow {
+        0% { opacity: 0; transform: translateY(5px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Efectos de partículas en background */
+    .form-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+                radial-gradient(circle at 20% 20%, rgba(255, 209, 0, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(255, 209, 0, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 40% 60%, rgba(255, 209, 0, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px, 80px 80px, 60px 60px;
+        animation: particleFloat 20s linear infinite;
+        z-index: -1;
+        opacity: 0.7;
+    }
+
+    @keyframes particleFloat {
+        0% { transform: translateY(0) translateX(0); }
+        100% { transform: translateY(-100px) translateX(50px); }
+    }
+</style>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Validación del formulario
+        // Validación del formulario (mantiene la lógica original)
         const form = document.querySelector('form');
         form.addEventListener('submit', function(event) {
             const name = document.getElementById('name').value.trim();
@@ -118,8 +1238,159 @@
         if (priceInput && priceInput.value) {
             priceInput.value = parseInt(priceInput.value.replace(/\D/g, ''), 10).toLocaleString('es-CO');
         }
+
+        // Contador de caracteres para textarea
+        const textarea = document.getElementById('description');
+        const counter = document.querySelector('.counter-text');
+        if (textarea && counter) {
+            function updateCounter() {
+                const count = textarea.value.length;
+                counter.textContent = `${count} caracteres`;
+
+                // Cambiar color según la longitud
+                if (count > 200) {
+                    counter.style.color = '#ff4757';
+                } else if (count > 150) {
+                    counter.style.color = '#ffa502';
+                } else {
+                    counter.style.color = 'rgba(255, 255, 255, 0.5)';
+                }
+            }
+
+            textarea.addEventListener('input', updateCounter);
+            updateCounter(); // Inicializar
+        }
+
+        // Efecto de preview de archivo
+        const fileInput = document.getElementById('imageFile');
+        const fileLabel = document.querySelector('.file-label-modern');
+        const fileText = document.querySelector('.file-text');
+
+        if (fileInput && fileLabel && fileText) {
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    fileText.textContent = `Archivo seleccionado: ${file.name}`;
+                    fileLabel.style.borderColor = 'var(--primary-color)';
+                    fileLabel.style.background = 'linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05))';
+                } else {
+                    fileText.textContent = 'Seleccionar archivo';
+                    fileLabel.style.borderColor = 'rgba(255, 209, 0, 0.3)';
+                    fileLabel.style.background = 'linear-gradient(135deg, rgba(255, 209, 0, 0.05), rgba(255, 209, 0, 0.02))';
+                }
+            });
+        }
+
+        // Efecto de zoom en imagen preview
+        const previewCard = document.querySelector('.image-preview-card');
+        if (previewCard) {
+            previewCard.addEventListener('click', function() {
+                const img = this.querySelector('img');
+                if (img) {
+                    // Crear modal simple para zoom
+                    const modal = document.createElement('div');
+                    modal.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.9);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 9999;
+                        cursor: pointer;
+                        animation: fadeIn 0.3s ease-out;
+                    `;
+
+                    const zoomedImg = img.cloneNode();
+                    zoomedImg.style.cssText = `
+                        max-width: 90%;
+                        max-height: 90%;
+                        object-fit: contain;
+                        border-radius: 12px;
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                        animation: zoomIn 0.3s ease-out;
+                    `;
+
+                    modal.appendChild(zoomedImg);
+                    document.body.appendChild(modal);
+
+                    // Cerrar al hacer clic
+                    modal.addEventListener('click', function() {
+                        modal.style.animation = 'fadeOut 0.3s ease-out';
+                        setTimeout(() => modal.remove(), 300);
+                    });
+                }
+            });
+        }
+
+        // Función para sincronizar el estado visual del switch con el valor real
+        function syncSwitchState() {
+            const checkbox = document.getElementById('available');
+            const switchSlider = document.querySelector('.switch-slider');
+            const switchButton = document.querySelector('.switch-button');
+            
+            if (checkbox && switchSlider && switchButton) {
+                // Verificar el estado actual del checkbox
+                if (checkbox.checked) {
+                    switchSlider.style.backgroundColor = 'var(--primary-color)';
+                    switchSlider.style.borderColor = 'var(--primary-color)';
+                    switchButton.style.transform = 'translateX(30px)';
+                    switchButton.style.backgroundColor = 'var(--dark-bg)';
+                } else {
+                    switchSlider.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    switchSlider.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    switchButton.style.transform = 'translateX(0)';
+                    switchButton.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                }
+            }
+        }
+        
+        // Sincronizar al cargar la página
+        syncSwitchState();
+        
+        // Agregar evento click al label del switch para cambiar el estado
+        const switchLabel = document.querySelector('.form-check-label-modern');
+        if (switchLabel) {
+            switchLabel.addEventListener('click', function(e) {
+                // Prevenir el comportamiento por defecto si se hace clic en el slider
+                if (e.target.closest('.switch-slider')) {
+                    e.preventDefault();
+                    const checkbox = document.getElementById('available');
+                    if (checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                        // Sincronizar inmediatamente después del cambio
+                        setTimeout(syncSwitchState, 10);
+                    }
+                }
+            });
+        }
+        
+        // También escuchar cambios directos en el checkbox
+        const checkbox = document.getElementById('available');
+        if (checkbox) {
+            checkbox.addEventListener('change', function() {
+                syncSwitchState();
+            });
+        }
+
+        // Animación de entrada para elementos
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        });
+
+        document.querySelectorAll('.form-section').forEach(section => {
+            observer.observe(section);
+        });
     });
 
+    // Función original de formateo de precio (mantiene la lógica)
     function formatPriceInput(input) {
         let value = input.value.replace(/\D/g, '');
         if (!value) {
@@ -128,6 +1399,26 @@
         }
         input.value = parseInt(value, 10).toLocaleString('es-CO');
     }
+
+    // Agregar estilos de animación dinámicamente
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
 </script>
 </body>
 </html>

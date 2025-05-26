@@ -1,81 +1,1360 @@
 <!-- src/main/resources/templates/order-detail.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head('Detalle de Pedido')"></head>
+<head th:replace="fragments/header :: head('Detalle de Pedido')">
+    <link rel="stylesheet" th:href="@{/css/custom.css}" />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 
-<main class="container py-5">
-    <h1 class="mb-4">Detalle del Pedido #<span th:text="${order.id}">123</span></h1>
+<main class="main-container">
+    <!-- Hero Section con título elegante -->
+    <div class="hero-section text-center">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="title-accent">Detalle del</span>
+                <span class="title-main">Pedido</span>
+                <span class="order-number">#<span th:text="${order.id}">123</span></span>
+            </h1>
+            <div class="hero-subtitle">
+                <span class="subtitle-line"></span>
+                <span class="subtitle-text">✦ Información Completa ✦</span>
+                <span class="subtitle-line"></span>
+            </div>
+            <p class="hero-description">Revisa todos los detalles de tu pedido y su estado actual</p>
+        </div>
+        <div class="hero-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-dot dot-1"></div>
+            <div class="decoration-dot dot-2"></div>
+        </div>
+    </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Productos</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Subtotal</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="item : ${order.items}">
-                                <td th:text="${item.product.name}">Producto</td>
-                                <td>$<span th:text="${#numbers.formatInteger(item.price, 0, 'POINT')}">0</span></td>
-                                <td th:text="${item.quantity}">1</td>
-                                <td>$<span th:text="${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">0</span></td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th colspan="3" class="text-end">Total:</th>
-                                <th>$<span th:text="${#numbers.formatInteger(order.totalAmount, 0, 'POINT')}">0</span></th>
-                            </tr>
-                            </tfoot>
-                        </table>
+    <div class="container py-5">
+        <div class="row g-4">
+            <!-- Sección de Productos -->
+            <div class="col-lg-8">
+                <div class="detail-card products-card">
+                    <div class="card-header-custom">
+                        <div class="header-content">
+                            <i class="bi bi-bag-check-fill header-icon"></i>
+                            <h5 class="header-title">Productos del Pedido</h5>
+                        </div>
+                        <div class="header-decoration"></div>
+                    </div>
+
+                    <div class="card-body-custom">
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="products-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="product-col">
+                                            <i class="bi bi-box-seam me-2"></i>Producto
+                                        </th>
+                                        <th class="price-col">
+                                            <i class="bi bi-tag me-2"></i>Precio
+                                        </th>
+                                        <th class="quantity-col">
+                                            <i class="bi bi-123 me-2"></i>Cantidad
+                                        </th>
+                                        <th class="subtotal-col">
+                                            <i class="bi bi-calculator me-2"></i>Subtotal
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="product-row" th:each="item, iterStat : ${order.items}">
+                                        <td class="product-name">
+                                            <div class="product-info">
+                                                <div class="product-icon">
+                                                    <i class="bi bi-circle-fill"></i>
+                                                </div>
+                                                <span th:text="${item.product.name}">Producto</span>
+                                            </div>
+                                        </td>
+                                        <td class="price-cell">
+                                            <span class="price-value">$<span th:text="${#numbers.formatInteger(item.price, 0, 'POINT')}">0</span></span>
+                                        </td>
+                                        <td class="quantity-cell">
+                                            <div class="quantity-badge">
+                                                <span th:text="${item.quantity}">1</span>
+                                            </div>
+                                        </td>
+                                        <td class="subtotal-cell">
+                                            <span class="subtotal-value">$<span th:text="${#numbers.formatInteger(item.price * item.quantity, 0, 'POINT')}">0</span></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="total-row">
+                                        <td colspan="3" class="total-label">
+                                            <strong>
+                                                <i class="bi bi-receipt me-2"></i>
+                                                Total del Pedido:
+                                            </strong>
+                                        </td>
+                                        <td class="total-amount">
+                                            <div class="total-value">
+                                                $<span th:text="${#numbers.formatInteger(order.totalAmount, 0, 'POINT')}">0</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Información del Pedido</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Estado:</strong>
-                        <span th:class="${'badge ' + order.status.name().toLowerCase()}"
-                              th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
-                                           (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
-                                           (order.status.name() == 'PREPARING' ? 'Preparando' :
-                                           (order.status.name() == 'READY' ? 'Listo' :
-                                           (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
-                            Estado
-                        </span>
-                    </p>
-                    <p><strong>Fecha:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</span></p>
-                    <hr>
-                    <p><strong>Cliente:</strong> <span th:text="${order.customerName}">Nombre del Cliente</span></p>
-                    <p><strong>Dirección:</strong> <span th:text="${order.deliveryAddress}">Dirección de Entrega</span></p>
-                    <p><strong>Teléfono:</strong> <span th:text="${order.contactPhone}">Teléfono de Contacto</span></p>
-                </div>
-            </div>
+            <!-- Sección de Información -->
+            <div class="col-lg-4">
+                <!-- Información del Pedido -->
+                <div class="detail-card info-card mb-4">
+                    <div class="card-header-custom">
+                        <div class="header-content">
+                            <i class="bi bi-info-circle-fill header-icon"></i>
+                            <h5 class="header-title">Estado del Pedido</h5>
+                        </div>
+                        <div class="header-decoration"></div>
+                    </div>
 
-            <div class="d-grid">
-                <a th:href="@{/orders}" class="btn btn-primary">Volver a Mis Pedidos</a>
+                    <div class="card-body-custom">
+                        <div class="status-section">
+                            <div class="status-container">
+                                <span class="status-label">Estado Actual:</span>
+                                <span th:class="${'status-badge status-' + order.status.name().toLowerCase()}"
+                                      th:text="${order.status.name() == 'PENDING' ? 'Pendiente' :
+                                                   (order.status.name() == 'CONFIRMED' ? 'Confirmado' :
+                                                   (order.status.name() == 'PREPARING' ? 'Preparando' :
+                                                   (order.status.name() == 'READY' ? 'Listo' :
+                                                   (order.status.name() == 'DELIVERED' ? 'Entregado' : 'Cancelado'))))}">
+                                    Estado
+                                </span>
+                            </div>
+
+                            <div class="status-progress">
+                                <div class="progress-bar"
+                                     th:class="${'progress-' + order.status.name().toLowerCase()}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-calendar-event"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label">Fecha del Pedido:</span>
+                                <span class="info-value" th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del Cliente -->
+                <div class="detail-card customer-card mb-4">
+                    <div class="card-header-custom">
+                        <div class="header-content">
+                            <i class="bi bi-person-fill header-icon"></i>
+                            <h5 class="header-title">Datos de Entrega</h5>
+                        </div>
+                        <div class="header-decoration"></div>
+                    </div>
+
+                    <div class="card-body-custom">
+                        <div class="customer-info">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-person-badge"></i>
+                                </div>
+                                <div class="info-content">
+                                    <span class="info-label">Cliente:</span>
+                                    <span class="info-value" th:text="${order.customerName}">Nombre del Cliente</span>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-geo-alt"></i>
+                                </div>
+                                <div class="info-content">
+                                    <span class="info-label">Dirección:</span>
+                                    <span class="info-value" th:text="${order.deliveryAddress}">Dirección de Entrega</span>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                                <div class="info-content">
+                                    <span class="info-label">Teléfono:</span>
+                                    <span class="info-value" th:text="${order.contactPhone}">Teléfono de Contacto</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón de Acción -->
+                <div class="action-section">
+                    <a th:href="@{/orders}" class="btn-back-to-orders">
+                        <i class="bi bi-arrow-left-circle me-2"></i>
+                        <span>Volver a Mis Pedidos</span>
+                        <div class="btn-shine"></div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>
+
+<!-- Estilos personalizados -->
+<style>
+    /* Variables CSS coherentes */
+    :root {
+        --primary-gold: #FFD700;
+        --primary-hover: #FFC107;
+        --secondary-gold: #F4D03F;
+        --dark-bg: #1a1a1a;
+        --darker-bg: #0f0f0f;
+        --card-bg: #2a2a2a;
+        --card-hover: #333333;
+        --text-light: #ffffff;
+        --text-muted: #b8b8b8;
+        --text-gold: #FFD700;
+        --border-gold: rgba(255, 215, 0, 0.3);
+        --shadow-gold: rgba(255, 215, 0, 0.2);
+        --gradient-gold: linear-gradient(135deg, #FFD700, #FFC107);
+        --gradient-dark: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+        --gradient-hero: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+        --gradient-card: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+
+        /* Estados de pedido */
+        --status-pending: #FFA500;
+        --status-confirmed: #4CAF50;
+        --status-preparing: #2196F3;
+        --status-ready: #9C27B0;
+        --status-delivered: #4CAF50;
+        --status-cancelled: #F44336;
+
+        /* Transiciones */
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-fast: all 0.2s ease;
+        --transition-slow: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Reset y estilos base */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: var(--dark-bg);
+        color: var(--text-light);
+        line-height: 1.6;
+        min-height: 100vh;
+    }
+
+    .main-container {
+        background: var(--dark-bg);
+        min-height: calc(100vh - 76px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        position: relative;
+        background: var(--gradient-hero);
+        padding: 3rem 0 2rem;
+        overflow: hidden;
+        border-bottom: 2px solid var(--primary-gold);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 3;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .hero-title {
+        font-family: 'Cinzel', serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        position: relative;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .title-accent {
+        color: var(--text-light);
+        opacity: 0.9;
+    }
+
+    .title-main {
+        color: var(--primary-gold);
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        animation: titleGlow 4s ease-in-out infinite alternate;
+    }
+
+    .order-number {
+        color: var(--primary-gold);
+        font-size: 0.8em;
+        background: var(--gradient-dark);
+        padding: 0.3rem 0.8rem;
+        border-radius: 25px;
+        border: 2px solid var(--primary-gold);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        animation: numberPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+        0% { text-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+        100% { text-shadow: 0 0 50px rgba(255, 215, 0, 0.8); }
+    }
+
+    @keyframes numberPulse {
+        0%, 100% {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transform: scale(1);
+        }
+        50% {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+    }
+
+    .hero-subtitle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .subtitle-line {
+        width: 60px;
+        height: 2px;
+        background: var(--gradient-gold);
+        border-radius: 1px;
+        animation: lineExpand 3s ease-in-out infinite;
+    }
+
+    @keyframes lineExpand {
+        0%, 100% { width: 60px; opacity: 0.7; }
+        50% { width: 80px; opacity: 1; }
+    }
+
+    .subtitle-text {
+        font-family: 'Montserrat', sans-serif;
+        color: var(--primary-gold);
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .hero-description {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        font-style: italic;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* Decoraciones del hero */
+    .hero-decoration {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .decoration-circle {
+        position: absolute;
+        border: 2px solid rgba(255, 215, 0, 0.2);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .circle-1 {
+        width: 100px;
+        height: 100px;
+        top: 20%;
+        right: 15%;
+        animation-delay: 0s;
+    }
+
+    .circle-2 {
+        width: 60px;
+        height: 60px;
+        bottom: 25%;
+        left: 20%;
+        animation-delay: 2s;
+    }
+
+    .decoration-dot {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: var(--primary-gold);
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    .dot-1 {
+        top: 30%;
+        left: 25%;
+        animation-delay: 1s;
+    }
+
+    .dot-2 {
+        bottom: 35%;
+        right: 30%;
+        animation-delay: 3s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 0.4;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+    }
+
+    /* Tarjetas de detalle */
+    .detail-card {
+        background: var(--gradient-card);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--border-gold);
+        transition: var(--transition-smooth);
+        position: relative;
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .detail-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        border-color: var(--primary-gold);
+    }
+
+    .card-header-custom {
+        background: var(--gradient-gold);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .header-icon {
+        font-size: 1.3rem;
+        color: var(--dark-bg);
+        animation: iconBounce 3s ease-in-out infinite;
+    }
+
+    @keyframes iconBounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .header-title {
+        font-family: 'Cinzel', serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--dark-bg);
+        margin: 0;
+    }
+
+    .header-decoration {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--dark-bg), transparent);
+    }
+
+    .card-body-custom {
+        padding: 2rem;
+        background: var(--gradient-card);
+    }
+
+    /* Tabla de productos */
+    .table-container {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--border-gold);
+    }
+
+    .products-table {
+        width: 100%;
+        margin: 0;
+        background: var(--darker-bg);
+        color: var(--text-light);
+    }
+
+    .products-table thead {
+        background: var(--gradient-dark);
+    }
+
+    .products-table th {
+        padding: 1rem;
+        font-weight: 600;
+        border-bottom: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .product-row {
+        transition: var(--transition-smooth);
+        border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    }
+
+    .product-row:hover {
+        background: rgba(255, 215, 0, 0.05);
+        transform: scale(1.01);
+    }
+
+    .products-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .product-icon {
+        color: var(--primary-gold);
+        font-size: 0.8rem;
+        animation: productIcon 4s ease-in-out infinite;
+    }
+
+    @keyframes productIcon {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+    }
+
+    .price-value, .subtotal-value {
+        font-family: 'Cinzel', serif;
+        font-weight: 600;
+        color: var(--primary-gold);
+        font-size: 1.1rem;
+    }
+
+    .quantity-badge {
+        background: var(--gradient-gold);
+        color: var(--dark-bg);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+    }
+
+    .total-row {
+        background: var(--gradient-dark);
+        border-top: 2px solid var(--primary-gold);
+    }
+
+    .total-row td {
+        padding: 1.5rem 1rem;
+        font-size: 1.1rem;
+    }
+
+    .total-label {
+        color: var(--text-light);
+        font-family: 'Cinzel', serif;
+    }
+
+    .total-value {
+        font-family: 'Cinzel', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-gold);
+        text-shadow: 0 2px 4px rgba(255, 209, 0, 0.3);
+        animation: totalGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes totalGlow {
+        0%, 100% {
+            text-shadow: 0 2px 4px rgba(255, 209, 0, 0.3);
+        }
+        50% {
+            text-shadow: 0 4px 8px rgba(255, 209, 0, 0.6);
+        }
+    }
+
+    /* Estados del pedido */
+    .status-section {
+        margin-bottom: 2rem;
+    }
+
+    .status-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .status-label {
+        font-weight: 600;
+        color: var(--text-light);
+        font-size: 1rem;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        animation: statusPulse 3s ease-in-out infinite;
+    }
+
+    .status-pending {
+        background: linear-gradient(135deg, var(--status-pending), #FF8C00);
+        color: white;
+    }
+
+    .status-confirmed {
+        background: linear-gradient(135deg, var(--status-confirmed), #45a049);
+        color: white;
+    }
+
+    .status-preparing {
+        background: linear-gradient(135deg, var(--status-preparing), #1976D2);
+        color: white;
+    }
+
+    .status-ready {
+        background: linear-gradient(135deg, var(--status-ready), #7B1FA2);
+        color: white;
+    }
+
+    .status-delivered {
+        background: linear-gradient(135deg, var(--status-delivered), #2E7D32);
+        color: white;
+    }
+
+    .status-cancelled {
+        background: linear-gradient(135deg, var(--status-cancelled), #D32F2F);
+        color: white;
+    }
+
+    @keyframes statusPulse {
+        0%, 100% {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1);
+        }
+        50% {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transform: scale(1.02);
+        }
+    }
+
+    /* Barra de progreso del estado */
+    .status-progress {
+        width: 100%;
+        height: 6px;
+        background: var(--darker-bg);
+        border-radius: 3px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress-bar {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 1s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        animation: progressShine 2s ease-in-out infinite;
+    }
+
+    @keyframes progressShine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .progress-pending {
+        width: 20%;
+        background: linear-gradient(90deg, var(--status-pending), #FF8C00);
+    }
+    .progress-confirmed {
+        width: 40%;
+        background: linear-gradient(90deg, var(--status-confirmed), #45a049);
+    }
+    .progress-preparing {
+        width: 60%;
+        background: linear-gradient(90deg, var(--status-preparing), #1976D2);
+    }
+    .progress-ready {
+        width: 80%;
+        background: linear-gradient(90deg, var(--status-ready), #7B1FA2);
+    }
+    .progress-delivered {
+        width: 100%;
+        background: linear-gradient(90deg, var(--status-delivered), #2E7D32);
+    }
+    .progress-cancelled {
+        width: 100%;
+        background: linear-gradient(90deg, var(--status-cancelled), #D32F2F);
+    }
+
+    /* Información del cliente */
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--darker-bg);
+        border-radius: 10px;
+        border: 1px solid var(--border-gold);
+        transition: var(--transition-smooth);
+    }
+
+    .info-item:hover {
+        background: var(--card-hover);
+        border-color: var(--primary-gold);
+        transform: translateX(5px);
+    }
+
+    .info-icon {
+        color: var(--primary-gold);
+        font-size: 1.2rem;
+        margin-top: 0.2rem;
+        animation: infoIcon 4s ease-in-out infinite;
+    }
+
+    @keyframes infoIcon {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .info-content {
+        flex: 1;
+    }
+
+    .info-label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        display: block;
+        color: var(--text-light);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    /* Botón de acción */
+    .action-section {
+        position: relative;
+    }
+
+    .btn-back-to-orders {
+        width: 100%;
+        background: var(--gradient-dark);
+        border: 2px solid var(--primary-gold);
+        color: var(--primary-gold);
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-back-to-orders:hover {
+        background: var(--gradient-gold);
+        color: var(--dark-bg);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 209, 0, 0.4);
+        text-decoration: none;
+        border-color: var(--primary-gold);
+    }
+
+    .btn-shine {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.6s ease;
+    }
+
+    .btn-back-to-orders:hover .btn-shine {
+        left: 100%;
+    }
+
+    /* Animaciones de entrada */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .products-card {
+        animation-delay: 0.1s;
+    }
+
+    .info-card {
+        animation-delay: 0.2s;
+    }
+
+    .customer-card {
+        animation-delay: 0.3s;
+    }
+
+    .action-section {
+        animation: fadeInUp 0.6s ease forwards;
+        animation-delay: 0.4s;
+        opacity: 0;
+    }
+
+    /* Efectos adicionales para las tarjetas */
+    .detail-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.03), transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 0;
+        border-radius: 15px;
+    }
+
+    .detail-card:hover::before {
+        opacity: 1;
+    }
+
+    /* Efecto de brillo en las tarjetas */
+    .detail-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.02), transparent);
+        transform: rotate(45deg);
+        transition: all 0.8s ease;
+        opacity: 0;
+        z-index: 1;
+    }
+
+    .detail-card:hover::after {
+        opacity: 1;
+        transform: rotate(45deg) translate(25%, 25%);
+    }
+
+    /* Efectos especiales para la tabla */
+    .product-row:nth-child(odd) {
+        background: rgba(255, 215, 0, 0.02);
+    }
+
+    .product-row:nth-child(even) {
+        background: rgba(255, 215, 0, 0.01);
+    }
+
+    /* Animación para los números de cantidad */
+    .quantity-badge {
+        animation: quantityPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes quantityPulse {
+        0%, 100% {
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+        50% {
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+        }
+    }
+
+    /* Estados adicionales para mejor UX */
+    .loading-state {
+        opacity: 0.7;
+        pointer-events: none;
+        position: relative;
+    }
+
+    .loading-state::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 30px;
+        height: 30px;
+        border: 3px solid var(--border-gold);
+        border-top: 3px solid var(--primary-gold);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .hero-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+        }
+
+        .order-number {
+            font-size: 0.7em;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .hero-section {
+            padding: 2.5rem 0 1.5rem;
+        }
+
+        .container {
+            padding: 0 1rem;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+        }
+
+        .card-body-custom {
+            padding: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .title-accent,
+        .title-main {
+            display: block;
+            text-align: center;
+        }
+
+        .order-number {
+            font-size: 0.6em;
+            margin-top: 0.5rem;
+        }
+
+        .hero-subtitle {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .subtitle-line {
+            width: 40px;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            padding: 0 1rem;
+        }
+
+        .products-table {
+            font-size: 0.85rem;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 0.5rem 0.3rem;
+        }
+
+        .product-info {
+            flex-direction: column;
+            gap: 0.3rem;
+            text-align: center;
+        }
+
+        .price-value,
+        .subtotal-value {
+            font-size: 1rem;
+        }
+
+        .total-value {
+            font-size: 1.3rem;
+        }
+
+        .status-container {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+
+        .status-badge {
+            align-self: center;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .info-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+        .info-content {
+            text-align: center;
+        }
+
+        .decoration-circle,
+        .decoration-dot {
+            display: none;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-section {
+            padding: 2rem 0 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+        }
+
+        .hero-description {
+            font-size: 0.9rem;
+        }
+
+        .card-header-custom {
+            padding: 1rem;
+        }
+
+        .card-body-custom {
+            padding: 1rem;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+        }
+
+        .products-table {
+            font-size: 0.8rem;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 0.4rem 0.2rem;
+        }
+
+        /* Tabla responsive para móviles */
+        .table-responsive {
+            border: none;
+        }
+
+        .products-table thead {
+            display: none;
+        }
+
+        .product-row {
+            display: block;
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--darker-bg);
+        }
+
+        .products-table td {
+            display: block;
+            text-align: center;
+            padding: 0.5rem 0;
+            border: none;
+            position: relative;
+        }
+
+        .products-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--primary-gold);
+            display: block;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .product-info {
+            justify-content: center;
+        }
+
+        .quantity-badge {
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .total-row {
+            display: block;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .total-row td {
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .btn-back-to-orders {
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Mejoras adicionales para accesibilidad */
+    .detail-card:focus-within {
+        outline: 2px solid var(--primary-gold);
+        outline-offset: 2px;
+    }
+
+    .btn-back-to-orders:focus {
+        outline: 2px solid var(--primary-gold);
+        outline-offset: 2px;
+    }
+
+    /* Animación de entrada para toda la página */
+    .main-container {
+        animation: pageLoad 1s ease-out;
+    }
+
+    @keyframes pageLoad {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Efectos de hover mejorados */
+    .hero-section:hover .decoration-dot {
+        animation-duration: 2s;
+    }
+
+    .hero-section:hover .decoration-circle {
+        animation-duration: 6s;
+    }
+
+    /* Transiciones suaves para todos los elementos */
+    * {
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Efecto especial para el total */
+    .total-row:hover .total-value {
+        animation: totalHighlight 0.6s ease;
+    }
+
+    @keyframes totalHighlight {
+        0%, 100% {
+            transform: scale(1);
+            text-shadow: 0 2px 4px rgba(255, 209, 0, 0.3);
+        }
+        50% {
+            transform: scale(1.05);
+            text-shadow: 0 4px 12px rgba(255, 209, 0, 0.8);
+        }
+    }
+
+    /* Estados de carga para elementos individuales */
+    .product-row.loading {
+        opacity: 0.5;
+        animation: rowLoading 1.5s ease-in-out infinite;
+    }
+
+    @keyframes rowLoading {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 0.8; }
+    }
+
+    /* Mejoras visuales adicionales */
+    .status-progress {
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-bar {
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    }
+
+    /* Efectos especiales para interacciones */
+    .info-item:active {
+        transform: translateX(3px) scale(0.98);
+    }
+
+    .btn-back-to-orders:active {
+        transform: translateY(-1px) scale(0.98);
+    }
+
+    .product-row:active {
+        transform: scale(0.99);
+    }
+</style>
+
+<script>
+    // Animaciones adicionales con JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animar la entrada de las filas de productos
+        const productRows = document.querySelectorAll('.product-row');
+        productRows.forEach((row, index) => {
+            row.style.animationDelay = `${0.1 * index}s`;
+            row.classList.add('fade-in-up');
+        });
+
+        // Animar la barra de progreso
+        const progressBar = document.querySelector('.progress-bar');
+        if (progressBar) {
+            setTimeout(() => {
+                progressBar.style.width = progressBar.style.width || '0%';
+            }, 500);
+        }
+
+        // Efecto de escritura para el número de pedido
+        const orderNumber = document.querySelector('.order-number span');
+        if (orderNumber) {
+            const originalText = orderNumber.textContent;
+            orderNumber.textContent = '';
+            let i = 0;
+            const typeWriter = setInterval(() => {
+                orderNumber.textContent += originalText.charAt(i);
+                i++;
+                if (i > originalText.length - 1) {
+                    clearInterval(typeWriter);
+                }
+            }, 100);
+        }
+
+        // Agregar atributos data-label para la vista móvil
+        const tableRows = document.querySelectorAll('.product-row');
+        tableRows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 4) {
+                cells[0].setAttribute('data-label', 'Producto');
+                cells[1].setAttribute('data-label', 'Precio');
+                cells[2].setAttribute('data-label', 'Cantidad');
+                cells[3].setAttribute('data-label', 'Subtotal');
+            }
+        });
+
+        // Efecto de hover mejorado para las tarjetas
+        const detailCards = document.querySelectorAll('.detail-card');
+        detailCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Animación del botón al hacer clic
+        const backButton = document.querySelector('.btn-back-to-orders');
+        if (backButton) {
+            backButton.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        }
+    });
+</script>
 </body>
 </html>

@@ -4,61 +4,1211 @@
 <body>
 <header th:replace="fragments/header :: header"></header>
 
-<main class="container py-5">
-    <h2 class="mb-4">Tu Carrito de Compras</h2>
+<main class="cart-main-container">
+  <!-- Elementos decorativos de fondo -->
+  <div class="cart-bg-elements">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-dot dot-1"></div>
+    <div class="bg-dot dot-2"></div>
+    <div class="bg-dot dot-3"></div>
+    <div class="bg-line line-1"></div>
+    <div class="bg-line line-2"></div>
+  </div>
 
-    <div id="empty-cart-message" th:if="${cart.items.isEmpty()}">
-      <div class="alert alert-info">
-        Tu carrito está vacío. <a th:href="@{/products}">Continúa comprando</a>.
+  <div class="container cart-container">
+    <!-- Header del carrito -->
+    <div class="cart-header">
+      <div class="cart-title-section">
+        <h2 class="cart-title">
+                    <span class="title-icon">
+                        <i class="bi bi-cart3"></i>
+                        <div class="icon-glow"></div>
+                    </span>
+          Tu Carrito de Compras
+        </h2>
+        <div class="title-underline">
+          <div class="underline-dot"></div>
+        </div>
       </div>
     </div>
 
-    <div id="cart-content" th:if="${!cart.items.isEmpty()}">
-      <div class="table-responsive">
-        <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <th>Subtotal</th>
-            <th>Acciones</th>
-          </tr>
-          </thead>
-          <tbody id="cart-items">
-          <tr th:each="item : ${cart.items}">
-            <td th:text="${item.product.name}">Producto</td>
-            <td th:text="${'$' + #numbers.formatInteger(item.product.price, 0, 'POINT')}">$0.00</td>
-            <td>
-              <div class="input-group input-group-sm" style="width: 120px;">
-                <button class="btn btn-outline-secondary decrease-quantity" th:data-id="${item.product.id}">-</button>
-                <input type="text" class="form-control text-center" th:value="${item.quantity}" readonly>
-                <button class="btn btn-outline-secondary increase-quantity" th:data-id="${item.product.id}">+</button>
-              </div>
-            </td>
-            <td th:text="${'$' + #numbers.formatInteger(item.product.price * item.quantity, 0, 'POINT')}">$0.00</td>
-            <td>
-              <button class="btn btn-sm btn-danger remove-item" th:data-id="${item.product.id}">Eliminar</button>
-            </td>
-          </tr>
-          </tbody>
-          <tfoot>
-          <tr>
-            <td colspan="3" class="text-end"><strong>Total:</strong></td>
-            <td><strong th:text="${'$' + #numbers.formatDecimal(cart.totalAmount, 1, 2)}" id="cart-total">$0.00</strong></td>
-            <td></td>
-          </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <div class="d-flex justify-content-between mt-4">
-        <a th:href="@{/products}" class="btn btn-secondary">Continuar Comprando</a>
-        <a th:href="@{/checkout}" class="btn btn-primary" id="checkout-button">Confirmacion del Pedido</a>
+    <!-- Mensaje de carrito vacío -->
+    <div id="empty-cart-message" th:if="${cart.items.isEmpty()}" class="empty-cart-section">
+      <div class="empty-cart-card">
+        <div class="empty-cart-icon">
+          <i class="bi bi-cart-x"></i>
+          <div class="icon-pulse"></div>
+        </div>
+        <h3 class="empty-cart-title">Tu carrito está vacío</h3>
+        <p class="empty-cart-text">Descubre nuestros deliciosos platos y comienza tu experiencia gastronómica</p>
+        <a th:href="@{/products}" class="btn-continue-shopping">
+          <span class="btn-text">Continúa comprando</span>
+          <span class="btn-icon"><i class="bi bi-arrow-right"></i></span>
+          <div class="btn-shine"></div>
+        </a>
       </div>
     </div>
-  </main>
+
+    <!-- Contenido del carrito -->
+    <div id="cart-content" th:if="${!cart.items.isEmpty()}" class="cart-content-section">
+      <!-- Tabla responsive mejorada -->
+      <div class="cart-table-container">
+        <div class="table-wrapper">
+          <table class="cart-table">
+            <thead class="cart-table-header">
+            <tr>
+              <th class="product-column">Producto</th>
+              <th class="price-column">Precio</th>
+              <th class="quantity-column">Cantidad</th>
+              <th class="subtotal-column">Subtotal</th>
+              <th class="actions-column">Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="cart-items" class="cart-table-body">
+            <tr th:each="item : ${cart.items}" class="cart-item-row">
+              <td class="product-cell">
+                <div class="product-info">
+                  <div class="product-icon">
+                    <i class="bi bi-egg-fried"></i>
+                  </div>
+                  <span class="product-name" th:text="${item.product.name}">Producto</span>
+                </div>
+              </td>
+              <td class="price-cell">
+                <span class="price-value" th:text="${'$' + #numbers.formatInteger(item.product.price, 0, 'POINT')}">$0.00</span>
+              </td>
+              <td class="quantity-cell">
+                <div class="quantity-controls">
+                  <button class="quantity-btn decrease-quantity" th:data-id="${item.product.id}">
+                    <i class="bi bi-dash"></i>
+                    <div class="btn-ripple"></div>
+                  </button>
+                  <input type="text" class="quantity-input" th:value="${item.quantity}" readonly>
+                  <button class="quantity-btn increase-quantity" th:data-id="${item.product.id}">
+                    <i class="bi bi-plus"></i>
+                    <div class="btn-ripple"></div>
+                  </button>
+                </div>
+              </td>
+              <td class="subtotal-cell">
+                <span class="subtotal-value" th:text="${'$' + #numbers.formatInteger(item.product.price * item.quantity, 0, 'POINT')}">$0.00</span>
+              </td>
+              <td class="actions-cell">
+                <button class="remove-btn remove-item" th:data-id="${item.product.id}">
+                  <i class="bi bi-trash3"></i>
+                  <span class="btn-tooltip">Eliminar</span>
+                  <div class="btn-hover-effect"></div>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Total section -->
+        <div class="cart-total-section">
+          <div class="total-card">
+            <div class="total-row">
+              <span class="total-label">Total del pedido:</span>
+              <span class="total-amount" th:text="${'$' + #numbers.formatDecimal(cart.totalAmount, 1, 2)}" id="cart-total">$0.00</span>
+            </div>
+            <div class="total-decoration"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="cart-actions">
+        <a th:href="@{/products}" class="btn-secondary-custom">
+          <span class="btn-icon"><i class="bi bi-arrow-left"></i></span>
+          <span class="btn-text">Continuar Comprando</span>
+          <div class="btn-shine"></div>
+        </a>
+        <a th:href="@{/checkout}" class="btn-primary-custom" id="checkout-button">
+          <span class="btn-text">Confirmación del Pedido</span>
+          <span class="btn-icon"><i class="bi bi-check-circle"></i></span>
+          <div class="btn-shine"></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
 <footer th:replace="fragments/footer :: footer"></footer>
 <script th:src="@{/js/cart.js}"></script>
+
+<style>
+  /* =================================
+     CART MAIN STYLING
+  ================================= */
+  .cart-main-container {
+    background-color: #121212;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 0;
+  }
+
+  /* Elementos decorativos de fondo */
+  .cart-bg-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.03;
+    background: radial-gradient(circle, #FFD100 10%, transparent 70%);
+  }
+
+  .circle-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    right: -100px;
+    animation: float 15s ease-in-out infinite;
+  }
+
+  .circle-2 {
+    width: 300px;
+    height: 300px;
+    bottom: -50px;
+    left: -80px;
+    animation: float 20s ease-in-out infinite reverse;
+  }
+
+  .bg-dot {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgba(255, 209, 0, 0.2);
+    box-shadow: 0 0 5px rgba(255, 209, 0, 0.3);
+  }
+
+  .dot-1 {
+    top: 20%;
+    left: 10%;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .dot-2 {
+    top: 60%;
+    right: 15%;
+    animation: float 12s ease-in-out infinite reverse;
+  }
+
+  .dot-3 {
+    bottom: 30%;
+    left: 60%;
+    animation: float 10s ease-in-out infinite 2s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(15px) translateX(8px); }
+  }
+
+  .bg-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.1), transparent);
+  }
+
+  .line-1 {
+    width: 70%;
+    top: 25%;
+    left: 15%;
+    opacity: 0.05;
+    transform: rotate(-3deg);
+  }
+
+  .line-2 {
+    width: 80%;
+    bottom: 35%;
+    right: 10%;
+    opacity: 0.05;
+    transform: rotate(2deg);
+  }
+
+  .cart-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+  }
+
+  /* =================================
+     HEADER DEL CARRITO
+  ================================= */
+  .cart-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .cart-title-section {
+    display: inline-block;
+    position: relative;
+  }
+
+  .cart-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .title-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.05));
+    color: #FFD100;
+    font-size: 1.8rem;
+    overflow: hidden;
+  }
+
+  .icon-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 209, 0, 0.3), transparent 70%);
+    animation: pulse-glow 3s ease infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  .title-underline {
+    position: relative;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #FFD100, transparent);
+    margin: 1rem auto 0;
+  }
+
+  .underline-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #FFD100;
+    border-radius: 50%;
+    top: -2.5px;
+    left: 0;
+    animation: moveDot 4s ease-in-out infinite alternate;
+    box-shadow: 0 0 8px rgba(255, 209, 0, 0.6);
+  }
+
+  @keyframes moveDot {
+    0% { left: 0; }
+    100% { left: 72px; }
+  }
+
+  /* =================================
+     CARRITO VACÍO
+  ================================= */
+  .empty-cart-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  .empty-cart-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    max-width: 500px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .empty-cart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 209, 0, 0.05), transparent);
+    z-index: -1;
+  }
+
+  .empty-cart-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+
+  .empty-cart-icon i {
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .icon-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: 2px solid rgba(255, 209, 0, 0.3);
+    border-radius: 50%;
+    animation: pulse-ring 2s ease infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+  }
+
+  .empty-cart-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 1rem;
+  }
+
+  .empty-cart-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  /* =================================
+     TABLA DEL CARRITO
+  ================================= */
+  .cart-content-section {
+    position: relative;
+  }
+
+  .cart-table-container {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .cart-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .cart-table-header {
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+  }
+
+  .cart-table-header th {
+    padding: 1.5rem 1rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #FFD100;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    position: relative;
+  }
+
+  .cart-table-header th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.3), transparent);
+  }
+
+  .cart-item-row {
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .cart-item-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 209, 0, 0.1), transparent);
+    transition: all 0.3s ease;
+    z-index: 0;
+  }
+
+  .cart-item-row:hover::before {
+    width: 100%;
+  }
+
+  .cart-item-row:hover {
+    transform: translateX(5px);
+  }
+
+  .cart-table-body td {
+    padding: 1.5rem 1rem;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Product cell */
+  .product-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .product-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.05));
+    color: #FFD100;
+    font-size: 1.2rem;
+  }
+
+  .product-name {
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+
+  /* Price cell */
+  .price-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #FFD100;
+  }
+
+  /* Quantity controls */
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .quantity-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quantity-btn:hover {
+    background: rgba(255, 209, 0, 0.1);
+    color: #FFD100;
+  }
+
+  .btn-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 209, 0, 0.3);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+  }
+
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  .quantity-input {
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    width: 60px;
+    height: 40px;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .quantity-input:focus {
+    outline: none;
+    background: rgba(255, 209, 0, 0.05);
+  }
+
+  /* Subtotal cell */
+  .subtotal-value {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #FFFFFF;
+  }
+
+  /* Remove button */
+  .remove-btn {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(220, 53, 69, 0.1));
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #dc3545;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .remove-btn:hover {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.3), rgba(220, 53, 69, 0.2));
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  }
+
+  .btn-tooltip {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .remove-btn:hover .btn-tooltip {
+    opacity: 1;
+    bottom: -40px;
+  }
+
+  .btn-hover-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(220, 53, 69, 0.4), transparent 70%);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .remove-btn:hover .btn-hover-effect {
+    opacity: 1;
+    animation: pulse-effect 1.5s ease infinite;
+  }
+
+  @keyframes pulse-effect {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.2); opacity: 0.6; }
+  }
+
+  /* =================================
+     SECCIÓN TOTAL
+  ================================= */
+  .cart-total-section {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .total-card {
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+    border: 1px solid rgba(255, 209, 0, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    min-width: 300px;
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .total-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .total-amount {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #FFD100;
+    text-shadow: 0 0 10px rgba(255, 209, 0, 0.3);
+  }
+
+  .total-decoration {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #FFD100, transparent);
+    animation: shimmer 2s ease infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* =================================
+     BOTONES DE ACCIÓN
+  ================================= */
+  .cart-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn-secondary-custom, .btn-primary-custom, .btn-continue-shopping {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-secondary-custom {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .btn-secondary-custom:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-primary-custom, .btn-continue-shopping {
+    background: linear-gradient(135deg, #FFD100, #FFDB4D);
+    color: #121212;
+    box-shadow: 0 4px 15px rgba(255, 209, 0, 0.3);
+  }
+
+  .btn-primary-custom:hover, .btn-continue-shopping:hover {
+    background: linear-gradient(135deg, #FFDB4D, #FFE066);
+    color: #121212;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 209, 0, 0.4);
+  }
+
+  .btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s ease;
+  }
+
+  .btn-secondary-custom:hover .btn-shine,
+  .btn-primary-custom:hover .btn-shine,
+  .btn-continue-shopping:hover .btn-shine {
+    left: 100%;
+  }
+
+  .btn-icon {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+  }
+
+  /* =================================
+     RESPONSIVE DESIGN
+  ================================= */
+  @media (max-width: 991px) {
+    .cart-title {
+      font-size: 2rem;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .cart-actions {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn-secondary-custom, .btn-primary-custom {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .total-card {
+      min-width: auto;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .cart-main-container {
+      padding: 1rem 0;
+    }
+
+    .cart-title {
+      font-size: 1.5rem;
+    }
+
+    .empty-cart-card {
+      margin: 0 1rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .cart-table-header th,
+    .cart-table-body td {
+      padding: 1rem 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .quantity-controls {
+      transform: scale(0.9);
+    }
+
+    .total-label {
+      font-size: 1.1rem;
+    }
+
+    .total-amount {
+      font-size: 1.5rem;
+    }
+
+    .product-info {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .product-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .cart-table-container {
+      border-radius: 10px;
+    }
+
+    .cart-table-header th {
+      font-size: 0.8rem;
+      padding: 0.8rem 0.3rem;
+    }
+
+    .cart-table-body td {
+      padding: 1rem 0.3rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-secondary-custom, .btn-primary-custom, .btn-continue-shopping {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+    }
+  }
+
+  /* =================================
+     ANIMACIONES ADICIONALES
+  ================================= */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cart-content-section {
+    animation: fadeInUp 0.6s ease;
+  }
+
+  .empty-cart-section {
+    animation: fadeInUp 0.6s ease;
+  }
+
+  .cart-item-row {
+    animation: fadeInUp 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .cart-item-row:nth-child(1) { animation-delay: 0.1s; }
+  .cart-item-row:nth-child(2) { animation-delay: 0.2s; }
+  .cart-item-row:nth-child(3) { animation-delay: 0.3s; }
+  .cart-item-row:nth-child(4) { animation-delay: 0.4s; }
+  .cart-item-row:nth-child(5) { animation-delay: 0.5s; }
+
+  /* =================================
+     EFECTOS DE CARGA Y TRANSICIONES
+  ================================= */
+  .cart-table-container {
+    animation: slideInFromBottom 0.8s ease;
+  }
+
+  @keyframes slideInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cart-total-section {
+    animation: slideInFromRight 0.6s ease 0.3s both;
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .cart-actions {
+    animation: fadeInUp 0.6s ease 0.5s both;
+  }
+
+  /* =================================
+     EFECTOS HOVER MEJORADOS
+  ================================= */
+  .cart-table-header th {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cart-table-header th::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.1), transparent);
+    transition: all 0.6s ease;
+  }
+
+  .cart-table-header th:hover::before {
+    left: 100%;
+  }
+
+  /* =================================
+     LOADING STATES
+  ================================= */
+  .quantity-btn.loading {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .quantity-btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .remove-btn.loading {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .remove-btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  /* =================================
+     MEJORAS DE ACCESIBILIDAD
+  ================================= */
+  .quantity-btn:focus,
+  .remove-btn:focus,
+  .btn-secondary-custom:focus,
+  .btn-primary-custom:focus,
+  .btn-continue-shopping:focus {
+    outline: 2px solid #FFD100;
+    outline-offset: 2px;
+  }
+
+  .cart-item-row:focus-within {
+    background: rgba(255, 209, 0, 0.05);
+    transform: translateX(5px);
+  }
+
+  /* =================================
+     ESTADOS DE ERROR Y ÉXITO
+  ================================= */
+  .cart-item-row.error {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.1), transparent);
+    animation: shake 0.5s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .cart-item-row.success {
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.1), transparent);
+    animation: pulse-success 0.6s ease;
+  }
+
+  @keyframes pulse-success {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  /* =================================
+     NOTIFICACIONES TOAST
+  ================================= */
+  .toast-notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.95), rgba(255, 219, 77, 0.95));
+    color: #121212;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .toast-notification.show {
+    transform: translateX(0);
+  }
+
+  .toast-notification.error {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.95), rgba(248, 81, 101, 0.95));
+    color: #FFFFFF;
+  }
+
+  .toast-notification.success {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.95), rgba(72, 199, 101, 0.95));
+    color: #FFFFFF;
+  }
+
+  /* =================================
+     MICRO-INTERACCIONES
+  ================================= */
+  .quantity-input {
+    transition: all 0.3s ease;
+  }
+
+  .quantity-input:hover {
+    background: rgba(255, 209, 0, 0.05);
+  }
+
+  .product-icon {
+    transition: all 0.3s ease;
+  }
+
+  .cart-item-row:hover .product-icon {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 209, 0, 0.3);
+  }
+
+  .price-value, .subtotal-value {
+    transition: all 0.3s ease;
+  }
+
+  .cart-item-row:hover .price-value,
+  .cart-item-row:hover .subtotal-value {
+    color: #FFD100;
+    text-shadow: 0 0 8px rgba(255, 209, 0, 0.4);
+  }
+
+  /* =================================
+     EFECTOS DE PARTÍCULAS (OPCIONAL)
+  ================================= */
+  .cart-header::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 209, 0, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    transform: translate(-50%, -50%);
+    animation: float 20s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* =================================
+     MEJORAS PARA PANTALLAS GRANDES
+  ================================= */
+  @media (min-width: 1400px) {
+    .cart-container {
+      max-width: 1400px;
+    }
+
+    .cart-title {
+      font-size: 3rem;
+    }
+
+    .cart-table-header th,
+    .cart-table-body td {
+      padding: 2rem 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .total-amount {
+      font-size: 2.2rem;
+    }
+  }
+
+  /* =================================
+     MODO OSCURO MEJORADO
+  ================================= */
+  .cart-main-container {
+    background: linear-gradient(135deg, #121212 0%, #1a1a1a 50%, #121212 100%);
+  }
+
+  .cart-main-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+            radial-gradient(circle at 20% 80%, rgba(255, 209, 0, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255, 209, 0, 0.03) 0%, transparent 50%);
+    z-index: 0;
+  }
+
+  /* =================================
+     PRINT STYLES
+  ================================= */
+  @media print {
+    .cart-bg-elements,
+    .cart-actions,
+    .remove-btn,
+    .quantity-controls {
+      display: none !important;
+    }
+
+    .cart-main-container {
+      background: white !important;
+      color: black !important;
+    }
+
+    .cart-table-container {
+      border: 1px solid #000 !important;
+      background: white !important;
+    }
+
+    .cart-title,
+    .total-label,
+    .total-amount {
+      color: black !important;
+    }
+  }
+</style>
+
 </body>
 </html>

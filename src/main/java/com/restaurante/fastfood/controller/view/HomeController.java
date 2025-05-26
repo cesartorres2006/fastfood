@@ -6,6 +6,7 @@ import com.restaurante.fastfood.service.CartService;
 import com.restaurante.fastfood.service.ProductService;
 import com.restaurante.fastfood.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,12 +45,17 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/";}
         return "login";
     }
 
     @GetMapping("/register")
-    public String registerForm(Model model) {
+    public String registerForm(Model model, Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/";
+        }
         model.addAttribute("user", new User());
         return "register";
     }

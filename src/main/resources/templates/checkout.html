@@ -4,71 +4,235 @@
 <body>
 <header th:replace="fragments/header :: header"></header>
 
-<main class="container py-5">
-  <h1 class="mb-4">Finalizar Pedido</h1>
+<main class="checkout-main-container">
+  <!-- Elementos decorativos de fondo -->
+  <div class="checkout-bg-elements">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+    <div class="bg-dot dot-1"></div>
+    <div class="bg-dot dot-2"></div>
+    <div class="bg-dot dot-3"></div>
+    <div class="bg-dot dot-4"></div>
+    <div class="bg-line line-1"></div>
+    <div class="bg-line line-2"></div>
+    <div class="floating-icon icon-1"><i class="bi bi-credit-card"></i></div>
+    <div class="floating-icon icon-2"><i class="bi bi-shield-check"></i></div>
+    <div class="floating-icon icon-3"><i class="bi bi-truck"></i></div>
+  </div>
 
-  <div class="row">
-    <div class="col-md-8">
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5 class="mb-0">Información de Entrega</h5>
+  <div class="container checkout-container">
+    <!-- Header del checkout -->
+    <div class="checkout-header">
+      <div class="checkout-title-section">
+        <h1 class="checkout-title">
+                    <span class="title-icon">
+                        <i class="bi bi-credit-card-2-front"></i>
+                        <div class="icon-glow"></div>
+                    </span>
+          Finalizar Pedido
+        </h1>
+        <div class="title-underline">
+          <div class="underline-dot"></div>
         </div>
-        <div class="card-body">
-          <form id="checkout-form" th:action="@{/checkout/place-order}" method="post">
-            <div class="mb-3">
-              <label for="customerName" class="form-label">Nombre completo</label>
-              <input type="text" id="customerName" name="customerName" class="form-control" th:value="${user.fullName}" readonly>
-            </div>
-            <div class="mb-3">
-              <label for="deliveryAddress" class="form-label">Dirección de entrega</label>
-              <input type="text" id="deliveryAddress" name="deliveryAddress" class="form-control" th:value="${user.address}" required>
-            </div>
-            <div class="mb-3">
-              <label for="contactPhone" class="form-label">Teléfono de contacto</label>
-              <input type="text" id="contactPhone" name="contactPhone" class="form-control" th:value="${user.phone}" required>
-            </div>
-            <div class="mb-3">
-              <label for="notes" class="form-label">Notas adicionales (opcional)</label>
-              <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="d-grid">
-              <button type="submit" class="btn btn-success">Confirmar Pedido</button>
-              <a th:href="@{/cart}" class="btn btn-outline-secondary mt-2">Volver al Carrito</a>
-            </div>
-          </form>
+        <p class="checkout-subtitle">Completa tu información para confirmar el pedido</p>
+      </div>
+
+      <!-- Progress indicator -->
+      <div class="checkout-progress">
+        <div class="progress-step completed">
+          <div class="step-circle">
+            <i class="bi bi-cart-check"></i>
+          </div>
+          <span class="step-label">Carrito</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step active">
+          <div class="step-circle">
+            <i class="bi bi-credit-card"></i>
+          </div>
+          <span class="step-label">Checkout</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step">
+          <div class="step-circle">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <span class="step-label">Confirmación</span>
         </div>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">Resumen del Pedido</h5>
+    <!-- Contenido principal -->
+    <div class="checkout-content">
+      <div class="row g-4">
+        <!-- Columna izquierda - Formulario -->
+        <div class="col-lg-8">
+          <div class="delivery-info-card">
+            <div class="card-header-custom">
+              <div class="header-icon">
+                <i class="bi bi-geo-alt"></i>
+                <div class="icon-pulse"></div>
+              </div>
+              <div class="header-text">
+                <h5 class="card-title-custom">Información de Entrega</h5>
+                <p class="card-subtitle-custom">Verifica y completa tus datos</p>
+              </div>
+            </div>
+
+            <div class="card-body-custom">
+              <form id="checkout-form" th:action="@{/checkout/place-order}" method="post" class="checkout-form">
+                <!-- Campo Nombre -->
+                <div class="form-group-custom">
+                  <label for="customerName" class="form-label-custom">
+                    <span class="label-icon"><i class="bi bi-person"></i></span>
+                    <span class="label-text">Nombre completo</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="text" id="customerName" name="customerName"
+                           class="form-input-custom" th:value="${user.fullName}" readonly>
+                    <div class="input-decoration"></div>
+                    <div class="readonly-indicator">
+                      <i class="bi bi-lock"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Campo Dirección -->
+                <div class="form-group-custom">
+                  <label for="deliveryAddress" class="form-label-custom">
+                    <span class="label-icon"><i class="bi bi-geo-alt"></i></span>
+                    <span class="label-text">Dirección de entrega</span>
+                    <span class="required-indicator">*</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="text" id="deliveryAddress" name="deliveryAddress"
+                           class="form-input-custom" th:value="${user.address}" required>
+                    <div class="input-decoration"></div>
+                    <div class="input-focus-line"></div>
+                  </div>
+                </div>
+
+                <!-- Campo Teléfono -->
+                <div class="form-group-custom">
+                  <label for="contactPhone" class="form-label-custom">
+                    <span class="label-icon"><i class="bi bi-telephone"></i></span>
+                    <span class="label-text">Teléfono de contacto</span>
+                    <span class="required-indicator">*</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="text" id="contactPhone" name="contactPhone"
+                           class="form-input-custom" th:value="${user.phone}" required>
+                    <div class="input-decoration"></div>
+                    <div class="input-focus-line"></div>
+                  </div>
+                </div>
+
+                <!-- Campo Notas -->
+                <div class="form-group-custom">
+                  <label for="notes" class="form-label-custom">
+                    <span class="label-icon"><i class="bi bi-chat-text"></i></span>
+                    <span class="label-text">Notas adicionales</span>
+                    <span class="optional-indicator">(opcional)</span>
+                  </label>
+                  <div class="textarea-wrapper">
+                                        <textarea id="notes" name="notes" class="textarea-custom" rows="4"
+                                                  placeholder="Instrucciones especiales para la entrega..."></textarea>
+                    <div class="textarea-decoration"></div>
+                    <div class="textarea-focus-line"></div>
+                  </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="form-actions">
+                  <button type="submit" class="btn-confirm-order">
+                    <span class="btn-icon"><i class="bi bi-check-circle"></i></span>
+                    <span class="btn-text">Confirmar Pedido</span>
+                    <div class="btn-shine"></div>
+                    <div class="btn-loading">
+                      <div class="loading-spinner"></div>
+                    </div>
+                  </button>
+                  <a th:href="@{/cart}" class="btn-back-to-cart">
+                    <span class="btn-icon"><i class="bi bi-arrow-left"></i></span>
+                    <span class="btn-text">Volver al Carrito</span>
+                    <div class="btn-shine"></div>
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-sm">
-              <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cant.</th>
-                <th>Precio</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="item : ${cart.items}">
-                <td th:text="${item.product.name}">Producto</td>
-                <td th:text="${item.quantity}">1</td>
-                <td th:text="${'$' + #numbers.formatDecimal(item.product.price * item.quantity, 1, 2)}">$0.00</td>
-              </tr>
-              </tbody>
-              <tfoot>
-              <tr>
-                <th colspan="2">Total</th>
-                <th th:text="${'$' + #numbers.formatDecimal(cart.totalAmount, 1, 2)}">$0.00</th>
-              </tr>
-              </tfoot>
-            </table>
+
+        <!-- Columna derecha - Resumen -->
+        <div class="col-lg-4">
+          <div class="order-summary-card">
+            <div class="summary-header">
+              <div class="header-icon">
+                <i class="bi bi-receipt"></i>
+                <div class="icon-pulse"></div>
+              </div>
+              <div class="header-text">
+                <h5 class="summary-title">Resumen del Pedido</h5>
+                <p class="summary-subtitle">Revisa tu orden antes de confirmar</p>
+              </div>
+            </div>
+
+            <div class="summary-content">
+              <div class="order-items">
+                <div class="items-header">
+                  <span class="header-product">Producto</span>
+                  <span class="header-qty">Cant.</span>
+                  <span class="header-price">Precio</span>
+                </div>
+
+                <div class="items-list">
+                  <div th:each="item : ${cart.items}" class="order-item">
+                    <div class="item-product">
+                      <div class="product-icon">
+                        <i class="bi bi-egg-fried"></i>
+                      </div>
+                      <span class="product-name" th:text="${item.product.name}">Producto</span>
+                    </div>
+                    <div class="item-quantity">
+                      <span class="quantity-badge" th:text="${item.quantity}">1</span>
+                    </div>
+                    <div class="item-price">
+                      <span class="price-value" th:text="${'$' + #numbers.formatDecimal(item.product.price * item.quantity, 1, 2)}">$0.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-total">
+                <div class="total-line"></div>
+                <div class="total-row">
+                  <span class="total-label">Total del Pedido</span>
+                  <span class="total-amount" th:text="${'$' + #numbers.formatDecimal(cart.totalAmount, 1, 2)}">$0.00</span>
+                </div>
+                <div class="total-decoration">
+                  <div class="decoration-dot"></div>
+                  <div class="decoration-dot"></div>
+                  <div class="decoration-dot"></div>
+                </div>
+              </div>
+
+              <!-- Info adicional -->
+              <div class="delivery-info">
+                <div class="info-item">
+                  <i class="bi bi-clock"></i>
+                  <span>Tiempo estimado: 30-45 min</span>
+                </div>
+                <div class="info-item">
+                  <i class="bi bi-shield-check"></i>
+                  <span>Pago seguro garantizado</span>
+                </div>
+                <div class="info-item">
+                  <i class="bi bi-truck"></i>
+                  <span>Entrega a domicilio</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -90,6 +254,11 @@
           event.preventDefault();
         } else {
           event.preventDefault();
+
+          // Mostrar estado de carga
+          const submitBtn = form.querySelector('.btn-confirm-order');
+          submitBtn.classList.add('loading');
+
           // Enviar datos al backend vía fetch
           const formData = new FormData(form);
           fetch(form.action, {
@@ -99,27 +268,41 @@
               'X-Requested-With': 'XMLHttpRequest'
             }
           })
-          .then(response => {
-            if (response.ok) {
-              showCheckoutSuccessModal();
-              const modalEl = document.getElementById('checkoutSuccessModal');
-              if (modalEl) {
-                modalEl.addEventListener('hidden.bs.modal', function () {
-                  window.location.href = '/';
-                }, { once: true });
-              }
-            } else {
-              response.text().then(text => {
-                alert('Ocurrió un error al procesar tu pedido. Intenta de nuevo.\n' + text);
-              });
-            }
-          })
-          .catch(() => {
-            alert('Ocurrió un error al procesar tu pedido. Intenta de nuevo.');
-          });
+                  .then(response => {
+                    submitBtn.classList.remove('loading');
+                    if (response.ok) {
+                      showCheckoutSuccessModal();
+                      const modalEl = document.getElementById('checkoutSuccessModal');
+                      if (modalEl) {
+                        modalEl.addEventListener('hidden.bs.modal', function () {
+                          window.location.href = '/';
+                        }, { once: true });
+                      }
+                    } else {
+                      response.text().then(text => {
+                        showErrorNotification('Ocurrió un error al procesar tu pedido. Intenta de nuevo.\n' + text);
+                      });
+                    }
+                  })
+                  .catch(() => {
+                    submitBtn.classList.remove('loading');
+                    showErrorNotification('Ocurrió un error al procesar tu pedido. Intenta de nuevo.');
+                  });
         }
       });
     }
+
+    // Agregar efectos de focus a los inputs
+    const inputs = document.querySelectorAll('.form-input-custom, .textarea-custom');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.closest('.input-wrapper, .textarea-wrapper').classList.add('focused');
+      });
+
+      input.addEventListener('blur', function() {
+        this.closest('.input-wrapper, .textarea-wrapper').classList.remove('focused');
+      });
+    });
   });
 
   function validateCheckoutForm() {
@@ -127,17 +310,1206 @@
     const contactPhone = document.getElementById('contactPhone').value.trim();
 
     if (!deliveryAddress) {
-      alert('Por favor, ingrese una dirección de entrega');
+      showErrorNotification('Por favor, ingrese una dirección de entrega');
+      document.getElementById('deliveryAddress').focus();
       return false;
     }
 
     if (!contactPhone) {
-      alert('Por favor, ingrese un teléfono de contacto');
+      showErrorNotification('Por favor, ingrese un teléfono de contacto');
+      document.getElementById('contactPhone').focus();
       return false;
     }
 
     return true;
   }
+
+  function showErrorNotification(message) {
+    // Crear notificación de error
+    const notification = document.createElement('div');
+    notification.className = 'error-notification';
+    notification.innerHTML = `
+      <i class="bi bi-exclamation-triangle"></i>
+      <span>${message}</span>
+    `;
+    document.body.appendChild(notification);
+
+    setTimeout(() => notification.classList.add('show'), 100);
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 4000);
+  }
 </script>
+
+<style>
+  /* =================================
+     CHECKOUT MAIN STYLING
+  ================================= */
+  .checkout-main-container {
+    background: linear-gradient(135deg, #121212 0%, #1a1a1a 50%, #121212 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 0;
+  }
+
+  .checkout-main-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+            radial-gradient(circle at 25% 25%, rgba(255, 209, 0, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 75% 75%, rgba(255, 209, 0, 0.03) 0%, transparent 50%);
+    z-index: 0;
+  }
+
+  /* =================================
+     ELEMENTOS DECORATIVOS DE FONDO
+  ================================= */
+  .checkout-bg-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.02;
+    background: radial-gradient(circle, #FFD100 10%, transparent 70%);
+  }
+
+  .circle-1 {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    right: -50px;
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .circle-2 {
+    width: 200px;
+    height: 200px;
+    bottom: 100px;
+    left: -50px;
+    animation: float 25s ease-in-out infinite reverse;
+  }
+
+  .circle-3 {
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    right: 10%;
+    animation: float 18s ease-in-out infinite 5s;
+  }
+
+  .bg-dot {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: rgba(255, 209, 0, 0.15);
+    box-shadow: 0 0 4px rgba(255, 209, 0, 0.2);
+  }
+
+  .dot-1 { top: 15%; left: 8%; animation: float 10s ease-in-out infinite; }
+  .dot-2 { top: 70%; right: 12%; animation: float 14s ease-in-out infinite reverse; }
+  .dot-3 { bottom: 25%; left: 70%; animation: float 12s ease-in-out infinite 3s; }
+  .dot-4 { top: 40%; left: 15%; animation: float 16s ease-in-out infinite 2s; }
+
+  .bg-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.08), transparent);
+    opacity: 0.4;
+  }
+
+  .line-1 {
+    width: 60%;
+    top: 30%;
+    left: 20%;
+    transform: rotate(-2deg);
+  }
+
+  .line-2 {
+    width: 70%;
+    bottom: 40%;
+    right: 5%;
+    transform: rotate(1deg);
+  }
+
+  .floating-icon {
+    position: absolute;
+    color: rgba(255, 209, 0, 0.1);
+    font-size: 1.5rem;
+    animation: float 15s ease-in-out infinite;
+  }
+
+  .icon-1 { top: 20%; left: 5%; animation-delay: 0s; }
+  .icon-2 { top: 60%; right: 8%; animation-delay: 5s; }
+  .icon-3 { bottom: 30%; left: 80%; animation-delay: 10s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    25% { transform: translateY(-10px) translateX(5px) rotate(1deg); }
+    50% { transform: translateY(0) translateX(10px) rotate(0deg); }
+    75% { transform: translateY(10px) translateX(5px) rotate(-1deg); }
+  }
+
+  .checkout-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+  }
+
+  /* =================================
+     HEADER DEL CHECKOUT
+  ================================= */
+  .checkout-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .checkout-title-section {
+    margin-bottom: 2rem;
+  }
+
+  .checkout-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .title-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.05));
+    color: #FFD100;
+    font-size: 1.8rem;
+    overflow: hidden;
+  }
+
+  .icon-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 209, 0, 0.3), transparent 70%);
+    animation: pulse-glow 3s ease infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  .title-underline {
+    position: relative;
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #FFD100, transparent);
+    margin: 0 auto 1rem;
+  }
+
+  .underline-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #FFD100;
+    border-radius: 50%;
+    top: -2.5px;
+    left: 0;
+    animation: moveDot 4s ease-in-out infinite alternate;
+    box-shadow: 0 0 8px rgba(255, 209, 0, 0.6);
+  }
+
+  @keyframes moveDot {
+    0% { left: 0; }
+    100% { left: 92px; }
+  }
+
+  .checkout-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 300;
+  }
+
+  /* =================================
+     INDICADOR DE PROGRESO
+  ================================= */
+  .checkout-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .step-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-step.completed .step-circle {
+    background: linear-gradient(135deg, #28a745, #34ce57);
+    color: white;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  }
+
+  .progress-step.active .step-circle {
+    background: linear-gradient(135deg, #FFD100, #FFDB4D);
+    color: #121212;
+    box-shadow: 0 4px 15px rgba(255, 209, 0, 0.4);
+    animation: pulse-active 2s ease infinite;
+  }
+
+  .progress-step .step-circle {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  @keyframes pulse-active {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .step-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .progress-step.completed .step-label,
+  .progress-step.active .step-label {
+    color: #FFFFFF;
+  }
+
+  .progress-line {
+    width: 80px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    position: relative;
+  }
+
+  .progress-step.completed + .progress-line {
+    background: linear-gradient(90deg, #28a745, #FFD100);
+  }
+
+  /* =================================
+     TARJETA DE INFORMACIÓN DE ENTREGA
+  ================================= */
+  .delivery-info-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  .delivery-info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 209, 0, 0.03), transparent);
+    z-index: -1;
+  }
+
+  .card-header-custom {
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .header-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+    color: #FFD100;
+    font-size: 1.5rem;
+  }
+
+  .icon-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(255, 209, 0, 0.3);
+    border-radius: 50%;
+    animation: pulse-ring 2s ease infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  .header-text {
+    flex: 1;
+  }
+
+  .card-title-custom {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .card-subtitle-custom {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .card-body-custom {
+    padding: 2rem;
+  }
+
+  /* =================================
+     FORMULARIO PERSONALIZADO
+  ================================= */
+  .checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .form-group-custom {
+    position: relative;
+  }
+
+  .form-label-custom {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+  }
+
+  .label-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 209, 0, 0.2);
+    color: #FFD100;
+    font-size: 0.9rem;
+  }
+
+  .required-indicator {
+    color: #dc3545;
+    font-weight: 700;
+    margin-left: 0.2rem;
+  }
+
+  .optional-indicator {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin-left: 0.5rem;
+  }
+
+  .input-wrapper, .textarea-wrapper {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .form-input-custom, .textarea-custom {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    color: #FFFFFF;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .form-input-custom:focus, .textarea-custom:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 209, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.1);
+  }
+
+  .form-input-custom::placeholder, .textarea-custom::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .form-input-custom[readonly] {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.6);
+    cursor: not-allowed;
+  }
+
+  .input-decoration, .textarea-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    background: linear-gradient(45deg, transparent, rgba(255, 209, 0, 0.05), transparent);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .input-wrapper.focused .input-decoration,
+  .textarea-wrapper.focused .textarea-decoration {
+    opacity: 1;
+  }
+
+  .input-focus-line, .textarea-focus-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #FFD100, #FFDB4D);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+    border-radius: 1px;
+    z-index: 3;
+  }
+
+  .input-wrapper.focused .input-focus-line,
+  .textarea-wrapper.focused .textarea-focus-line {
+    width: 100%;
+  }
+
+  .readonly-indicator {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.9rem;
+    z-index: 3;
+  }
+
+  .textarea-custom {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+    line-height: 1.5;
+  }
+
+  /* =================================
+     BOTONES DE ACCIÓN
+  ================================= */
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .btn-confirm-order, .btn-back-to-cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 1.2rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-confirm-order {
+    background: linear-gradient(135deg, #28a745, #34ce57);
+    color: #FFFFFF;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  }
+
+  .btn-confirm-order:hover {
+    background: linear-gradient(135deg, #34ce57, #28a745);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+  }
+
+  .btn-back-to-cart {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .btn-back-to-cart:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s ease;
+  }
+
+  .btn-confirm-order:hover .btn-shine,
+  .btn-back-to-cart:hover .btn-shine {
+    left: 100%;
+  }
+
+  .btn-icon {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+  }
+
+  .btn-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+  }
+
+  .btn-confirm-order.loading .btn-loading {
+    opacity: 1;
+  }
+
+  .btn-confirm-order.loading {
+    pointer-events: none;
+  }
+
+  .loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid #FFFFFF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* =================================
+     TARJETA DE RESUMEN DEL PEDIDO
+  ================================= */
+  .order-summary-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    position: relative;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .order-summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 209, 0, 0.03), transparent);
+    z-index: -1;
+  }
+
+  .summary-header {
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .summary-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0 0 0.3rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .summary-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .summary-content {
+    padding: 1.5rem;
+  }
+
+  /* =================================
+     LISTA DE PRODUCTOS
+  ================================= */
+  .order-items {
+    margin-bottom: 1.5rem;
+  }
+
+  .items-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #FFD100;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .order-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .order-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+  }
+
+  .item-product {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .product-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+    color: #FFD100;
+    font-size: 1rem;
+  }
+
+  .product-name {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .item-quantity {
+    display: flex;
+    justify-content: center;
+  }
+
+  .quantity-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.2), rgba(255, 209, 0, 0.1));
+    color: #FFD100;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .item-price {
+    text-align: right;
+  }
+
+  .price-value {
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  /* =================================
+     TOTAL DEL PEDIDO
+  ================================= */
+  .order-total {
+    position: relative;
+    margin-top: 1.5rem;
+  }
+
+  .total-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 209, 0, 0.3), transparent);
+    margin-bottom: 1rem;
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255, 209, 0, 0.1), rgba(255, 209, 0, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 209, 0, 0.2);
+  }
+
+  .total-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .total-amount {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #FFD100;
+    text-shadow: 0 0 10px rgba(255, 209, 0, 0.3);
+  }
+
+  .total-decoration {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .decoration-dot {
+    width: 6px;
+    height: 6px;
+    background: #FFD100;
+    border-radius: 50%;
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  .decoration-dot:nth-child(2) { animation-delay: 0.3s; }
+  .decoration-dot:nth-child(3) { animation-delay: 0.6s; }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* =================================
+     INFORMACIÓN DE ENTREGA
+  ================================= */
+  .delivery-info {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .info-item:hover {
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateX(5px);
+  }
+
+  .info-item i {
+    color: #FFD100;
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+  }
+
+  /* =================================
+     NOTIFICACIONES DE ERROR
+  ================================= */
+  .error-notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.95), rgba(248, 81, 101, 0.95));
+    color: #FFFFFF;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    max-width: 350px;
+  }
+
+  .error-notification.show {
+    transform: translateX(0);
+  }
+
+  .error-notification i {
+    font-size: 1.2rem;
+    color: #FFFFFF;
+  }
+
+  /* =================================
+     RESPONSIVE DESIGN
+  ================================= */
+  @media (max-width: 1199px) {
+    .order-summary-card {
+      position: static;
+      margin-top: 2rem;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .checkout-title {
+      font-size: 2rem;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .checkout-progress {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .progress-line {
+      width: 2px;
+      height: 40px;
+      transform: rotate(90deg);
+    }
+
+    .form-actions {
+      gap: 1rem;
+    }
+
+    .card-header-custom {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .checkout-main-container {
+      padding: 1rem 0;
+    }
+
+    .checkout-title {
+      font-size: 1.8rem;
+    }
+
+    .card-header-custom,
+    .card-body-custom,
+    .summary-header,
+    .summary-content {
+      padding: 1.5rem;
+    }
+
+    .checkout-progress {
+      gap: 1rem;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+
+    .step-label {
+      font-size: 0.8rem;
+    }
+
+    .progress-line {
+      height: 30px;
+    }
+
+    .order-item {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 0.8rem;
+    }
+
+    .items-header {
+      display: none;
+    }
+
+    .item-product {
+      justify-content: center;
+    }
+
+    .item-price {
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .checkout-header {
+      margin-bottom: 2rem;
+    }
+
+    .checkout-title {
+      font-size: 1.5rem;
+    }
+
+    .card-header-custom,
+    .card-body-custom,
+    .summary-header,
+    .summary-content {
+      padding: 1rem;
+    }
+
+    .form-input-custom, .textarea-custom {
+      padding: 0.8rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-confirm-order, .btn-back-to-cart {
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    .total-label {
+      font-size: 1rem;
+    }
+
+    .total-amount {
+      font-size: 1.4rem;
+    }
+
+    .error-notification {
+      right: 10px;
+      left: 10px;
+      max-width: none;
+      transform: translateY(-100px);
+    }
+
+    .error-notification.show {
+      transform: translateY(0);
+    }
+  }
+
+  /* =================================
+     ANIMACIONES DE ENTRADA
+  ================================= */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .checkout-header {
+    animation: fadeInUp 0.6s ease;
+  }
+
+  .delivery-info-card {
+    animation: slideInFromLeft 0.8s ease;
+  }
+
+  .order-summary-card {
+    animation: slideInFromRight 0.8s ease 0.2s both;
+  }
+
+  .order-item {
+    animation: fadeInUp 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .order-item:nth-child(1) { animation-delay: 0.1s; }
+  .order-item:nth-child(2) { animation-delay: 0.2s; }
+  .order-item:nth-child(3) { animation-delay: 0.3s; }
+  .order-item:nth-child(4) { animation-delay: 0.4s; }
+  .order-item:nth-child(5) { animation-delay: 0.5s; }
+
+  /* =================================
+     ESTADOS DE VALIDACIÓN
+  ================================= */
+  .form-input-custom.error, .textarea-custom.error {
+    border-color: rgba(220, 53, 69, 0.6);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    animation: shake 0.5s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .form-input-custom.success, .textarea-custom.success {
+    border-color: rgba(40, 167, 69, 0.6);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+  }
+
+  /* =================================
+     MEJORAS DE ACCESIBILIDAD
+  ================================= */
+  .form-input-custom:focus, .textarea-custom:focus,
+  .btn-confirm-order:focus, .btn-back-to-cart:focus {
+    outline: 2px solid #FFD100;
+    outline-offset: 2px;
+  }
+
+  /* =================================
+     PRINT STYLES
+  ================================= */
+  @media print {
+    .checkout-bg-elements,
+    .floating-icon,
+    .btn-confirm-order,
+    .btn-back-to-cart,
+    .checkout-progress {
+      display: none !important;
+    }
+
+    .checkout-main-container {
+      background: white !important;
+      color: black !important;
+    }
+
+    .delivery-info-card,
+    .order-summary-card {
+      border: 1px solid #000 !important;
+      background: white !important;
+      box-shadow: none !important;
+    }
+
+    .checkout-title,
+    .card-title-custom,
+    .summary-title,
+    .total-label,
+    .total-amount {
+      color: black !important;
+    }
+  }
+</style>
+
 </body>
 </html>
